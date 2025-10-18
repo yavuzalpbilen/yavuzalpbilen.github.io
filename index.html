@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Yavuz Alp Bilen — Game Designer Portfolio</title>
+  <title>Merve — Game Designer Portfolio</title>
   <meta name="description" content="Game designer portfolio — systems, level design, prototypes, and shipped work." />
-  <meta property="og:title" content="Yavuz Alp Bilen — Game Designer" />
+  <meta property="og:title" content="Merve — Game Designer" />
   <meta property="og:description" content="Systems & level designer focused on rapid prototyping and player-centric iteration." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="cover.png" />
@@ -15,164 +15,156 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%230ea5e9'/%3E%3Cstop stop-color='%238b5cf6' offset='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' rx='28' fill='url(%23g)'/%3E%3Cpath d='M34 79l30-50l30 50l-30 18l-30-18z' fill='white'/%3E%3C/svg%3E"/>
   <style>
     :root {
-      --bg: #0b0c10;          /* base bg (dark) */
-      --bg-soft: #0f1117;     /* panels */
-      --text: #e5e7eb;        /* text */
-      --muted: #94a3b8;       /* secondary */
-      --brand: #0ea5e9;       /* cyan */
-      --brand-2: #8b5cf6;     /* violet */
-      --card: #11131a;
-      --stroke: rgba(148,163,184,.15);
-      --shadow: 0 10px 30px rgba(2,6,23,.25);
+      --bg: #0b0c10; --bg-soft: #0f1117; --text: #e5e7eb; --muted: #94a3b8; --brand: #0ea5e9; --brand-2: #8b5cf6; --card: #11131a; --stroke: rgba(148,163,184,.15); --shadow: 0 10px 30px rgba(2,6,23,.25);
     }
-    :root.light {
-      --bg: #f8fafc;
-      --bg-soft: #ffffff;
-      --text: #0f172a;
-      --muted: #475569;
-      --card: #ffffff;
-      --stroke: rgba(2,6,23,.08);
-      --shadow: 0 8px 24px rgba(2,6,23,.08);
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      color: var(--text); background: radial-gradient(1200px 800px at 10% -10%, rgba(14,165,233,.25), transparent 40%),
-                           radial-gradient(1200px 800px at 100% 10%, rgba(139,92,246,.18), transparent 45%),
-                           var(--bg);
-      line-height: 1.6;
-    }
-    a { color: inherit; text-decoration: none; }
-    .container { width: min(1100px, 92vw); margin-inline: auto; }
-    header {
-      position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(180%) blur(10px);
-      background: color-mix(in oklab, var(--bg-soft) 75%, transparent);
-      border-bottom: 1px solid var(--stroke);
-    }
-    .nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; }
-    .logo { display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.3px; }
-    .logo-badge { width: 28px; height: 28px; border-radius: 10px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); display:grid; place-items:center; box-shadow: var(--shadow); }
-    .logo-badge svg { width:18px; height:18px; fill:#fff }
-    .nav a { opacity:.9; padding:8px 12px; border-radius:10px; }
-    .nav a:hover { background: color-mix(in oklab, var(--brand) 15%, transparent); }
-    .btn {
-      display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:12px; border:1px solid var(--stroke);
-      background: linear-gradient(180deg, color-mix(in oklab, var(--bg-soft) 70%, transparent), var(--bg-soft));
-      box-shadow: var(--shadow);
-    }
-    .btn--brand{ border:none; background: linear-gradient(135deg, var(--brand), var(--brand-2)); color:white; }
-
-    /* Hero */
-    .hero { padding: 80px 0 40px; display:grid; grid-template-columns: 1.1fr .9fr; gap: 36px; align-items: center; }
-    @media (max-width: 900px){ .hero{ grid-template-columns:1fr; padding-top: 48px; } }
-    .hero h1 { font-size: clamp(36px, 6vw, 56px); line-height: 1.08; margin: 0 0 10px; letter-spacing:-0.02em; }
-    .hero p { font-size: clamp(16px, 2.6vw, 18px); color: var(--muted); margin: 0 0 22px; }
-    .hero .actions { display:flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
-    .hero-card { background: linear-gradient(180deg, color-mix(in oklab, var(--bg-soft) 70%, transparent), var(--bg-soft));
-                 border:1px solid var(--stroke); border-radius: 20px; padding: 18px; box-shadow: var(--shadow); }
-    .stats { display:grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 14px; }
-    .stat { background: var(--card); border:1px solid var(--stroke); border-radius:16px; padding:14px; text-align:center; }
-    .stat .big { font-weight:800; font-size: 28px; letter-spacing:-.02em; }
-    .stat .small { font-size: 12px; color: var(--muted); }
-
-    /* Sections */
-    section { padding: 56px 0; }
-    .section-title { display:flex; align-items:center; gap:12px; margin-bottom: 22px; }
-    .section-title h2 { margin:0; font-size: clamp(22px, 3vw, 28px); }
-    .section-title .line { height:1px; flex:1; background: linear-gradient(90deg, var(--brand), transparent); opacity:.5 }
-
-    /* Projects */
-    .grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    @media (max-width: 1000px){ .grid{ grid-template-columns: repeat(2, 1fr);} }
-    @media (max-width: 640px){ .grid{ grid-template-columns: 1fr;} }
-    .card { background: var(--card); border:1px solid var(--stroke); border-radius: 18px; overflow: clip; box-shadow: var(--shadow); display:flex; flex-direction:column; }
-    .thumb { aspect-ratio: 16/9; display:block; background: linear-gradient(135deg, color-mix(in oklab, var(--brand) 35%, transparent), color-mix(in oklab, var(--brand-2) 25%, transparent)); position:relative; }
-    .thumb img { width:100%; height:100%; object-fit: cover; display:block; }
-    .card-body { padding: 16px; display:flex; flex-direction:column; gap:10px; }
-    .card h3 { margin:0; font-size: 18px; }
-    .tags { display:flex; gap:8px; flex-wrap:wrap }
-    .tag { font-size:12px; color: var(--muted); border:1px solid var(--stroke); padding:4px 8px; border-radius: 999px; }
-    .card .buttons { display:flex; gap:10px; margin-top: 6px; }
-    .card .buttons a { flex:1; text-align:center; }
-
-    /* About */
-    .about { display:grid; grid-template-columns: .8fr 1.2fr; gap: 22px; }
-    @media (max-width: 900px){ .about{ grid-template-columns: 1fr; } }
-    .about .panel { background: var(--card); border:1px solid var(--stroke); border-radius: 18px; padding: 18px; box-shadow: var(--shadow); }
-    .skills { display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .skills .pill { border:1px dashed var(--stroke); padding: 10px 12px; border-radius: 12px; }
-
-    /* Footer */
-    footer { padding: 30px 0 60px; border-top:1px solid var(--stroke) }
-    .socials { display:flex; flex-wrap:wrap; gap:10px }
-
-    /* Helpers */
-    .reveal { opacity: 0; transform: translateY(10px); transition: .6s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .muted { color: var(--muted) }
-    .mono { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
-    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0 }
+    :root.light { --bg: #f8fafc; --bg-soft: #ffffff; --text: #0f172a; --muted: #475569; --card: #ffffff; --stroke: rgba(2,6,23,.08); --shadow: 0 8px 24px rgba(2,6,23,.08); }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text);background:radial-gradient(1200px 800px at 10% -10%, rgba(14,165,233,.25), transparent 40%),radial-gradient(1200px 800px at 100% 10%, rgba(139,92,246,.18), transparent 45%),var(--bg);line-height:1.6}
+    a{color:inherit;text-decoration:none}
+    .container{width:min(1100px,92vw);margin-inline:auto}
+    header{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur(10px);background:color-mix(in oklab, var(--bg-soft) 75%, transparent);border-bottom:1px solid var(--stroke)}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.3px}
+    .logo-badge{width:28px;height:28px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;box-shadow:var(--shadow)}
+    .logo-badge svg{width:18px;height:18px;fill:#fff}
+    .nav a{opacity:.9;padding:8px 12px;border-radius:10px}
+    .nav a:hover{background:color-mix(in oklab, var(--brand) 15%, transparent)}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;border:1px solid var(--stroke);background:linear-gradient(180deg,color-mix(in oklab, var(--bg-soft) 70%, transparent),var(--bg-soft));box-shadow:var(--shadow)}
+    .btn--brand{border:none;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:white}
+    .hero{padding:80px 0 40px;display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center}
+    @media (max-width:900px){.hero{grid-template-columns:1fr;padding-top:48px}}
+    .hero h1{font-size:clamp(36px,6vw,56px);line-height:1.08;margin:0 0 10px;letter-spacing:-.02em}
+    .hero p{font-size:clamp(16px,2.6vw,18px);color:var(--muted);margin:0 0 22px}
+    .hero .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px}
+    .hero-card{background:linear-gradient(180deg,color-mix(in oklab, var(--bg-soft) 70%, transparent),var(--bg-soft));border:1px solid var(--stroke);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+    .stat{background:var(--card);border:1px solid var(--stroke);border-radius:16px;padding:14px;text-align:center}
+    .stat .big{font-weight:800;font-size:28px;letter-spacing:-.02em}
+    .stat .small{font-size:12px;color:var(--muted)}
+    section{padding:56px 0}
+    .section-title{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+    .section-title h2{margin:0;font-size:clamp(22px,3vw,28px)}
+    .section-title .line{height:1px;flex:1;background:linear-gradient(90deg,var(--brand),transparent);opacity:.5}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    @media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--card);border:1px solid var(--stroke);border-radius:18px;overflow:clip;box-shadow:var(--shadow);display:flex;flex-direction:column}
+    .thumb{aspect-ratio:16/9;display:block;background:linear-gradient(135deg,color-mix(in oklab, var(--brand) 35%, transparent),color-mix(in oklab, var(--brand-2) 25%, transparent));position:relative}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .card-body{padding:16px;display:flex;flex-direction:column;gap:10px}
+    .card h3{margin:0;font-size:18px}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{font-size:12px;color:var(--muted);border:1px solid var(--stroke);padding:4px 8px;border-radius:999px}
+    .card .buttons{display:flex;gap:10px;margin-top:6px}
+    .card .buttons a{flex:1;text-align:center}
+    .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .filters button{cursor:pointer}
+    .about{display:grid;grid-template-columns:.8fr 1.2fr;gap:22px}
+    @media (max-width:900px){.about{grid-template-columns:1fr}}
+    .about .panel{background:var(--card);border:1px solid var(--stroke);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+    .skills{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .skills .pill{border:1px dashed var(--stroke);padding:10px 12px;border-radius:12px}
+    footer{padding:30px 0 60px;border-top:1px solid var(--stroke)}
+    .socials{display:flex;flex-wrap:wrap;gap:10px}
+    .reveal{opacity:0;transform:translateY(10px);transition:.6s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .muted{color:var(--muted)}
+    .mono{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+    dialog{border:none;border-radius:16px;padding:0;box-shadow:var(--shadow);background:var(--bg-soft);color:var(--text)}
+    dialog::backdrop{background:rgba(0,0,0,.5)}
+    .modal-body{padding:0}
+    .video{width:min(960px,92vw);aspect-ratio:16/9}
+    .lang{display:flex;gap:6px}
   </style>
   <script>
-    // Theme toggle with persistence
-    const applyTheme = (t) => {
-      document.documentElement.classList.toggle('light', t === 'light');
-      localStorage.setItem('theme', t);
-      const metaTheme = document.querySelector('meta[name="theme-color"]');
-      if(metaTheme) metaTheme.setAttribute('content', t==='light' ? '#ffffff' : '#0b0c10');
+    // Theme + Lang persistence
+    const applyTheme = (t)=>{document.documentElement.classList.toggle('light', t==='light');localStorage.setItem('theme',t);document.querySelector('meta[name="theme-color"]').setAttribute('content', t==='light'?'#ffffff':'#0b0c10')}
+    const initTheme = ()=>{const s=localStorage.getItem('theme');const prefersLight=window.matchMedia('(prefers-color-scheme: light)').matches;applyTheme(s||(prefersLight?'light':'dark'))}
+
+    const I18N = {
+      en:{
+        heroHello:"Hi, I'm Merve",
+        heroTitle:"Systems & Level Designer focused on playable prototypes and data‑driven iteration.",
+        heroSub:"I build small games fast to answer big design questions. 5+ UE/Unity prototypes, 2 shipped student titles, and a soft‑launch mobile puzzle.",
+        viewProjects:"View Projects", downloadCV:"Download CV", itch:"itch.io",
+        selectedProjects:"Selected Projects", about:"About", contact:"Contact",
+        philosophyTitle:"Philosophy", philosophyText:"I believe good design emerges from fast iteration and honest playtesting. My process: define a sharp design question → prototype the smallest thing that answers it → test → measure → iterate.",
+        skillsTitle:"Skills", filterAll:"All", filterUnity:"Unity", filterUE:"Unreal", filterSystems:"Systems", filterNarrative:"Narrative",
+        contactPitch:"I'm looking for internships and junior roles for 2025/26. Reach out for collaborations or playtest requests.", email:"Email", github:"GitHub", linkedin:"LinkedIn"
+      },
+      tr:{
+        heroHello:"Merhaba, ben Merve",
+        heroTitle:"Oynanabilir prototiplere ve veriye dayalı iterasyona odaklanan Sistem & Seviye Tasarımcısı.",
+        heroSub:"Büyük tasarım sorularını küçük oyunlarla hızlıca cevaplarım. 5+ UE/Unity prototipi, 2 yayınlanan öğrenci projesi, bir soft‑launch mobil bulmaca.",
+        viewProjects:"Projeleri Gör", downloadCV:"CV'yi İndir", itch:"itch.io",
+        selectedProjects:"Seçili Projeler", about:"Hakkımda", contact:"İletişim",
+        philosophyTitle:"Felsefe", philosophyText:"İyi tasarım hızlı iterasyon ve dürüst playtest ile ortaya çıkar. Sürecim: net bir tasarım sorusu → bunu cevaplayacak en küçük prototip → test → ölç → yinele.",
+        skillsTitle:"Yetenekler", filterAll:"Tümü", filterUnity:"Unity", filterUE:"Unreal", filterSystems:"Sistemler", filterNarrative:"Anlatı",
+        contactPitch:"2025/26 için staj ve junior roller arıyorum. İşbirliği veya playtest için iletişime geçebilirsin.", email:"E‑posta", github:"GitHub", linkedin:"LinkedIn"
+      }
+    };
+    const applyLang = (lang)=>{
+      document.documentElement.lang = lang; localStorage.setItem('lang', lang);
+      document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); if(I18N[lang][k]) el.textContent=I18N[lang][k]; });
     }
-    const initTheme = () => {
-      const stored = localStorage.getItem('theme');
-      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-      applyTheme(stored || (prefersLight ? 'light' : 'dark'));
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-      initTheme();
-      document.getElementById('themeToggle').addEventListener('click', () => {
-        const now = document.documentElement.classList.contains('light') ? 'dark' : 'light';
-        applyTheme(now);
-      });
+    const initLang = ()=>{ applyLang(localStorage.getItem('lang')||'en'); }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      initTheme(); initLang();
+      document.getElementById('themeToggle').addEventListener('click',()=>{applyTheme(document.documentElement.classList.contains('light')?'dark':'light')});
+      document.getElementById('langEn').addEventListener('click',()=>applyLang('en'));
+      document.getElementById('langTr').addEventListener('click',()=>applyLang('tr'));
       // Scroll reveal
-      const io = new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } })
-      }, { threshold:.12 });
-      document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
-      // Smooth scroll for internal links
-      document.querySelectorAll('a[href^="#"]').forEach(a=>{
-        a.addEventListener('click', (e)=>{ e.preventDefault(); document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'}) })
-      })
+      const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}})},{threshold:.12});
+      document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',(e)=>{e.preventDefault();document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'})}))
+      // Filters
+      const cards=[...document.querySelectorAll('[data-tags]')];
+      const setActive=(k)=>{document.querySelectorAll('[data-filter]').forEach(b=>b.classList.toggle('btn--brand', b.dataset.filter===k));}
+      document.querySelectorAll('[data-filter]').forEach(btn=>btn.addEventListener('click',()=>{
+        const k=btn.dataset.filter; setActive(k);
+        cards.forEach(c=>{ const tags=c.dataset.tags.split(','); c.style.display = (k==='all'||tags.includes(k))?'flex':'none'; })
+      }));
+      setActive('all');
+      // Video modal
+      const modal=document.getElementById('videoModal');
+      document.querySelectorAll('[data-video]').forEach(v=>v.addEventListener('click',()=>{ const url=v.dataset.video; document.getElementById('videoFrame').src=url; modal.showModal(); }))
+      document.getElementById('closeModal').addEventListener('click',()=>{document.getElementById('videoFrame').src=''; modal.close();})
     });
   </script>
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Yavuz Alp Bilen",
-    "jobTitle": "Game Designer",
-    "url": "https://yourname.github.io/",
-    "image": "https://yourname.github.io/avatar.jpg",
-    "sameAs": [
-      "https://github.com/yourname",
-      "https://www.linkedin.com/in/yourname/",
-      "https://yourname.itch.io/"
-    ]
+    "@context":"https://schema.org",
+    "@type":"Person",
+    "name":"Merve",
+    "jobTitle":"Game Designer",
+    "url":"https://yourname.github.io/",
+    "image":"https://yourname.github.io/avatar.jpg",
+    "sameAs":["https://github.com/yourname","https://www.linkedin.com/in/yourname/","https://yourname.itch.io/"]
   }
   </script>
 </head>
 <body>
+  <a class="sr-only" href="#projects">Skip to content</a>
   <header>
     <div class="container nav">
       <a class="logo" href="#top" aria-label="Home">
         <span class="logo-badge" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M12 2l4 7-4 13-4-13 4-7z"/></svg>
         </span>
-        <span>Yavuz Alp Bilen • Game Designer</span>
+        <span>Merve • Game Designer</span>
       </a>
       <nav aria-label="Primary">
-        <a href="#projects">Projects</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
+        <a href="#projects" data-i18n="selectedProjects">Selected Projects</a>
+        <a href="#about" data-i18n="about">About</a>
+        <a href="#contact" data-i18n="contact">Contact</a>
+        <div class="lang" aria-label="Language">
+          <button id="langEn" class="btn" aria-label="English">EN</button>
+          <button id="langTr" class="btn" aria-label="Turkish">TR</button>
+        </div>
         <button id="themeToggle" class="btn" aria-label="Toggle theme">🌓</button>
       </nav>
     </div>
@@ -182,15 +174,15 @@
     <!-- Hero -->
     <section class="hero">
       <div>
-        <span class="muted">Hi, I'm Yavuz Alp Bilen</span>
-        <h1>Systems & Level Designer focused on <span style="background:linear-gradient(90deg,var(--brand),var(--brand-2)); -webkit-background-clip:text; background-clip:text; color:transparent;">playable prototypes</span> and data‑driven iteration.</h1>
-        <p>I build small games fast to answer big design questions. 5+ UE/Unity prototypes, 2 shipped student titles, and a soft‑launch mobile puzzle.</p>
+        <span class="muted" data-i18n="heroHello">Hi, I'm Merve</span>
+        <h1 data-i18n="heroTitle">Systems & Level Designer focused on playable prototypes and data‑driven iteration.</h1>
+        <p data-i18n="heroSub">I build small games fast to answer big design questions. 5+ UE/Unity prototypes, 2 shipped student titles, and a soft‑launch mobile puzzle.</p>
         <div class="actions">
-          <a class="btn btn--brand" href="#projects">View Projects</a>
-          <a class="btn" href="resume.pdf" target="_blank" rel="noopener">Download CV</a>
-          <a class="btn" href="https://yourname.itch.io" target="_blank" rel="noopener">itch.io</a>
+          <a class="btn btn--brand" href="#projects" data-i18n="viewProjects">View Projects</a>
+          <a class="btn" href="resume.pdf" target="_blank" rel="noopener" data-i18n="downloadCV">Download CV</a>
+          <a class="btn" href="https://yourname.itch.io" target="_blank" rel="noopener" data-i18n="itch">itch.io</a>
         </div>
-        <div class="stats">
+        <div class="stats" aria-label="Quick stats">
           <div class="stat"><div class="big mono">12</div><div class="small">Prototypes</div></div>
           <div class="stat"><div class="big mono">3</div><div class="small">Team Projects</div></div>
           <div class="stat"><div class="big mono">2</div><div class="small">Engines (UE/Unity)</div></div>
@@ -198,7 +190,7 @@
       </div>
       <div class="hero-card reveal" aria-hidden="true">
         <div class="thumb" style="border-radius:14px; margin-bottom:12px;">
-          <img alt="Showreel placeholder" src="cover.png" onerror="this.style.display='none'">
+          <img alt="Showreel placeholder" src="cover.png" loading="lazy" onerror="this.style.display='none'">
         </div>
         <div style="font-size:14px; color:var(--muted)">Latest: <strong>Forest Runner</strong> — endless runner with dynamic difficulty and weighted spawn tables.</div>
       </div>
@@ -207,57 +199,62 @@
     <!-- Projects -->
     <section id="projects">
       <div class="section-title">
-        <h2>Selected Projects</h2>
+        <h2 data-i18n="selectedProjects">Selected Projects</h2>
         <div class="line"></div>
       </div>
+
+      <div class="filters" role="toolbar" aria-label="Project filters">
+        <button class="btn" data-filter="all" data-i18n="filterAll">All</button>
+        <button class="btn" data-filter="unity" data-i18n="filterUnity">Unity</button>
+        <button class="btn" data-filter="unreal" data-i18n="filterUE">Unreal</button>
+        <button class="btn" data-filter="systems" data-i18n="filterSystems">Systems</button>
+        <button class="btn" data-filter="narrative" data-i18n="filterNarrative">Narrative</button>
+      </div>
+
       <div class="grid">
         <!-- Card 1 -->
-        <article class="card reveal">
+        <article class="card reveal" data-tags="unity,systems">
           <a class="thumb" href="https://yourname.itch.io/forest-runner" target="_blank" rel="noopener">
-            <img alt="Forest Runner" src="images/forest-runner.jpg" onerror="this.parentElement.style.background='linear-gradient(135deg, #0ea5e944, #8b5cf644)'; this.remove();" />
+            <img alt="Forest Runner" src="images/forest-runner.jpg" loading="lazy" srcset="images/forest-runner_640.jpg 640w, images/forest-runner_960.jpg 960w, images/forest-runner.jpg 1280w" sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw" onerror="this.parentElement.style.background='linear-gradient(135deg, #0ea5e944, #8b5cf644)'; this.remove();" />
           </a>
           <div class="card-body">
             <h3>Forest Runner</h3>
             <p class="muted">Endless runner prototype exploring dynamic difficulty with Elo‑like player rating and adaptive spawn weights.</p>
-            <div class="tags">
-              <span class="tag">Unity</span><span class="tag">Systems</span><span class="tag">C#</span>
-            </div>
+            <div class="tags"><span class="tag">Unity</span><span class="tag">Systems</span><span class="tag">C#</span></div>
             <div class="buttons">
               <a class="btn btn--brand" href="https://yourname.itch.io/forest-runner" target="_blank" rel="noopener">Play</a>
               <a class="btn" href="https://github.com/yourname/forest-runner" target="_blank" rel="noopener">Code</a>
+              <button class="btn" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1">Video</button>
             </div>
           </div>
         </article>
         <!-- Card 2 -->
-        <article class="card reveal">
-          <a class="thumb" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener">
-            <img alt="Decision Game" src="images/decision-game.jpg" onerror="this.parentElement.style.background='linear-gradient(135deg, #0ea5e944, #8b5cf644)'; this.remove();" />
+        <article class="card reveal" data-tags="unity,narrative">
+          <a class="thumb" href="#" target="_blank" rel="noopener">
+            <img alt="Decision Game" src="images/decision-game.jpg" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(135deg, #0ea5e944, #8b5cf644)'; this.remove();" />
           </a>
           <div class="card-body">
             <h3>Decision Game</h3>
             <p class="muted">Narrative system where choices shift player stats (Money, Happiness, Health) and gate events via thresholds.</p>
-            <div class="tags">
-              <span class="tag">Unity</span><span class="tag">Narrative</span><span class="tag">Design</span>
-            </div>
+            <div class="tags"><span class="tag">Unity</span><span class="tag">Narrative</span><span class="tag">Design</span></div>
             <div class="buttons">
               <a class="btn" href="https://github.com/yourname/decision-game" target="_blank" rel="noopener">Code</a>
               <a class="btn" href="#" target="_blank" rel="noopener">Design Doc</a>
+              <button class="btn" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1">Video</button>
             </div>
           </div>
         </article>
         <!-- Card 3 -->
-        <article class="card reveal">
+        <article class="card reveal" data-tags="unreal,systems">
           <a class="thumb" href="#" target="_blank" rel="noopener">
-            <img alt="Arena AI" src="images/arena-ai.jpg" onerror="this.parentElement.style.background='linear-gradient(135deg, #0ea5e944, #8b5cf644)'; this.remove();" />
+            <img alt="Arena AI" src="images/arena-ai.jpg" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(135deg, #0ea5e944, #8b5cf644)'; this.remove();" />
           </a>
           <div class="card-body">
             <h3>Arena AI</h3>
-            <p class="muted">Utility‑based AI for enemy behaviors with designer‑tunable curves; shipped as a graybox combat prototype in UE5.</p>
-            <div class="tags">
-              <span class="tag">Unreal</span><span class="tag">Behavior</span><span class="tag">Blueprint</span>
-            </div>
+            <p class="muted">Utility‑based AI for enemy behaviors with designer‑tunable curves; graybox combat prototype in UE5.</p>
+            <div class="tags"><span class="tag">Unreal</span><span class="tag">Behavior</span><span class="tag">Blueprint</span></div>
             <div class="buttons">
-              <a class="btn btn--brand" href="#" target="_blank" rel="noopener">Video</a>
+              <button class="btn btn--brand" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1">Video</button>
               <a class="btn" href="#" target="_blank" rel="noopener">Code</a>
             </div>
           </div>
@@ -268,13 +265,13 @@
     <!-- About -->
     <section id="about">
       <div class="section-title">
-        <h2>About</h2>
+        <h2 data-i18n="about">About</h2>
         <div class="line"></div>
       </div>
       <div class="about">
         <div class="panel reveal">
-          <h3 style="margin-top:0">Philosophy</h3>
-          <p>I believe good design emerges from fast iteration and honest playtesting. My process: define a sharp design question → prototype the smallest thing that answers it → test → measure → iterate.</p>
+          <h3 style="margin-top:0" data-i18n="philosophyTitle">Philosophy</h3>
+          <p data-i18n="philosophyText">I believe good design emerges from fast iteration and honest playtesting. My process: define a sharp design question → prototype the smallest thing that answers it → test → measure → iterate.</p>
           <ul>
             <li>Comfortable in <strong>Unity</strong> (C#) and <strong>UE5</strong> (Blueprints).</li>
             <li>Owns the loop: paper sketch → graybox → tuning → user test (OBS + spreadsheets).</li>
@@ -282,7 +279,7 @@
           </ul>
         </div>
         <div class="panel reveal">
-          <h3 style="margin-top:0">Skills</h3>
+          <h3 style="margin-top:0" data-i18n="skillsTitle">Skills</h3>
           <div class="skills">
             <div class="pill">Systems Design</div>
             <div class="pill">Level Design</div>
@@ -300,12 +297,18 @@
     <!-- Contact -->
     <section id="contact">
       <div class="section-title">
-        <h2>Contact</h2>
+        <h2 data-i18n="contact">Contact</h2>
         <div class="line"></div>
       </div>
       <div class="card reveal" style="padding:18px;">
-        <p class="muted">I'm looking for internships and junior roles for 2025/26. Reach out for collaborations or playtest requests.</p>
-        <div class="socials">
+        <p class="muted" data-i18n="contactPitch">I'm looking for internships and junior roles for 2025/26. Reach out for collaborations or playtest requests.</p>
+        <form action="https://formspree.io/f/your-id" method="POST" class="reveal" style="display:grid;gap:10px;grid-template-columns:1fr 1fr">
+          <label style="display:flex;flex-direction:column;gap:6px">Name<input name="name" required class="btn" style="padding:10px"/></label>
+          <label style="display:flex;flex-direction:column;gap:6px">Email<input name="email" type="email" required class="btn" style="padding:10px"/></label>
+          <label style="grid-column:1/-1;display:flex;flex-direction:column;gap:6px">Message<textarea name="message" rows="5" required class="btn" style="padding:10px"></textarea></label>
+          <button class="btn btn--brand" type="submit">Send</button>
+        </form>
+        <div class="socials" style="margin-top:12px">
           <a class="btn" href="mailto:your@email.com">Email</a>
           <a class="btn" href="https://github.com/yourname" target="_blank" rel="noopener">GitHub</a>
           <a class="btn" href="https://yourname.itch.io" target="_blank" rel="noopener">itch.io</a>
@@ -318,11 +321,19 @@
 
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
-      <small class="muted">© <span id="y"></span> Yavuz Alp Bilen. Built with HTML/CSS/JS. Hosted on GitHub Pages.</small>
-      <div class="muted">V1.0 • <a class="muted" href="#top">Back to top ↑</a></div>
+      <small class="muted">© <span id="y"></span> Merve. Built with HTML/CSS/JS. Hosted on GitHub Pages. V1.1</small>
+      <div class="muted"><a class="muted" href="#top">Back to top ↑</a></div>
     </div>
   </footer>
 
-  <script> document.getElementById('y').textContent = new Date().getFullYear(); </script>
+  <!-- Video Modal -->
+  <dialog id="videoModal">
+    <div class="modal-body">
+      <iframe id="videoFrame" class="video" src="" title="Project video" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+    <div style="display:flex;justify-content:flex-end;padding:10px"><button id="closeModal" class="btn">Close</button></div>
+  </dialog>
+
+  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
 </body>
 </html>

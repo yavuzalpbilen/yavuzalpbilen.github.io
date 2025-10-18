@@ -1,328 +1,563 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Yavuz Alp Bilen — Game Designer Portfolio</title>
-  <meta name="description" content="Game designer portfolio — systems, level design, prototypes, and shipped work." />
-  <meta property="og:title" content="Yavuz Alp Bilen — Game Designer" />
-  <meta property="og:description" content="Systems & level designer focused on rapid prototyping and player-centric iteration." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="cover.png" />
-  <meta name="theme-color" content="#0ea5e9" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%230ea5e9'/%3E%3Cstop stop-color='%238b5cf6' offset='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' rx='28' fill='url(%23g)'/%3E%3Cpath d='M34 79l30-50l30 50l-30 18l-30-18z' fill='white'/%3E%3C/svg%3E"/>
-  <style>
-    :root {
-      --bg: #0b0c10;          /* base bg (dark) */
-      --bg-soft: #0f1117;     /* panels */
-      --text: #e5e7eb;        /* text */
-      --muted: #94a3b8;       /* secondary */
-      --brand: #0ea5e9;       /* cyan */
-      --brand-2: #8b5cf6;     /* violet */
-      --card: #11131a;
-      --stroke: rgba(148,163,184,.15);
-      --shadow: 0 10px 30px rgba(2,6,23,.25);
-    }
-    :root.light {
-      --bg: #f8fafc;
-      --bg-soft: #ffffff;
-      --text: #0f172a;
-      --muted: #475569;
-      --card: #ffffff;
-      --stroke: rgba(2,6,23,.08);
-      --shadow: 0 8px 24px rgba(2,6,23,.08);
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      color: var(--text); background: radial-gradient(1200px 800px at 10% -10%, rgba(14,165,233,.25), transparent 40%),
-                           radial-gradient(1200px 800px at 100% 10%, rgba(139,92,246,.18), transparent 45%),
-                           var(--bg);
-      line-height: 1.6;
-    }
-    a { color: inherit; text-decoration: none; }
-    .container { width: min(1100px, 92vw); margin-inline: auto; }
-    header {
-      position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(180%) blur(10px);
-      background: color-mix(in oklab, var(--bg-soft) 75%, transparent);
-      border-bottom: 1px solid var(--stroke);
-    }
-    .nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; }
-    .logo { display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.3px; }
-    .logo-badge { width: 28px; height: 28px; border-radius: 10px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); display:grid; place-items:center; box-shadow: var(--shadow); }
-    .logo-badge svg { width:18px; height:18px; fill:#fff }
-    .nav a { opacity:.9; padding:8px 12px; border-radius:10px; }
-    .nav a:hover { background: color-mix(in oklab, var(--brand) 15%, transparent); }
-    .btn {
-      display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:12px; border:1px solid var(--stroke);
-      background: linear-gradient(180deg, color-mix(in oklab, var(--bg-soft) 70%, transparent), var(--bg-soft));
-      box-shadow: var(--shadow);
-    }
-    .btn--brand{ border:none; background: linear-gradient(135deg, var(--brand), var(--brand-2)); color:white; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Designer Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* Hero */
-    .hero { padding: 80px 0 40px; display:grid; grid-template-columns: 1.1fr .9fr; gap: 36px; align-items: center; }
-    @media (max-width: 900px){ .hero{ grid-template-columns:1fr; padding-top: 48px; } }
-    .hero h1 { font-size: clamp(36px, 6vw, 56px); line-height: 1.08; margin: 0 0 10px; letter-spacing:-0.02em; }
-    .hero p { font-size: clamp(16px, 2.6vw, 18px); color: var(--muted); margin: 0 0 22px; }
-    .hero .actions { display:flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
-    .hero-card { background: linear-gradient(180deg, color-mix(in oklab, var(--bg-soft) 70%, transparent), var(--bg-soft));
-                 border:1px solid var(--stroke); border-radius: 20px; padding: 18px; box-shadow: var(--shadow); }
-    .stats { display:grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 14px; }
-    .stat { background: var(--card); border:1px solid var(--stroke); border-radius:16px; padding:14px; text-align:center; }
-    .stat .big { font-weight:800; font-size: 28px; letter-spacing:-.02em; }
-    .stat .small { font-size: 12px; color: var(--muted); }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
 
-    /* Sections */
-    section { padding: 56px 0; }
-    .section-title { display:flex; align-items:center; gap:12px; margin-bottom: 22px; }
-    .section-title h2 { margin:0; font-size: clamp(22px, 3vw, 28px); }
-    .section-title .line { height:1px; flex:1; background: linear-gradient(90deg, var(--brand), transparent); opacity:.5 }
+        header {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
 
-    /* Projects */
-    .grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    @media (max-width: 1000px){ .grid{ grid-template-columns: repeat(2, 1fr);} }
-    @media (max-width: 640px){ .grid{ grid-template-columns: 1fr;} }
-    .card { background: var(--card); border:1px solid var(--stroke); border-radius: 18px; overflow: clip; box-shadow: var(--shadow); display:flex; flex-direction:column; }
-    .thumb { aspect-ratio: 16/9; display:block; background: linear-gradient(135deg, color-mix(in oklab, var(--brand) 35%, transparent), color-mix(in oklab, var(--brand-2) 25%, transparent)); position:relative; }
-    .thumb img { width:100%; height:100%; object-fit: cover; display:block; }
-    .card-body { padding: 16px; display:flex; flex-direction:column; gap:10px; }
-    .card h3 { margin:0; font-size: 18px; }
-    .tags { display:flex; gap:8px; flex-wrap:wrap }
-    .tag { font-size:12px; color: var(--muted); border:1px solid var(--stroke); padding:4px 8px; border-radius: 999px; }
-    .card .buttons { display:flex; gap:10px; margin-top: 6px; }
-    .card .buttons a { flex:1; text-align:center; }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00d4ff, #ff00ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    /* About */
-    .about { display:grid; grid-template-columns: .8fr 1.2fr; gap: 22px; }
-    @media (max-width: 900px){ .about{ grid-template-columns: 1fr; } }
-    .about .panel { background: var(--card); border:1px solid var(--stroke); border-radius: 18px; padding: 18px; box-shadow: var(--shadow); }
-    .skills { display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .skills .pill { border:1px dashed var(--stroke); padding: 10px 12px; border-radius: 12px; }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
 
-    /* Footer */
-    footer { padding: 30px 0 60px; border-top:1px solid var(--stroke) }
-    .socials { display:flex; flex-wrap:wrap; gap:10px }
+        nav a:hover {
+            color: #00d4ff;
+        }
 
-    /* Helpers */
-    .reveal { opacity: 0; transform: translateY(10px); transition: .6s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .muted { color: var(--muted) }
-    .mono { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
-    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0 }
-  </style>
-  <script>
-    // Theme toggle with persistence
-    const applyTheme = (t) => {
-      document.documentElement.classList.toggle('light', t === 'light');
-      localStorage.setItem('theme', t);
-      const metaTheme = document.querySelector('meta[name="theme-color"]');
-      if(metaTheme) metaTheme.setAttribute('content', t==='light' ? '#ffffff' : '#0b0c10');
-    }
-    const initTheme = () => {
-      const stored = localStorage.getItem('theme');
-      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-      applyTheme(stored || (prefersLight ? 'light' : 'dark'));
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-      initTheme();
-      document.getElementById('themeToggle').addEventListener('click', () => {
-        const now = document.documentElement.classList.contains('light') ? 'dark' : 'light';
-        applyTheme(now);
-      });
-      // Scroll reveal
-      const io = new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } })
-      }, { threshold:.12 });
-      document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
-      // Smooth scroll for internal links
-      document.querySelectorAll('a[href^="#"]').forEach(a=>{
-        a.addEventListener('click', (e)=>{ e.preventDefault(); document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'}) })
-      })
-    });
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Yavuz Alp Bilen",
-    "jobTitle": "Game Designer",
-    "url": "https://yourname.github.io/",
-    "image": "https://yourname.github.io/avatar.jpg",
-    "sameAs": [
-      "https://github.com/yourname",
-      "https://www.linkedin.com/in/yourname/",
-      "https://yourname.itch.io/"
-    ]
-  }
-  </script>
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            z-index: 2;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: #00d4ff;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.8), transparent);
+            border-radius: 50%;
+            animation: float 6s infinite;
+        }
+
+        section {
+            padding: 5rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            background: linear-gradient(45deg, #00d4ff, #ff00ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .project-card:hover .project-image::after {
+            left: 100%;
+        }
+
+        .project-info {
+            padding: 1.5rem;
+        }
+
+        .project-info h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .project-info p {
+            color: #b0b0b0;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(0, 212, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(0, 212, 255, 0.4);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .skill-category h3 {
+            margin-bottom: 1.5rem;
+            color: #00d4ff;
+        }
+
+        .skill-item {
+            margin-bottom: 1rem;
+        }
+
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #0099ff);
+            border-radius: 10px;
+            animation: fillBar 1.5s ease;
+        }
+
+        .contact {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            margin: 0 5%;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            padding: 1rem 2rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid #00d4ff;
+            color: #00d4ff;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .contact-link:hover {
+            background: #00d4ff;
+            color: #0a0e27;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: #666;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            25% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            50% {
+                transform: translateY(-10px) translateX(-10px);
+            }
+            75% {
+                transform: translateY(-15px) translateX(5px);
+            }
+        }
+
+        @keyframes fillBar {
+            from {
+                width: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            nav {
+                display: none;
+            }
+            
+            .projects-grid, .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="container nav">
-      <a class="logo" href="#top" aria-label="Home">
-        <span class="logo-badge" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M12 2l4 7-4 13-4-13 4-7z"/></svg>
-        </span>
-        <span>Yavuz Alp Bilen • Game Designer</span>
-      </a>
-      <nav aria-label="Primary">
-        <a href="#projects">Projects</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-        <button id="themeToggle" class="btn" aria-label="Toggle theme">🌓</button>
-      </nav>
-    </div>
-  </header>
+    <header>
+        <div class="logo">GameDev</div>
+        <nav>
+            <a href="#projects">Projects</a>
+            <a href="#skills">Skills</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
 
-  <main id="top" class="container">
-    <!-- Hero -->
     <section class="hero">
-      <div>
-        <span class="muted">Hi, I'm Yavuz Alp Bilen</span>
-        <h1>Systems & Level Designer focused on <span style="background:linear-gradient(90deg,var(--brand),var(--brand-2)); -webkit-background-clip:text; background-clip:text; color:transparent;">playable prototypes</span> and data‑driven iteration.</h1>
-        <p>I build small games fast to answer big design questions. 5+ UE/Unity prototypes, 2 shipped student titles, and a soft‑launch mobile puzzle.</p>
-        <div class="actions">
-          <a class="btn btn--brand" href="#projects">View Projects</a>
-          <a class="btn" href="resume.pdf" target="_blank" rel="noopener">Download CV</a>
-          <a class="btn" href="https://yourname.itch.io" target="_blank" rel="noopener">itch.io</a>
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <h1>Alex Morgan</h1>
+            <p class="subtitle">Game Designer & Creative Visionary</p>
+            <a href="#projects" class="cta-button">View My Work</a>
         </div>
-        <div class="stats">
-          <div class="stat"><div class="big mono">12</div><div class="small">Prototypes</div></div>
-          <div class="stat"><div class="big mono">3</div><div class="small">Team Projects</div></div>
-          <div class="stat"><div class="big mono">2</div><div class="small">Engines (UE/Unity)</div></div>
-        </div>
-      </div>
-      <div class="hero-card reveal" aria-hidden="true">
-        <div class="thumb" style="border-radius:14px; margin-bottom:12px;">
-          <img alt="Showreel placeholder" src="cover.png" onerror="this.style.display='none'">
-        </div>
-        <div style="font-size:14px; color:var(--muted)">Latest: <strong>Forest Runner</strong> — endless runner with dynamic difficulty and weighted spawn tables.</div>
-      </div>
     </section>
 
-    <!-- Projects -->
     <section id="projects">
-      <div class="section-title">
-        <h2>Selected Projects</h2>
-        <div class="line"></div>
-      </div>
-      <div class="grid">
-        <!-- Card 1 -->
-        <article class="card reveal">
-          <a class="thumb" href="https://yourname.itch.io/forest-runner" target="_blank" rel="noopener">
-            <img alt="Forest Runner" src="images/forest-runner.jpg" onerror="this.parentElement.style.background='linear-gradient(135deg, #0ea5e944, #8b5cf644)'; this.remove();" />
-          </a>
-          <div class="card-body">
-            <h3>Forest Runner</h3>
-            <p class="muted">Endless runner prototype exploring dynamic difficulty with Elo‑like player rating and adaptive spawn weights.</p>
-            <div class="tags">
-              <span class="tag">Unity</span><span class="tag">Systems</span><span class="tag">C#</span>
+        <h2>Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎮</div>
+                <div class="project-info">
+                    <h3>Neon Legends</h3>
+                    <p>A fast-paced multiplayer arena shooter with unique character abilities and dynamic level design. Led gameplay mechanics and progression systems.</p>
+                    <div class="project-tags">
+                        <span class="tag">Multiplayer</span>
+                        <span class="tag">Action</span>
+                        <span class="tag">Unity</span>
+                    </div>
+                </div>
             </div>
-            <div class="buttons">
-              <a class="btn btn--brand" href="https://yourname.itch.io/forest-runner" target="_blank" rel="noopener">Play</a>
-              <a class="btn" href="https://github.com/yourname/forest-runner" target="_blank" rel="noopener">Code</a>
+
+            <div class="project-card">
+                <div class="project-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🗡️</div>
+                <div class="project-info">
+                    <h3>Shadow Realm</h3>
+                    <p>Dark fantasy RPG featuring branching narratives and complex character progression. Designed combat system and narrative framework.</p>
+                    <div class="project-tags">
+                        <span class="tag">RPG</span>
+                        <span class="tag">Narrative</span>
+                        <span class="tag">Unreal Engine</span>
+                    </div>
+                </div>
             </div>
-          </div>
-        </article>
-        <!-- Card 2 -->
-        <article class="card reveal">
-          <a class="thumb" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener">
-            <img alt="Decision Game" src="images/decision-game.jpg" onerror="this.parentElement.style.background='linear-gradient(135deg, #0ea5e944, #8b5cf644)'; this.remove();" />
-          </a>
-          <div class="card-body">
-            <h3>Decision Game</h3>
-            <p class="muted">Narrative system where choices shift player stats (Money, Happiness, Health) and gate events via thresholds.</p>
-            <div class="tags">
-              <span class="tag">Unity</span><span class="tag">Narrative</span><span class="tag">Design</span>
+
+            <div class="project-card">
+                <div class="project-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">🌊</div>
+                <div class="project-info">
+                    <h3>Ocean's Echo</h3>
+                    <p>Atmospheric puzzle adventure exploring underwater environments. Created level design and environmental storytelling elements.</p>
+                    <div class="project-tags">
+                        <span class="tag">Puzzle</span>
+                        <span class="tag">Adventure</span>
+                        <span class="tag">Indie</span>
+                    </div>
+                </div>
             </div>
-            <div class="buttons">
-              <a class="btn" href="https://github.com/yourname/decision-game" target="_blank" rel="noopener">Code</a>
-              <a class="btn" href="#" target="_blank" rel="noopener">Design Doc</a>
+
+            <div class="project-card">
+                <div class="project-image" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">🏎️</div>
+                <div class="project-info">
+                    <h3>Velocity Rush</h3>
+                    <p>Arcade racing game with procedurally generated tracks. Balanced difficulty progression and player feedback systems.</p>
+                    <div class="project-tags">
+                        <span class="tag">Racing</span>
+                        <span class="tag">Arcade</span>
+                        <span class="tag">Mobile</span>
+                    </div>
+                </div>
             </div>
-          </div>
-        </article>
-        <!-- Card 3 -->
-        <article class="card reveal">
-          <a class="thumb" href="#" target="_blank" rel="noopener">
-            <img alt="Arena AI" src="images/arena-ai.jpg" onerror="this.parentElement.style.background='linear-gradient(135deg, #0ea5e944, #8b5cf644)'; this.remove();" />
-          </a>
-          <div class="card-body">
-            <h3>Arena AI</h3>
-            <p class="muted">Utility‑based AI for enemy behaviors with designer‑tunable curves; shipped as a graybox combat prototype in UE5.</p>
-            <div class="tags">
-              <span class="tag">Unreal</span><span class="tag">Behavior</span><span class="tag">Blueprint</span>
-            </div>
-            <div class="buttons">
-              <a class="btn btn--brand" href="#" target="_blank" rel="noopener">Video</a>
-              <a class="btn" href="#" target="_blank" rel="noopener">Code</a>
-            </div>
-          </div>
-        </article>
-      </div>
+        </div>
     </section>
 
-    <!-- About -->
-    <section id="about">
-      <div class="section-title">
-        <h2>About</h2>
-        <div class="line"></div>
-      </div>
-      <div class="about">
-        <div class="panel reveal">
-          <h3 style="margin-top:0">Philosophy</h3>
-          <p>I believe good design emerges from fast iteration and honest playtesting. My process: define a sharp design question → prototype the smallest thing that answers it → test → measure → iterate.</p>
-          <ul>
-            <li>Comfortable in <strong>Unity</strong> (C#) and <strong>UE5</strong> (Blueprints).</li>
-            <li>Owns the loop: paper sketch → graybox → tuning → user test (OBS + spreadsheets).</li>
-            <li>Team player: clear documentation, version control, and scope discipline.</li>
-          </ul>
+    <section id="skills">
+        <h2>Skills & Expertise</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3>Game Design</h3>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Level Design</span>
+                        <span>95%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 95%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Systems Design</span>
+                        <span>90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 90%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Balancing</span>
+                        <span>88%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 88%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Technical</h3>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Unity</span>
+                        <span>92%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 92%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Unreal Engine</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 85%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>C# Scripting</span>
+                        <span>80%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 80%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Creative</h3>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Narrative Design</span>
+                        <span>87%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 87%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>UI/UX Design</span>
+                        <span>83%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 83%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Documentation</span>
+                        <span>90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 90%;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="panel reveal">
-          <h3 style="margin-top:0">Skills</h3>
-          <div class="skills">
-            <div class="pill">Systems Design</div>
-            <div class="pill">Level Design</div>
-            <div class="pill">Prototyping</div>
-            <div class="pill">Balance & Telemetry</div>
-            <div class="pill">C# / Blueprint</div>
-            <div class="pill">Unity / UE5</div>
-            <div class="pill">Figma / Notion</div>
-            <div class="pill">Git / Git LFS</div>
-          </div>
-        </div>
-      </div>
     </section>
 
-    <!-- Contact -->
-    <section id="contact">
-      <div class="section-title">
-        <h2>Contact</h2>
-        <div class="line"></div>
-      </div>
-      <div class="card reveal" style="padding:18px;">
-        <p class="muted">I'm looking for internships and junior roles for 2025/26. Reach out for collaborations or playtest requests.</p>
-        <div class="socials">
-          <a class="btn" href="mailto:your@email.com">Email</a>
-          <a class="btn" href="https://github.com/yourname" target="_blank" rel="noopener">GitHub</a>
-          <a class="btn" href="https://yourname.itch.io" target="_blank" rel="noopener">itch.io</a>
-          <a class="btn" href="https://www.linkedin.com/in/yourname/" target="_blank" rel="noopener">LinkedIn</a>
-          <a class="btn" href="https://www.artstation.com/yourname" target="_blank" rel="noopener">ArtStation</a>
+    <section id="contact" class="contact">
+        <h2>Let's Create Something Amazing</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 1rem;">Available for freelance projects and collaborations</p>
+        <div class="contact-links">
+            <a href="mailto:contact@example.com" class="contact-link">Email Me</a>
+            <a href="#" class="contact-link">LinkedIn</a>
+            <a href="#" class="contact-link">Twitter</a>
+            <a href="#" class="contact-link">Portfolio</a>
         </div>
-      </div>
     </section>
-  </main>
 
-  <footer>
-    <div class="container" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
-      <small class="muted">© <span id="y"></span> Yavuz Alp Bilen. Built with HTML/CSS/JS. Hosted on GitHub Pages.</small>
-      <div class="muted">V1.0 • <a class="muted" href="#top">Back to top ↑</a></div>
-    </div>
-  </footer>
+    <footer>
+        <p>&copy; 2025 Alex Morgan. Crafted with passion for games.</p>
+    </footer>
 
-  <script> document.getElementById('y').textContent = new Date().getFullYear(); </script>
+    <script>
+        // Create floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = Math.random() * 4 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(10, 14, 39, 0.95)';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                header.style.background = 'rgba(10, 14, 39, 0.8)';
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

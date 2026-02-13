@@ -1,1462 +1,1541 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Game Designer Portfolio</title>
-
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #07070a 0%, #121218 50%, #1c1c24 100%);
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-    /* Animated gradient background */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background:
-        radial-gradient(circle at 20% 50%, rgba(80, 80, 110, 0.12) 0%, transparent 55%),
-        radial-gradient(circle at 80% 80%, rgba(110, 90, 140, 0.10) 0%, transparent 55%),
-        radial-gradient(circle at 50% 20%, rgba(90, 110, 130, 0.08) 0%, transparent 55%);
-      animation: gradientShift 20s ease infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    @keyframes gradientShift {
-      0%, 100% { opacity: 0.45; transform: scale(1) rotate(0deg); }
-      33% { opacity: 0.65; transform: scale(1.1) rotate(4deg); }
-      66% { opacity: 0.55; transform: scale(0.98) rotate(-4deg); }
-    }
-
-    /* Spotlight effect */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 1;
-      transform: translate(-50%, -50%);
-      transition: opacity 0.3s;
-      opacity: 0;
-    }
-
-    body.mouse-active::after { opacity: 1; }
-
-    header {
-      padding: 2rem 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
-      background: rgba(10, 10, 10, 0.70);
-      backdrop-filter: blur(20px);
-      transition: all 0.3s ease;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .logo {
-      font-size: 1.8rem;
-      font-weight: bold;
-      background: linear-gradient(45deg, #ffffff, #cccccc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      position: relative;
-    }
-
-    .logo::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #ffffff, transparent);
-      transition: width 0.3s;
-    }
-
-    .logo:hover::after { width: 100%; }
-
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      margin-left: 2rem;
-      transition: all 0.3s;
-      font-weight: 500;
-      position: relative;
-      padding: 0.5rem 0;
-    }
-
-    nav a::before {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 0;
-      height: 2px;
-      background: #ffffff;
-      transition: width 0.3s;
-    }
-
-    nav a:hover::before { width: 100%; }
-    nav a:hover { color: #fff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
-
-    .hero {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      z-index: 2;
-    }
-
-    .hero-content { z-index: 3; padding: 2rem; }
-
-    .hero h1 {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      animation: fadeInUp 1s ease, glow 3s ease-in-out infinite;
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-      position: relative;
-      display: inline-block;
-    }
-
-    .hero h1::before {
-      content: attr(data-text);
-      position: absolute;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      color: transparent;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-      -webkit-background-clip: text;
-      background-clip: text;
-      animation: shine 3s infinite;
-    }
-
-    @keyframes shine { 0% { background-position: -500%; } 100% { background-position: 500%; } }
-    @keyframes glow {
-      0%, 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.18); }
-      50% { text-shadow: 0 0 32px rgba(255, 255, 255, 0.33); }
-    }
-
-    .hero .subtitle {
-      font-size: 1.5rem;
-      color: #cccccc;
-      margin-bottom: 1rem;
-      animation: fadeInUp 1s ease 0.2s backwards;
-    }
-
-    .hero .specialization {
-      font-size: 1.2rem;
-      color: #ffffff;
-      margin-bottom: 2rem;
-      animation: fadeInUp 1s ease 0.3s backwards;
-      display: inline-block;
-      padding: 1rem 2rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50px;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s;
-    }
-
-    .hero .specialization:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: scale(1.05);
-      box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
-    }
-
-    .tools {
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-      animation: fadeInUp 1s ease 0.4s backwards;
-    }
-
-    .tool-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.8rem 1.5rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50px;
-      font-size: 1rem;
-      color: #e0e0e0;
-      transition: all 0.3s;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-    }
-
-    .tool-badge:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: translateY(-5px) scale(1.05);
-      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    .cta-button {
-      display: inline-block;
-      padding: 1rem 2.5rem;
-      background: linear-gradient(45deg, #666666, #888888);
-      color: #fff;
-      text-decoration: none;
-      border-radius: 50px;
-      font-weight: bold;
-      transition: all 0.3s;
-      animation: fadeInUp 1s ease 0.5s backwards, pulse 2s ease-in-out infinite;
-      box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-button::before {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      width: 0; height: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-
-    .cta-button::after {
-      content: '';
-      position: absolute;
-      top: -50%; left: -50%;
-      width: 200%; height: 200%;
-      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-      transform: rotate(45deg);
-      animation: buttonShine 3s infinite;
-    }
-
-    @keyframes buttonShine {
-      0% { transform: translateX(-100%) rotate(45deg); }
-      100% { transform: translateX(100%) rotate(45deg); }
-    }
-
-    .cta-button:hover::before { width: 300px; height: 300px; }
-    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3); }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1); }
-      50% { box-shadow: 0 5px 30px rgba(255, 255, 255, 0.2); }
-    }
-
-    /* ===== SPACE BACKGROUND LAYERS (fixed) ===== */
-    .stars-background, .space-dust, .particles, .floating-shapes {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .stars-background { z-index: 0; }
-    .space-dust { z-index: 0; }
-    .particles { z-index: 0; }
-    .floating-shapes { z-index: 0; }
-
-    .space-dust::before {
-      content: '';
-      position: absolute;
-      inset: -20%;
-      background:
-        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.06) 0%, transparent 35%),
-        radial-gradient(circle at 70% 60%, rgba(180,220,255,0.05) 0%, transparent 40%),
-        radial-gradient(circle at 40% 80%, rgba(220,180,255,0.04) 0%, transparent 45%),
-        radial-gradient(circle at 85% 20%, rgba(255,255,255,0.04) 0%, transparent 40%);
-      filter: blur(18px);
-      opacity: 0.55;
-      animation: dustMove 30s ease-in-out infinite;
-      transform: translate3d(0,0,0);
-    }
-
-    @keyframes dustMove {
-      0%,100% { transform: translate3d(0,0,0) scale(1); opacity: 0.50; }
-      50% { transform: translate3d(-1.5%, 1.2%, 0) scale(1.05); opacity: 0.65; }
-    }
-
-    .star {
-      position: absolute;
-      width: 2px; height: 2px;
-      background: white;
-      border-radius: 50%;
-      animation: twinkle 3s infinite;
-    }
-
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.25; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.6); }
-    }
-
-    .particle {
-      position: absolute;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent);
-      border-radius: 50%;
-      animation: float 6s infinite;
-      filter: blur(1px);
-      opacity: 0.75;
-    }
-
-    /* Content over space */
-    section, footer, #contact { position: relative; z-index: 2; }
-
-    /* ===== Drift system ===== */
-    .drift {
-      will-change: transform;
-      animation-name: driftMove;
-      animation-timing-function: ease-in-out;
-      animation-iteration-count: infinite;
-    }
-
-    @keyframes driftMove {
-      0%, 100% { transform: translate3d(0,0,0) rotate(0deg); }
-      50% { transform: translate3d(var(--dx, 20px), var(--dy, 12px), 0) rotate(var(--dr, 2deg)); }
-    }
-
-    /* ===== Nebula ===== */
-    .nebula {
-      position: absolute;
-      width: 460px;
-      height: 460px;
-      border-radius: 50%;
-      filter: blur(70px);
-      opacity: 0.16;
-      z-index: 0;
-      mix-blend-mode: screen;
-    }
-
-    /* ===== Galaxies ===== */
-    .galaxy {
-      position: absolute;
-      width: 520px;
-      height: 520px;
-      border-radius: 50%;
-      background:
-        conic-gradient(
-          from 0deg,
-          rgba(255,255,255,0.00) 0deg,
-          rgba(180,220,255,0.08) 55deg,
-          rgba(255,255,255,0.00) 135deg,
-          rgba(200,170,255,0.06) 220deg,
-          rgba(255,255,255,0.00) 360deg
-        );
-      filter: blur(18px);
-      opacity: 0.12;
-      z-index: 0;
-      mix-blend-mode: screen;
-      -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 25%, rgba(0,0,0,0) 70%);
-      mask-image: radial-gradient(circle, rgba(0,0,0,1) 25%, rgba(0,0,0,0) 70%);
-    }
-
-    /* ===== Planets ===== */
-    .planet {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0.20;
-      z-index: 0;
-      box-shadow: 0 0 60px rgba(255,255,255,0.06);
-      overflow: visible;
-    }
-
-    .planet::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), transparent 45%);
-      opacity: 0.55;
-      pointer-events: none;
-    }
-
-    .planet::after {
-      content: '';
-      position: absolute;
-      inset: -10%;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 60%);
-      filter: blur(10px);
-      opacity: 0.55;
-      pointer-events: none;
-    }
-
-    .planet-ring {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%) rotate(-18deg);
-      width: 160%;
-      height: 38%;
-      border-radius: 50%;
-      background: radial-gradient(ellipse at center,
-        rgba(255,255,255,0.00) 30%,
-        rgba(255,255,255,0.10) 45%,
-        rgba(255,255,255,0.06) 55%,
-        rgba(255,255,255,0.00) 70%
-      );
-      filter: blur(2px);
-      opacity: 0.45;
-      pointer-events: none;
-    }
-
-    /* ===== Black holes ===== */
-    .black-hole-container { position: absolute; z-index: 0; }
-
-    .black-hole {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%,
-        #000000 0%,
-        #000000 25%,
-        #0a0a0a 30%,
-        transparent 40%
-      );
-      box-shadow:
-        inset 0 0 50px rgba(0, 0, 0, 1),
-        0 0 30px rgba(0, 0, 0, 0.8);
-      animation: rotateBlackHole 30s linear infinite;
-    }
-
-    .black-hole::before {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%; height: 100%;
-      border-radius: 50%;
-      background: #000;
-      box-shadow:
-        0 0 20px rgba(0, 0, 0, 0.9),
-        inset 0 0 20px rgba(0, 0, 0, 1);
-    }
-
-    .black-hole::after {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 180%; height: 180%;
-      border-radius: 50%;
-      background:
-        radial-gradient(ellipse at center,
-          transparent 35%,
-          rgba(255, 150, 50, 0.3) 40%,
-          rgba(255, 180, 80, 0.5) 45%,
-          rgba(255, 200, 100, 0.4) 50%,
-          rgba(200, 150, 80, 0.3) 55%,
-          rgba(150, 100, 50, 0.2) 60%,
-          transparent 70%
-        );
-      animation: accretionDisk 15s linear infinite;
-      filter: blur(3px);
-    }
-
-    .bh-swirl {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 135%; height: 135%;
-      border-radius: 50%;
-      background: conic-gradient(
-        from 0deg,
-        rgba(255,255,255,0.00) 0deg,
-        rgba(255,255,255,0.07) 60deg,
-        rgba(255,255,255,0.00) 140deg,
-        rgba(255,255,255,0.06) 220deg,
-        rgba(255,255,255,0.00) 360deg
-      );
-      filter: blur(10px);
-      opacity: 0.33;
-      animation: swirlSpin 10s linear infinite;
-      mix-blend-mode: soft-light;
-      -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%);
-      mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%);
-      pointer-events: none;
-    }
-
-    .gravitational-lens {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 250%; height: 250%;
-      border-radius: 50%;
-      background: radial-gradient(circle,
-        transparent 30%,
-        rgba(100, 100, 120, 0.05) 45%,
-        rgba(80, 80, 100, 0.08) 50%,
-        rgba(60, 60, 80, 0.05) 55%,
-        transparent 70%
-      );
-      pointer-events: none;
-      animation: lensDistortion 20s ease-in-out infinite;
-    }
-
-    @keyframes lensDistortion {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-      50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.8; }
-    }
-
-    @keyframes swirlSpin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
-    @keyframes rotateBlackHole { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @keyframes accretionDisk { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-
-    /* ===== Spaceships ===== */
-    .spaceship {
-      position: absolute;
-      width: 55px;
-      height: 55px;
-      z-index: 1;
-      filter: drop-shadow(0 0 8px rgba(60, 100, 140, 0.5));
-      pointer-events: none;
-    }
-
-    .spaceship svg { width: 100%; height: 100%; }
-
-    .trail {
-      position: absolute;
-      width: 90px;
-      height: 5px;
-      background: linear-gradient(90deg,
-        rgba(80, 130, 180, 0.8),
-        rgba(100, 150, 200, 0.6),
-        rgba(120, 170, 220, 0.4),
-        rgba(140, 190, 230, 0.2),
-        transparent
-      );
-      border-radius: 50%;
-      filter: blur(4px);
-      animation: trailPulse 0.2s ease-in-out infinite;
-      box-shadow:
-        0 0 12px rgba(80, 130, 180, 0.6),
-        0 0 20px rgba(60, 110, 160, 0.3);
-      z-index: 0;
-    }
-
-    .trail::before {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg,
-        rgba(180, 200, 220, 0.5),
-        rgba(150, 180, 210, 0.3),
-        transparent
-      );
-      border-radius: 50%;
-      filter: blur(2px);
-    }
-
-    @keyframes trailPulse {
-      0%, 100% { opacity: 0.85; transform: scaleX(1) scaleY(1); }
-      50% { opacity: 1; transform: scaleX(1.25) scaleY(1.15); }
-    }
-
-    .spaceship.captured { animation: capturedByBlackHole 2s ease-in forwards !important; }
-
-    @keyframes capturedByBlackHole {
-      0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
-      50% { transform: translate(var(--bh-x), var(--bh-y)) rotate(360deg) scale(0.5); opacity: 0.8; }
-      100% { transform: translate(var(--bh-x), var(--bh-y)) rotate(720deg) scale(0); opacity: 0; }
-    }
-
-    /* Sections */
-    section {
-      padding: 5rem 5%;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    h2 {
-      font-size: 2.5rem;
-      margin-bottom: 3rem;
-      text-align: center;
-      background: linear-gradient(45deg, #ffffff, #aaaaaa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-
-    h2::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #888888, transparent);
-      animation: expandLine 2s ease-in-out infinite;
-    }
-
-    @keyframes expandLine {
-      0%, 100% { width: 100px; }
-      50% { width: 200px; }
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 2rem;
-    }
-
-    .project-card {
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 20px;
-      overflow: hidden;
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      position: relative;
-      cursor: pointer;
-    }
-
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-      transition: left 0.5s;
-    }
-
-    .project-card::after {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      background: linear-gradient(45deg,
-        transparent,
-        rgba(255, 255, 255, 0.1),
-        transparent,
-        rgba(255, 255, 255, 0.1),
-        transparent
-      );
-      background-size: 200% 200%;
-      border-radius: 20px;
-      opacity: 0;
-      transition: opacity 0.5s;
-      animation: borderGlow 3s linear infinite;
-      z-index: -1;
-    }
-
-    @keyframes borderGlow { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
-    .project-card:hover::after { opacity: 1; }
-    .project-card:hover::before { left: 100%; }
-
-    .project-card:hover {
-      transform: translateY(-15px) scale(1.02);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .project-image {
-      width: 100%;
-      height: 250px;
-      background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s;
-    }
-
-    .project-card:hover .project-image { transform: scale(1.1); filter: brightness(1.2); }
-
-    .project-image::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transition: left 0.5s;
-    }
-
-    .project-card:hover .project-image::after { left: 100%; }
-
-    .project-info { padding: 1.5rem; transition: all 0.3s; }
-    .project-card:hover .project-info { background: rgba(255, 255, 255, 0.02); }
-
-    .project-info h3 { margin-bottom: 0.5rem; font-size: 1.5rem; transition: all 0.3s; }
-    .project-card:hover .project-info h3 { color: #fff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
-
-    .project-role { color: #999; font-size: 0.9rem; margin-bottom: 0.8rem; font-style: italic; }
-    .project-info p { color: #b0b0b0; line-height: 1.6; margin-bottom: 1rem; }
-
-    .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .tag {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.3s;
-    }
-
-    .project-card:hover .tag {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.4);
-      transform: translateY(-2px);
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-
-    .skill-category {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 2rem;
-      border-radius: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.4s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .skill-category::before {
-      content: '';
-      position: absolute;
-      top: -50%; left: -50%;
-      width: 200%; height: 200%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-
-    .skill-category:hover::before { opacity: 1; animation: rotate 10s linear infinite; }
-    @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-    .skill-category:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .skill-category h3 { margin-bottom: 1.5rem; color: #cccccc; position: relative; z-index: 1; }
-    .skill-item { margin-bottom: 1rem; position: relative; z-index: 1; }
-    .skill-name { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
-
-    .skill-bar {
-      height: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .skill-bar::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      animation: shimmer 2s infinite;
-    }
-
-    @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
-
-    .skill-progress {
-      height: 100%;
-      background: linear-gradient(90deg, #888888, #aaaaaa, #888888);
-      background-size: 200% 100%;
-      border-radius: 10px;
-      animation: fillBar 1.5s ease, gradientMove 3s ease infinite;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    }
-
-    @keyframes gradientMove {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    .contact {
-      text-align: center;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 4rem 2rem;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .contact::before {
-      content: '';
-      position: absolute;
-      top: -50%; left: -50%;
-      width: 200%; height: 200%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-      animation: rotate 15s linear infinite;
-    }
-
-    .contact h2, .contact p, .contact-links { position: relative; z-index: 1; }
-
-    .contact-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .contact-link {
-      padding: 1rem 2rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 2px solid #888888;
-      color: #cccccc;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: all 0.3s;
-      font-weight: bold;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .contact-link::before {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      width: 0; height: 0;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: width 0.5s, height 0.5s;
-    }
-
-    .contact-link:hover::before { width: 300px; height: 300px; }
-    .contact-link:hover {
-      background: #888888;
-      color: #0a0a0a;
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem;
-      margin-top: 3rem;
-      color: #666;
-      z-index: 2;
-      position: relative;
-    }
-
-    /* Reveal */
-    .reveal { opacity: 0; transform: translateY(50px); transition: all 0.6s ease; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) translateX(0); }
-      25% { transform: translateY(-20px) translateX(10px); }
-      50% { transform: translateY(-10px) translateX(-10px); }
-      75% { transform: translateY(-15px) translateX(5px); }
-    }
-
-    @keyframes fillBar { from { width: 0; } }
-
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 2.5rem; }
-      nav { display: none; }
-      .projects-grid, .skills-grid { grid-template-columns: 1fr; }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="stars-background" id="stars"></div>
-  <div class="space-dust" id="dust"></div>
-  <div class="particles" id="particles"></div>
-  <div class="floating-shapes" id="space-objects"></div>
-
-  <header>
-    <div class="logo">GameDev</div>
-    <nav>
-      <a href="#projects">Projects</a>
-      <a href="#skills">Background</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <div class="hero-content">
-      <h1 data-text="Game Designer">Game Designer</h1>
-      <p class="subtitle">Certified Game Designer</p>
-      <p class="specialization">Specializing in Level Design & Environment Design</p>
-      <div class="tools">
-        <div class="tool-badge"><span>🎮</span><span>Unity Engine</span></div>
-        <div class="tool-badge"><span>⚡</span><span>Unreal Engine</span></div>
-      </div>
-      <a href="#projects" class="cta-button">View My Work</a>
-    </div>
-  </section>
-
-  <section id="projects">
-    <h2>Featured Projects</h2>
-    <div class="projects-grid">
-      <div class="project-card reveal">
-        <div class="project-image" style="background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);">🏙️</div>
-        <div class="project-info">
-          <h3>Urban Warfare</h3>
-          <div class="project-role">Level Designer & Environment Artist</div>
-          <p>Designed and built 8 multiplayer maps featuring urban environments. Created vertical gameplay spaces with multiple routes and strategic points.</p>
-          <div class="project-tags">
-            <span class="tag">Unity</span><span class="tag">Multiplayer</span><span class="tag">Level Design</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card reveal">
-        <div class="project-image" style="background: linear-gradient(135deg, #5a5a5a 0%, #3a3a3a 100%);">🌲</div>
-        <div class="project-info">
-          <h3>Forest of Echoes</h3>
-          <div class="project-role">Environment Designer</div>
-          <p>Crafted atmospheric forest environments for single-player adventure. Designed exploration-focused levels with environmental storytelling elements.</p>
-          <div class="project-tags">
-            <span class="tag">Unreal Engine</span><span class="tag">Adventure</span><span class="tag">Environment Design</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card reveal">
-        <div class="project-image" style="background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);">🏰</div>
-        <div class="project-info">
-          <h3>Siege Masters</h3>
-          <div class="project-role">Level Designer</div>
-          <p>Developed castle siege levels with destructible environments and dynamic objectives. Created asymmetric maps balancing attacker and defender advantages.</p>
-          <div class="project-tags">
-            <span class="tag">Unity</span><span class="tag">Strategy</span><span class="tag">Level Design</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card reveal">
-        <div class="project-image" style="background: linear-gradient(135deg, #2a2a2a 0%, #4a4a4a 100%);">🌊</div>
-        <div class="project-info">
-          <h3>Deep Blue</h3>
-          <div class="project-role">Environment & Level Designer</div>
-          <p>Designed underwater exploration levels with unique navigation challenges. Created atmospheric environments using volumetric lighting and particle effects.</p>
-          <div class="project-tags">
-            <span class="tag">Unreal Engine</span><span class="tag">Exploration</span><span class="tag">Environment Design</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="skills">
-    <h2>Education & Experience</h2>
-    <div class="skills-grid">
-      <div class="skill-category reveal">
-        <h3>Education</h3>
-        <div class="skill-item">
-          <div class="skill-name"><span>Game Design Certification</span></div>
-          <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Game Design Academy - Comprehensive program covering systems design, level design, and game mechanics with specialization in level and environment design.</p>
-        </div>
-        <div class="skill-item" style="margin-top: 1.5rem;">
-          <div class="skill-name"><span>Unity Certification</span></div>
-          <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Unity Technologies - Certified in level design tools, lighting systems, and environment optimization.</p>
-        </div>
-      </div>
-
-      <div class="skill-category reveal">
-        <h3>Level Design Skills</h3>
-        <div class="skill-item">
-          <div class="skill-name"><span>Level Design</span><span>95%</span></div>
-          <div class="skill-bar"><div class="skill-progress" style="width: 95%;"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Environment Design</span><span>92%</span></div>
-          <div class="skill-bar"><div class="skill-progress" style="width: 92%;"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Player Flow Design</span><span>90%</span></div>
-          <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
-        </div>
-      </div>
-
-      <div class="skill-category reveal">
-        <h3>Engine Experience</h3>
-        <remember: the new script updates require full script paste but not relevant here.>
-        <div class="skill-item">
-          <div class="skill-name"><span>Unity</span><span>92%</span></div>
-          <div class="skill-bar"><div class="skill-progress" style="width: 92%;"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Unreal Engine</span><span>85%</span></div>
-          <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Lighting & VFX</span><span>88%</span></div>
-          <div class="skill-bar"><div class="skill-progress" style="width: 88%;"></div></div>
-        </div>
-      </div>
-
-      <div class="skill-category reveal">
-        <h3>Professional Experience</h3>
-        <div class="skill-item">
-          <div class="skill-name"><span>Level Designer</span></div>
-          <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Independent Studio (2022 - Present) - Design and implement game levels, create environment layouts, collaborate with teams.</p>
-        </div>
-        <div class="skill-item" style="margin-top: 1.5rem;">
-          <div class="skill-name"><span>Environment Designer</span></div>
-          <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Freelance (2020 - 2022) - Designed atmospheric environments, specialized in environmental storytelling.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div id="contact">
-    <section class="contact reveal">
-      <h2>Let's Create Something Amazing</h2>
-      <p style="font-size: 1.2rem; margin-bottom: 1rem;">Available for freelance projects and collaborations</p>
-      <div class="contact-links">
-        <a href="mailto:contact@example.com" class="contact-link">Email Me</a>
-        <a href="#" class="contact-link">LinkedIn</a>
-        <a href="#" class="contact-link">ArtStation</a>
-        <a href="#" class="contact-link">Portfolio</a>
-      </div>
-    </section>
-  </div>
-
-  <footer>
-    <p>&copy; 2025 Game Designer Portfolio. Crafted with passion for games.</p>
-  </footer>
-
-  <script>
-    // ===== Stars =====
-    const starsContainer = document.getElementById('stars');
-    const starCount = 260;
-
-    for (let i = 0; i < starCount; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-
-      const size = Math.random() < 0.85 ? 2 : 3;
-      star.style.width = size + 'px';
-      star.style.height = size + 'px';
-
-      star.style.left = Math.random() * 100 + '%';
-      star.style.top = Math.random() * 100 + '%';
-
-      star.style.animationDelay = Math.random() * 3 + 's';
-      star.style.animationDuration = (Math.random() * 2 + 2) + 's';
-
-      // very subtle tint variation
-      const tint = Math.random();
-      if (tint > 0.92) star.style.background = 'rgba(180,220,255,0.95)';
-      if (tint < 0.06) star.style.background = 'rgba(255,210,180,0.95)';
-
-      starsContainer.appendChild(star);
-    }
-
-    // ===== Particles =====
-    const particlesContainer = document.getElementById('particles');
-    for (let i = 0; i < 55; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      const size = Math.random() * 5 + 2;
-      p.style.width = size + 'px';
-      p.style.height = size + 'px';
-      p.style.left = Math.random() * 100 + '%';
-      p.style.top = Math.random() * 100 + '%';
-      p.style.animationDelay = Math.random() * 6 + 's';
-      p.style.animationDuration = (Math.random() * 5 + 4) + 's';
-      particlesContainer.appendChild(p);
-    }
-
-    const spaceContainer = document.getElementById('space-objects');
-
-    // helper: apply drift vars
-    function applyDrift(el, minDur = 18, maxDur = 36) {
-      el.classList.add('drift');
-      const dx = (Math.random() * 60 - 30).toFixed(1) + 'px';
-      const dy = (Math.random() * 50 - 25).toFixed(1) + 'px';
-      const dr = (Math.random() * 6 - 3).toFixed(2) + 'deg';
-      const dur = (minDur + Math.random() * (maxDur - minDur)).toFixed(1) + 's';
-      const delay = (-Math.random() * 12).toFixed(1) + 's';
-
-      el.style.setProperty('--dx', dx);
-      el.style.setProperty('--dy', dy);
-      el.style.setProperty('--dr', dr);
-      el.style.animationDuration = dur;
-      el.style.animationDelay = delay;
-    }
-
-    // ===== Nebulas =====
-    const nebulas = [
-      { top: '8%', left: '10%', color: 'rgba(70, 80, 140, 0.32)', size: 560 },
-      { top: '55%', right: '6%', color: 'rgba(120, 90, 150, 0.26)', size: 520 },
-      { bottom: '16%', left: '18%', color: 'rgba(70, 120, 130, 0.26)', size: 580 },
-      { bottom: '5%', right: '28%', color: 'rgba(100, 110, 160, 0.22)', size: 620 }
-    ];
-
-    nebulas.forEach(n => {
-      const neb = document.createElement('div');
-      neb.className = 'nebula';
-      neb.style.width = n.size + 'px';
-      neb.style.height = n.size + 'px';
-      neb.style.background = `radial-gradient(circle, ${n.color} 0%, transparent 60%)`;
-      if (n.top) neb.style.top = n.top;
-      if (n.bottom) neb.style.bottom = n.bottom;
-      if (n.left) neb.style.left = n.left;
-      if (n.right) neb.style.right = n.right;
-      applyDrift(neb, 22, 42);
-      spaceContainer.appendChild(neb);
-    });
-
-    // ===== Galaxies =====
-    const galaxies = [
-      { top: '20%', left: '54%', size: 560, rotate: 18 },
-      { top: '72%', left: '6%', size: 660, rotate: -12 }
-    ];
-
-    galaxies.forEach(g => {
-      const gal = document.createElement('div');
-      gal.className = 'galaxy';
-      gal.style.width = g.size + 'px';
-      gal.style.height = g.size + 'px';
-      gal.style.top = g.top;
-      gal.style.left = g.left;
-      gal.style.transform = `rotate(${g.rotate}deg)`;
-      applyDrift(gal, 28, 55);
-      spaceContainer.appendChild(gal);
-    });
-
-    // ===== Planets (ADDED) =====
-    function addPlanet({ top, left, right, bottom, size, colors, ring }) {
-      const planet = document.createElement('div');
-      planet.className = 'planet';
-      planet.style.width = size + 'px';
-      planet.style.height = size + 'px';
-      planet.style.background =
-        `radial-gradient(circle at 30% 30%,
-          ${colors[0]} 0%,
-          ${colors[1]} 35%,
-          ${colors[2]} 70%,
-          ${colors[3]} 100%
-        )`;
-
-      if (top) planet.style.top = top;
-      if (bottom) planet.style.bottom = bottom;
-      if (left) planet.style.left = left;
-      if (right) planet.style.right = right;
-
-      if (ring) {
-        const r = document.createElement('div');
-        r.className = 'planet-ring';
-        r.style.transform = `translate(-50%, -50%) rotate(${ring.rotate ?? -18}deg)`;
-        r.style.opacity = ring.opacity ?? 0.45;
-        planet.appendChild(r reminding);
-      }
-
-      applyDrift(planet, 24, 52);
-      spaceContainer.appendChild(planet);
-    }
-
-    // planet set (subtle, not blocking content)
-    addPlanet({
-      top: '12%',
-      right: '6%',
-      size: 240,
-      colors: ['rgba(180,220,255,0.34)', 'rgba(90,120,190,0.20)', 'rgba(40,60,100,0.14)', 'rgba(10,12,20,0.08)'],
-      ring: { rotate: -24, opacity: 0.42 }
-    });
-
-    addPlanet({
-      bottom: '10%',
-      right: '8%',
-      size: 280,
-      colors: ['rgba(255,230,190,0.22)', 'rgba(180,120,80,0.16)', 'rgba(80,55,40,0.12)', 'rgba(10,8,8,0.08)'],
-      ring: null
-    });
-
-    addPlanet({
-      top: '60%',
-      left: '3%',
-      size: 200,
-      colors: ['rgba(200,255,235,0.18)', 'rgba(80,170,140,0.14)', 'rgba(40,90,80,0.12)', 'rgba(10,15,12,0.08)'],
-      ring: { rotate: 14, opacity: 0.38 }
-    });
-
-    // ===== Black holes =====
-    const blackHolePositions = [
-      { top: '16%', left: '18%', size: 120 },
-      { top: '52%', right: '14%', size: 150 },
-      { bottom: '24%', left: '28%', size: 110 },
-      { top: '76%', right: '22%', size: 130 }
-    ];
-
-    const blackHoles = [];
-    blackHolePositions.forEach((pos) => {
-      const container = document.createElement('div');
-      container.className = 'black-hole-container';
-      if (pos.top) container.style.top = pos.top;
-      if (pos.bottom) container.style.bottom = pos.bottom;
-      if (pos.left) container.style.left = pos.left;
-      if (pos.right) container.style.right = pos.right;
-
-      const blackHole = document.createElement('div');
-      blackHole.className = 'black-hole';
-      blackHole.style.width = pos.size + 'px';
-      blackHole.style.height = pos.size + 'px';
-      blackHole.style.animationDuration = (20 + Math.random() * 15) + 's';
-
-      const swirl = document.createElement('div');
-      swirl.className = 'bh-swirl';
-      swirl.style.animationDuration = (8 + Math.random() * 8) + 's';
-      blackHole.appendChild(swirl);
-
-      const lens = document.createElement('div');
-      lens.className = 'gravitational-lens';
-
-      container.appendChild(blackHole);
-      container.appendChild(lens);
-      spaceContainer.appendChild(container);
-
-      blackHoles.push({ element: blackHole });
-    });
-
-    // ===== Original spaceship SVG =====
-    const spaceshipSVG = `
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
-              fill="url(#centerBody)" stroke="#0a0a0a" stroke-width="1.5"/>
-        <path d="M 50 38 L 35 26 L 23 21 L 20 24 L 25 31 L 37 36 L 50 41 Z"
-              fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
-        <path d="M 50 62 L 35 74 L 23 79 L 20 76 L 25 69 L 37 64 L 50 59 Z"
-              fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
-        <path d="M 50 38 L 35 26 L 23 21" stroke="#4a4a4a" stroke-width="0.8" opacity="0.7"/>
-        <path d="M 50 62 L 35 74 L 23 79" stroke="#4a4a4a" stroke-width="0.8" opacity="0.7"/>
-        <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
-        <ellipse cx="68" cy="52" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
-        <rect x="18" y="46" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
-        <rect x="18" y="51.5" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
-        <ellipse cx="22" cy="47" rx="6" ry="2" fill="#3070a0" opacity="0.75">
-          <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
-        </ellipse>
-        <ellipse cx="22" cy="53" rx="6" ry="2" fill="#3070a0" opacity="0.75">
-          <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
-        </ellipse>
-        <ellipse cx="21" cy="47" rx="3.5" ry="1.5" fill="#5090d0" opacity="0.9">
-          <animate attributeName="opacity" values="0.7;1;0.7" dur="0.15s" repeatCount="indefinite"/>
-        </ellipse>
-        <ellipse cx="21" cy="53" rx="3.5" ry="1.5" fill="#5090d0" opacity="0.9">
-          <animate attributeName="opacity" values="0.7;1;0.7" dur="0.15s" repeatCount="indefinite"/>
-        </ellipse>
-        <path d="M 75 48 L 80 50 L 75 52" stroke="#5a5a5a" stroke-width="1" fill="none"/>
-        <path d="M 50 38 L 58 42 L 62 50 L 58 58 L 50 62 L 42 58 L 38 50 L 42 42 Z"
-              fill="url(#reinforcement)" stroke="#1a1a1a" stroke-width="0.8" opacity="0.6"/>
-        <defs>
-          <radialGradient id="centerBody" cx="60%" cy="50%">
-            <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
-            <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
-          </radialGradient>
-          <linearGradient id="wingGradient" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
-            <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
-          </linearGradient>
-          <radialGradient id="reinforcement" cx="50%" cy="50%">
-            <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
-          </radialGradient>
-        </defs>
-      </svg>
-    `;
-
-    // ===== Straight-line Spaceship =====
-    function createSpaceship() {
-      const spaceship = document.createElement('div');
-      spaceship.className = 'spaceship';
-      spaceship.innerHTML = spaceshipSVG;
-
-      const trail = document.createElement('div');
-      trail.className = 'trail';
-      spaceship.appendChild(trail);
-
-      const edge = Math.floor(Math.random() * 4);
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-
-      let startX, startY, endX, endY;
-
-      if (edge === 0) { // left -> right
-        startX = -100; endX = vw + 100;
-        startY = Math.random() * vh; endY = startY;
-      } else if (edge === 1) { // top -> bottom
-        startY = -100; endY = vh + 100;
-        startX = Math.random() * vw; endX = startX;
-      } else if (edge === 2) { // right -> left
-        startX = vw + 100; endX = -100;
-        startY = Math.random() * vh; endY = startY;
-      } else { // bottom -> top
-        startY = vh + 100; endY = -100;
-        startX = Math.random() * vw; endX = startX;
-      }
-
-      const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
-
-      spaceship.style.left = startX + 'px';
-      spaceship.style.top = startY + 'px';
-
-      trail.style.right = '100%';
-      trail.style.top = '50%';
-      trail.style.transform = 'translateY(-50%)';
-
-      const duration = 10 + Math.random() * 5;
-      let startTime = null;
-      let rafId;
-
-      function animate(ts) {
-        if (!startTime) startTime = ts;
-        const progress = (ts - startTime) / (duration * 1000);
-
-        if (progress < 1 && !spaceship.classList.contains('captured')) {
-          const x = startX + (endX - startX) * progress;
-          const y = startY + (endY - startY) * progress;
-
-          spaceship.style.left = x + 'px';
-          spaceship.style.top = y + 'px';
-          spaceship.style.transform = `rotate(${angle}deg)`;
-
-          // collision
-          const shipCenterX = x + 27.5;
-          const shipCenterY = y + 27.5;
-
-          blackHoles.forEach(bh => {
-            const r = bh.element.getBoundingClientRect();
-            const bhX = r.left + r.width / 2;
-            const bhY = r.top + r.height / 2;
-            const bhRadius = r.width / 2;
-
-            const dist = Math.hypot(shipCenterX - bhX, shipCenterY - bhY);
-
-            if (dist < bhRadius * 1.5 && !spaceship.classList.contains('captured')) {
-              spaceship.classList.add('captured');
-              trail.style.opacity = '0';
-
-              spaceship.style.setProperty('--bh-x', (bhX - x - 27.5) + 'px');
-              spaceship.style.setProperty('--bh-y', (bhY - y - 27.5) + 'px');
-
-              cancelAnimationFrame(rafId);
-              setTimeout(() => spaceship.remove(), 2000);
-            }
-          });
-
-          rafId = requestAnimationFrame(animate);
-        } else {
-          if (!spaceship.classList.contains('captured')) spaceship.remove();
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Designer Portfolio</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #141420 50%, #1f1f2a 100%);
+            color: #fff;
+            overflow-x: hidden;
         }
-      }
 
-      spaceContainer.appendChild(spaceship);
-      rafId = requestAnimationFrame(animate);
-    }
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(80, 80, 120, 0.14) 0%, transparent 55%),
+                radial-gradient(circle at 80% 80%, rgba(120, 90, 150, 0.12) 0%, transparent 55%),
+                radial-gradient(circle at 50% 20%, rgba(90, 120, 130, 0.10) 0%, transparent 55%);
+            animation: gradientShift 20s ease infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    setInterval(createSpaceship, 1500);
-    for (let i = 0; i < 5; i++) setTimeout(createSpaceship, i * 400);
+        @keyframes gradientShift {
+            0%, 100% { opacity: 0.45; transform: scale(1) rotate(0deg); }
+            33% { opacity: 0.65; transform: scale(1.1) rotate(5deg); }
+            66% { opacity: 0.55; transform: scale(0.98) rotate(-5deg); }
+        }
 
-    // Smooth scrolling
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', function (e) {
-        e.preventDefault();
-        const t = document.querySelector(this.getAttribute('href'));
-        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
+        /* Spotlight effect that follows cursor */
+        body::after {
+            content: '';
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+            opacity: 0;
+            left: var(--mouse-x, 50%);
+            top: var(--mouse-y, 50%);
+        }
 
-    // Header scroll
-    window.addEventListener('scroll', () => {
-      const header = document.querySelector('header');
-      if (window.scrollY > 100) {
-        header.style.background = 'rgba(10, 10, 10, 0.95)';
-        header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.5)';
-      } else {
-        header.style.background = 'rgba(10, 10, 10, 0.7)';
-        header.style.boxShadow = 'none';
-      }
-    });
+        body.mouse-active::after { opacity: 1; }
 
-    // Reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const revealOnScroll = () => {
-      reveals.forEach(el => {
-        const top = el.getBoundingClientRect().top;
-        if (top < window.innerHeight - 100) el.classList.add('active');
-      });
-    };
-    window.addEventListener('scroll', revealOnScroll);
-    revealOnScroll();
+        header {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-    // Spotlight
-    document.addEventListener('mousemove', (e) => {
-      document.body.style.setProperty('--mouse-x', e.clientX + 'px');
-      document.body.style.setProperty('--mouse-y', e.clientY + 'px');
-      document.body.classList.add('mouse-active');
-    });
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ffffff, #cccccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
 
-    const spotlightStyle = document.createElement('style');
-    spotlightStyle.textContent = `body::after{ left: var(--mouse-x, 50%); top: var(--mouse-y, 50%);} `;
-    document.head.appendChild(spotlightStyle);
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ffffff, transparent);
+            transition: width 0.3s;
+        }
 
-    // Magnetic
-    document.querySelectorAll('.project-card, .skill-category').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const r = card.getBoundingClientRect();
-        const x = e.clientX - r.left;
-        const y = e.clientY - r.top;
-        const cx = r.width / 2;
-        const cy = r.height / 2;
-        const dx = (x - cx) / cx;
-        const dy = (y - cy) / cy;
+        .logo:hover::after { width: 100%; }
 
-        card.style.transform = `
-          perspective(1000px)
-          rotateY(${dx * 5}deg)
-          rotateX(${-dy * 5}deg)
-          translateY(-15px)
-          scale(1.02)
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: all 0.3s;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ffffff;
+            transition: width 0.3s;
+        }
+
+        nav a:hover::before { width: 100%; }
+        nav a:hover { color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content { z-index: 2; padding: 2rem; }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease, glow 3s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1::before {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            color: transparent;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { background-position: -500%; }
+            100% { background-position: 500%; }
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+            50% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.4); }
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: #cccccc;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .hero .specialization {
+            font-size: 1.2rem;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.3s backwards;
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .hero .specialization:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
+        }
+
+        .tools {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        .tool-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            font-size: 1rem;
+            color: #e0e0e0;
+            transition: all 0.3s;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .tool-badge:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(45deg, #666666, #888888);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s;
+            animation: fadeInUp 1s ease 0.5s backwards, pulse 2s ease-in-out infinite;
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: buttonShine 3s infinite;
+        }
+
+        @keyframes buttonShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .cta-button:hover::before { width: 300px; height: 300px; }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3); }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1); }
+            50% { box-shadow: 0 5px 30px rgba(255, 255, 255, 0.2); }
+        }
+
+        /* ===== SPACE LAYERS (fixed, not scrolling away) ===== */
+        .stars-background,
+        .space-dust,
+        .particles,
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .space-dust::before {
+            content: '';
+            position: absolute;
+            inset: -20%;
+            background:
+                radial-gradient(circle at 18% 32%, rgba(255,255,255,0.05) 0%, transparent 35%),
+                radial-gradient(circle at 72% 62%, rgba(180,220,255,0.045) 0%, transparent 42%),
+                radial-gradient(circle at 45% 82%, rgba(220,180,255,0.035) 0%, transparent 45%),
+                radial-gradient(circle at 88% 22%, rgba(255,255,255,0.035) 0%, transparent 40%);
+            filter: blur(18px);
+            opacity: 0.55;
+            animation: dustMove 30s ease-in-out infinite;
+            transform: translate3d(0,0,0);
+        }
+
+        @keyframes dustMove {
+            0%,100% { transform: translate3d(0,0,0) scale(1); opacity: 0.50; }
+            50% { transform: translate3d(-1.5%, 1.2%, 0) scale(1.05); opacity: 0.65; }
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent);
+            border-radius: 50%;
+            animation: float 6s infinite;
+            filter: blur(1px);
+        }
+
+        /* Stars background */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* Drift helper */
+        .drift {
+            will-change: transform;
+            animation-name: driftMove;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes driftMove {
+            0%, 100% { transform: translate3d(0,0,0) rotate(0deg); }
+            50% { transform: translate3d(var(--dx, 20px), var(--dy, 12px), 0) rotate(var(--dr, 2deg)); }
+        }
+
+        /* Nebula */
+        .nebula {
+            position: absolute;
+            width: 520px;
+            height: 520px;
+            border-radius: 50%;
+            filter: blur(70px);
+            opacity: 0.16;
+            z-index: 0;
+            mix-blend-mode: screen;
+        }
+
+        /* Galaxy */
+        .galaxy {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                rgba(255,255,255,0.00) 0deg,
+                rgba(180,220,255,0.08) 55deg,
+                rgba(255,255,255,0.00) 135deg,
+                rgba(200,170,255,0.06) 220deg,
+                rgba(255,255,255,0.00) 360deg
+            );
+            filter: blur(18px);
+            opacity: 0.12;
+            z-index: 0;
+            mix-blend-mode: screen;
+            -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 25%, rgba(0,0,0,0) 70%);
+            mask-image: radial-gradient(circle, rgba(0,0,0,1) 25%, rgba(0,0,0,0) 70%);
+        }
+
+        /* Planets */
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.20;
+            z-index: 0;
+            box-shadow: 0 0 60px rgba(255,255,255,0.06);
+        }
+
+        .planet::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), transparent 45%);
+            opacity: 0.55;
+        }
+
+        .planet::after {
+            content: '';
+            position: absolute;
+            inset: -10%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 60%);
+            filter: blur(10px);
+            opacity: 0.55;
+        }
+
+        .planet-ring {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-18deg);
+            width: 160%;
+            height: 38%;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at center,
+                rgba(255,255,255,0.00) 30%,
+                rgba(255,255,255,0.10) 45%,
+                rgba(255,255,255,0.06) 55%,
+                rgba(255,255,255,0.00) 70%
+            );
+            filter: blur(2px);
+            opacity: 0.45;
+        }
+
+        section {
+            padding: 5rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            background: linear-gradient(45deg, #ffffff, #aaaaaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #888888, transparent);
+            animation: expandLine 2s ease-in-out infinite;
+        }
+
+        @keyframes expandLine {
+            0%, 100% { width: 100px; }
+            50% { width: 200px; }
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            background-size: 200% 200%;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            animation: borderGlow 3s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes borderGlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 200%; }
+        }
+
+        .project-card:hover::after { opacity: 1; }
+        .project-card:hover::before { left: 100%; }
+
+        .project-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .project-card:hover .project-image {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        .project-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .project-card:hover .project-image::after { left: 100%; }
+
+        .project-info { padding: 1.5rem; transition: all 0.3s; }
+        .project-card:hover .project-info { background: rgba(255, 255, 255, 0.02); }
+
+        .project-info h3 { margin-bottom: 0.5rem; font-size: 1.5rem; transition: all 0.3s; }
+        .project-card:hover .project-info h3 { color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
+
+        .project-role { color: #999; font-size: 0.9rem; margin-bottom: 0.8rem; font-style: italic; }
+        .project-info p { color: #b0b0b0; line-height: 1.6; margin-bottom: 1rem; }
+
+        .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .tag {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .project-card:hover .tag {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-category::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .skill-category:hover::before { opacity: 1; animation: rotate 10s linear infinite; }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .skill-category:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .skill-category h3 { margin-bottom: 1.5rem; color: #cccccc; position: relative; z-index: 1; }
+        .skill-item { margin-bottom: 1rem; position: relative; z-index: 1; }
+        .skill-name { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+
+        .skill-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skill-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #888888, #aaaaaa, #888888);
+            background-size: 200% 100%;
+            border-radius: 10px;
+            animation: fillBar 1.5s ease, gradientMove 3s ease infinite;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .contact {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+            animation: rotate 15s linear infinite;
+        }
+
+        .contact h2, .contact p, .contact-links { position: relative; z-index: 1; }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #888888;
+            color: #cccccc;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .contact-link:hover::before { width: 300px; height: 300px; }
+
+        .contact-link:hover {
+            background: #888888;
+            color: #0a0a0a;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: #666;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Scroll reveal */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.6s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(-10px) translateX(-10px); }
+            75% { transform: translateY(-15px) translateX(5px); }
+        }
+
+        @keyframes fillBar { from { width: 0; } }
+
+        /* Black Holes */
+        .black-hole {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%,
+                #000000 0%,
+                #000000 25%,
+                #0a0a0a 30%,
+                transparent 40%
+            );
+            box-shadow:
+                inset 0 0 50px rgba(0, 0, 0, 1),
+                0 0 30px rgba(0, 0, 0, 0.8);
+            animation: rotateBlackHole 30s linear infinite;
+        }
+
+        .black-hole::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #000000;
+            box-shadow:
+                0 0 20px rgba(0, 0, 0, 0.9),
+                inset 0 0 20px rgba(0, 0, 0, 1);
+        }
+
+        .black-hole::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180%;
+            height: 180%;
+            border-radius: 50%;
+            background:
+                radial-gradient(ellipse at center,
+                    transparent 35%,
+                    rgba(255, 150, 50, 0.3) 40%,
+                    rgba(255, 180, 80, 0.5) 45%,
+                    rgba(255, 200, 100, 0.4) 50%,
+                    rgba(200, 150, 80, 0.3) 55%,
+                    rgba(150, 100, 50, 0.2) 60%,
+                    transparent 70%
+                );
+            animation: accretionDisk 15s linear infinite;
+            filter: blur(3px);
+        }
+
+        .bh-swirl {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 135%;
+            height: 135%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                rgba(255,255,255,0.00) 0deg,
+                rgba(255,255,255,0.07) 60deg,
+                rgba(255,255,255,0.00) 140deg,
+                rgba(255,255,255,0.06) 220deg,
+                rgba(255,255,255,0.00) 360deg
+            );
+            filter: blur(10px);
+            opacity: 0.33;
+            animation: swirlSpin 10s linear infinite;
+            mix-blend-mode: soft-light;
+            -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%);
+            mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%);
+            pointer-events: none;
+        }
+
+        @keyframes swirlSpin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .black-hole-container { position: absolute; }
+
+        .gravitational-lens {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250%;
+            height: 250%;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                transparent 30%,
+                rgba(100, 100, 120, 0.05) 45%,
+                rgba(80, 80, 100, 0.08) 50%,
+                rgba(60, 60, 80, 0.05) 55%,
+                transparent 70%
+            );
+            pointer-events: none;
+            animation: lensDistortion 20s ease-in-out infinite;
+        }
+
+        @keyframes lensDistortion {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.8; }
+        }
+
+        @keyframes rotateBlackHole {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes accretionDisk {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Spaceships */
+        .spaceship {
+            position: absolute;
+            width: 55px;
+            height: 55px;
+            z-index: 1;
+            filter: drop-shadow(0 0 8px rgba(60, 100, 140, 0.5));
+            pointer-events: none;
+        }
+
+        .spaceship svg { width: 100%; height: 100%; }
+
+        .trail {
+            position: absolute;
+            width: 90px;
+            height: 5px;
+            background: linear-gradient(90deg,
+                rgba(80, 130, 180, 0.8),
+                rgba(100, 150, 200, 0.6),
+                rgba(120, 170, 220, 0.4),
+                rgba(140, 190, 230, 0.2),
+                transparent
+            );
+            border-radius: 50%;
+            filter: blur(4px);
+            animation: trailPulse 0.2s ease-in-out infinite;
+            box-shadow:
+                0 0 12px rgba(80, 130, 180, 0.6),
+                0 0 20px rgba(60, 110, 160, 0.3);
+            z-index: 0;
+        }
+
+        .trail::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                rgba(180, 200, 220, 0.5),
+                rgba(150, 180, 210, 0.3),
+                transparent
+            );
+            border-radius: 50%;
+            filter: blur(2px);
+        }
+
+        @keyframes trailPulse {
+            0%, 100% { opacity: 0.85; transform: scaleX(1) scaleY(1); }
+            50% { opacity: 1; transform: scaleX(1.25) scaleY(1.15); }
+        }
+
+        .spaceship.captured {
+            animation: capturedByBlackHole 2s ease-in forwards !important;
+        }
+
+        @keyframes capturedByBlackHole {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+            50% { transform: translate(var(--bh-x), var(--bh-y)) rotate(360deg) scale(0.5); opacity: 0.8; }
+            100% { transform: translate(var(--bh-x), var(--bh-y)) rotate(720deg) scale(0); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            nav { display: none; }
+            .projects-grid, .skills-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars-background" id="stars"></div>
+    <div class="space-dust" id="dust"></div>
+    <div class="particles" id="particles"></div>
+    <div class="floating-shapes" id="space-objects"></div>
+
+    <header>
+        <div class="logo">GameDev</div>
+        <nav>
+            <a href="#projects">Projects</a>
+            <a href="#skills">Background</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 data-text="Game Designer">Game Designer</h1>
+            <p class="subtitle">Certified Game Designer</p>
+            <p class="specialization">Specializing in Level Design & Environment Design</p>
+            <div class="tools">
+                <div class="tool-badge"><span>🎮</span><span>Unity Engine</span></div>
+                <div class="tool-badge"><span>⚡</span><span>Unreal Engine</span></div>
+            </div>
+            <a href="#projects" class="cta-button">View My Work</a>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2>Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card reveal">
+                <div class="project-image" style="background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);">🏙️</div>
+                <div class="project-info">
+                    <h3>Urban Warfare</h3>
+                    <div class="project-role">Level Designer & Environment Artist</div>
+                    <p>Designed and built 8 multiplayer maps featuring urban environments. Created vertical gameplay spaces with multiple routes and strategic points.</p>
+                    <div class="project-tags">
+                        <span class="tag">Unity</span>
+                        <span class="tag">Multiplayer</span>
+                        <span class="tag">Level Design</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-image" style="background: linear-gradient(135deg, #5a5a5a 0%, #3a3a3a 100%);">🌲</div>
+                <div class="project-info">
+                    <h3>Forest of Echoes</h3>
+                    <div class="project-role">Environment Designer</div>
+                    <p>Crafted atmospheric forest environments for single-player adventure. Designed exploration-focused levels with environmental storytelling elements.</p>
+                    <div class="project-tags">
+                        <span class="tag">Unreal Engine</span>
+                        <span class="tag">Adventure</span>
+                        <span class="tag">Environment Design</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-image" style="background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);">🏰</div>
+                <div class="project-info">
+                    <h3>Siege Masters</h3>
+                    <div class="project-role">Level Designer</div>
+                    <p>Developed castle siege levels with destructible environments and dynamic objectives. Created asymmetric maps balancing attacker and defender advantages.</p>
+                    <div class="project-tags">
+                        <span class="tag">Unity</span>
+                        <span class="tag">Strategy</span>
+                        <span class="tag">Level Design</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-image" style="background: linear-gradient(135deg, #2a2a2a 0%, #4a4a4a 100%);">🌊</div>
+                <div class="project-info">
+                    <h3>Deep Blue</h3>
+                    <div class="project-role">Environment & Level Designer</div>
+                    <p>Designed underwater exploration levels with unique navigation challenges. Created atmospheric environments using volumetric lighting and particle effects.</p>
+                    <div class="project-tags">
+                        <span class="tag">Unreal Engine</span>
+                        <span class="tag">Exploration</span>
+                        <span class="tag">Environment Design</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2>Education & Experience</h2>
+        <div class="skills-grid">
+            <div class="skill-category reveal">
+                <h3>Education</h3>
+                <div class="skill-item">
+                    <div class="skill-name"><span>Game Design Certification</span></div>
+                    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">
+                        Game Design Academy - Comprehensive program covering systems design, level design, and game mechanics with specialization in level and environment design.
+                    </p>
+                </div>
+                <div class="skill-item" style="margin-top: 1.5rem;">
+                    <div class="skill-name"><span>Unity Certification</span></div>
+                    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">
+                        Unity Technologies - Certified in level design tools, lighting systems, and environment optimization.
+                    </p>
+                </div>
+            </div>
+
+            <div class="skill-category reveal">
+                <h3>Level Design Skills</h3>
+                <div class="skill-item">
+                    <div class="skill-name"><span>Level Design</span><span>95%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 95%;"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>Environment Design</span><span>92%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 92%;"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>Player Flow Design</span><span>90%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+                </div>
+            </div>
+
+            <div class="skill-category reveal">
+                <h3>Engine Experience</h3>
+                <div class="skill-item">
+                    <div class="skill-name"><span>Unity</span><span>92%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 92%;"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>Unreal Engine</span><span>85%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name"><span>Lighting & VFX</span><span>88%</span></div>
+                    <div class="skill-bar"><div class="skill-progress" style="width: 88%;"></div></div>
+                </div>
+            </div>
+
+            <div class="skill-category reveal">
+                <h3>Professional Experience</h3>
+                <div class="skill-item">
+                    <div class="skill-name"><span>Level Designer</span></div>
+                    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">
+                        Independent Studio (2022 - Present) - Design and implement game levels, create environment layouts, collaborate with teams.
+                    </p>
+                </div>
+                <div class="skill-item" style="margin-top: 1.5rem;">
+                    <div class="skill-name"><span>Environment Designer</span></div>
+                    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">
+                        Freelance (2020 - 2022) - Designed atmospheric environments, specialized in environmental storytelling.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="contact">
+        <section class="contact reveal">
+            <h2>Let's Create Something Amazing</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 1rem;">Available for freelance projects and collaborations</p>
+            <div class="contact-links">
+                <a href="mailto:contact@example.com" class="contact-link">Email Me</a>
+                <a href="#" class="contact-link">LinkedIn</a>
+                <a href="#" class="contact-link">ArtStation</a>
+                <a href="#" class="contact-link">Portfolio</a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Game Designer Portfolio. Crafted with passion for games.</p>
+    </footer>
+
+    <script>
+        // ===== Stars =====
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 260; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+
+            const size = Math.random() < 0.85 ? 2 : 3;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+
+            const tint = Math.random();
+            if (tint > 0.92) star.style.background = 'rgba(180,220,255,0.95)';
+            if (tint < 0.06) star.style.background = 'rgba(255,210,180,0.95)';
+
+            starsContainer.appendChild(star);
+        }
+
+        // ===== Particles =====
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 55; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = Math.random() * 5 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particle.style.animationDuration = (Math.random() * 5 + 4) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        const spaceContainer = document.getElementById('space-objects');
+
+        function applyDrift(el, minDur = 22, maxDur = 55) {
+            el.classList.add('drift');
+            const dx = (Math.random() * 60 - 30).toFixed(1) + 'px';
+            const dy = (Math.random() * 50 - 25).toFixed(1) + 'px';
+            const dr = (Math.random() * 6 - 3).toFixed(2) + 'deg';
+            const dur = (minDur + Math.random() * (maxDur - minDur)).toFixed(1) + 's';
+            const delay = (-Math.random() * 12).toFixed(1) + 's';
+
+            el.style.setProperty('--dx', dx);
+            el.style.setProperty('--dy', dy);
+            el.style.setProperty('--dr', dr);
+            el.style.animationDuration = dur;
+            el.style.animationDelay = delay;
+        }
+
+        // ===== Nebulas =====
+        const nebulas = [
+            { top: '8%', left: '10%', color: 'rgba(70, 80, 140, 0.32)', size: 560 },
+            { top: '55%', right: '6%', color: 'rgba(120, 90, 150, 0.26)', size: 520 },
+            { bottom: '16%', left: '18%', color: 'rgba(70, 120, 130, 0.26)', size: 580 },
+            { bottom: '5%', right: '28%', color: 'rgba(100, 110, 160, 0.22)', size: 620 }
+        ];
+
+        nebulas.forEach(n => {
+            const neb = document.createElement('div');
+            neb.className = 'nebula';
+            neb.style.width = n.size + 'px';
+            neb.style.height = n.size + 'px';
+            neb.style.background = `radial-gradient(circle, ${n.color} 0%, transparent 60%)`;
+            if (n.top) neb.style.top = n.top;
+            if (n.bottom) neb.style.bottom = n.bottom;
+            if (n.left) neb.style.left = n.left;
+            if (n.right) neb.style.right = n.right;
+            applyDrift(neb, 26, 60);
+            spaceContainer.appendChild(neb);
+        });
+
+        // ===== Galaxies =====
+        const galaxies = [
+            { top: '18%', left: '52%', size: 620, rotate: 18 },
+            { top: '70%', left: '6%', size: 700, rotate: -12 }
+        ];
+
+        galaxies.forEach(g => {
+            const gal = document.createElement('div');
+            gal.className = 'galaxy';
+            gal.style.width = g.size + 'px';
+            gal.style.height = g.size + 'px';
+            gal.style.top = g.top;
+            gal.style.left = g.left;
+            gal.style.transform = `rotate(${g.rotate}deg)`;
+            applyDrift(gal, 28, 70);
+            spaceContainer.appendChild(gal);
+        });
+
+        // ===== Planets =====
+        function addPlanet({ top, left, right, bottom, size, colors, ring }) {
+            const planet = document.createElement('div');
+            planet.className = 'planet';
+            planet.style.width = size + 'px';
+            planet.style.height = size + 'px';
+            planet.style.background =
+                `radial-gradient(circle at 30% 30%,
+                    ${colors[0]} 0%,
+                    ${colors[1]} 35%,
+                    ${colors[2]} 70%,
+                    ${colors[3]} 100%
+                )`;
+
+            if (top) planet.style.top = top;
+            if (bottom) planet.style.bottom = bottom;
+            if (left) planet.style.left = left;
+            if (right) planet.style.right = right;
+
+            if (ring) {
+                const r = document.createElement('div');
+                r.className = 'planet-ring';
+                r.style.transform = `translate(-50%, -50%) rotate(${ring.rotate ?? -18}deg)`;
+                r.style.opacity = ring.opacity ?? 0.45;
+                planet.appendChild(r);
+            }
+
+            applyDrift(planet, 30, 75);
+            spaceContainer.appendChild(planet);
+        }
+
+        addPlanet({
+            top: '12%',
+            right: '6%',
+            size: 240,
+            colors: ['rgba(180,220,255,0.34)','rgba(90,120,190,0.20)','rgba(40,60,100,0.14)','rgba(10,12,20,0.08)'],
+            ring: { rotate: -24, opacity: 0.42 }
+        });
+
+        addPlanet({
+            bottom: '10%',
+            right: '8%',
+            size: 280,
+            colors: ['rgba(255,230,190,0.22)','rgba(180,120,80,0.16)','rgba(80,55,40,0.12)','rgba(10,8,8,0.08)'],
+            ring: null
+        });
+
+        addPlanet({
+            top: '60%',
+            left: '3%',
+            size: 200,
+            colors: ['rgba(200,255,235,0.18)','rgba(80,170,140,0.14)','rgba(40,90,80,0.12)','rgba(10,15,12,0.08)'],
+            ring: { rotate: 14, opacity: 0.38 }
+        });
+
+        // ===== Black holes =====
+        const blackHolePositions = [
+            { top: '16%', left: '18%', size: 120 },
+            { top: '52%', right: '14%', size: 150 },
+            { bottom: '24%', left: '28%', size: 110 },
+            { top: '76%', right: '22%', size: 130 }
+        ];
+
+        const blackHoles = [];
+        blackHolePositions.forEach((pos) => {
+            const container = document.createElement('div');
+            container.className = 'black-hole-container';
+            container.style.position = 'absolute';
+            if (pos.top) container.style.top = pos.top;
+            if (pos.bottom) container.style.bottom = pos.bottom;
+            if (pos.left) container.style.left = pos.left;
+            if (pos.right) container.style.right = pos.right;
+
+            const blackHole = document.createElement('div');
+            blackHole.className = 'black-hole';
+            blackHole.style.width = pos.size + 'px';
+            blackHole.style.height = pos.size + 'px';
+            blackHole.style.animationDuration = (20 + Math.random() * 15) + 's';
+
+            const swirl = document.createElement('div');
+            swirl.className = 'bh-swirl';
+            swirl.style.animationDuration = (8 + Math.random() * 8) + 's';
+            blackHole.appendChild(swirl);
+
+            const lens = document.createElement('div');
+            lens.className = 'gravitational-lens';
+
+            container.appendChild(blackHole);
+            container.appendChild(lens);
+            spaceContainer.appendChild(container);
+
+            blackHoles.push({ element: blackHole });
+        });
+
+        // ===== Spaceship SVG (seninki) =====
+        const spaceshipSVG = `
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
+                      fill="url(#centerBody)" stroke="#0a0a0a" stroke-width="1.5"/>
+                <path d="M 50 38 L 35 26 L 23 21 L 20 24 L 25 31 L 37 36 L 50 41 Z"
+                      fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
+                <path d="M 50 62 L 35 74 L 23 79 L 20 76 L 25 69 L 37 64 L 50 59 Z"
+                      fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
+                <path d="M 50 38 L 35 26 L 23 21" stroke="#4a4a4a" stroke-width="0.8" opacity="0.7"/>
+                <path d="M 50 62 L 35 74 L 23 79" stroke="#4a4a4a" stroke-width="0.8" opacity="0.7"/>
+                <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
+                <ellipse cx="68" cy="52" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
+                <rect x="18" y="46" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
+                <rect x="18" y="51.5" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
+                <ellipse cx="22" cy="47" rx="6" ry="2" fill="#3070a0" opacity="0.75">
+                    <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
+                </ellipse>
+                <ellipse cx="22" cy="53" rx="6" ry="2" fill="#3070a0" opacity="0.75">
+                    <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
+                </ellipse>
+                <ellipse cx="21" cy="47" rx="3.5" ry="1.5" fill="#5090d0" opacity="0.9">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="0.15s" repeatCount="indefinite"/>
+                </ellipse>
+                <ellipse cx="21" cy="53" rx="3.5" ry="1.5" fill="#5090d0" opacity="0.9">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="0.15s" repeatCount="indefinite"/>
+                </ellipse>
+                <path d="M 75 48 L 80 50 L 75 52" stroke="#5a5a5a" stroke-width="1" fill="none"/>
+                <path d="M 50 38 L 58 42 L 62 50 L 58 58 L 50 62 L 42 58 L 38 50 L 42 42 Z"
+                      fill="url(#reinforcement)" stroke="#1a1a1a" stroke-width="0.8" opacity="0.6"/>
+                <defs>
+                    <radialGradient id="centerBody" cx="60%" cy="50%">
+                        <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+                    </radialGradient>
+                    <linearGradient id="wingGradient" x1="100%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+                    </linearGradient>
+                    <radialGradient id="reinforcement" cx="50%" cy="50%">
+                        <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
+                    </radialGradient>
+                </defs>
+            </svg>
         `;
-      });
-      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
-    });
 
-    // Parallax particles
-    document.addEventListener('mousemove', (e) => {
-      const ps = document.querySelectorAll('.particle');
-      const x = e.clientX / window.innerWidth;
-      const y = e.clientY / window.innerHeight;
+        function createSpaceship() {
+            const spaceship = document.createElement('div');
+            spaceship.className = 'spaceship';
+            spaceship.innerHTML = spaceshipSVG;
 
-      ps.forEach((p, i) => {
-        const speed = (i % 3 + 1) * 0.5;
-        p.style.transform = `translate(${(x - 0.5) * 20 * speed}px, ${(y - 0.5) * 20 * speed}px)`;
-      });
-    });
-  </script>
+            const trail = document.createElement('div');
+            trail.className = 'trail';
+            spaceship.appendChild(trail);
+
+            const edge = Math.floor(Math.random() * 4);
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+
+            let startX, startY, endX, endY;
+
+            if (edge === 0) { // left -> right
+                startX = -100; endX = vw + 100;
+                startY = Math.random() * vh; endY = startY;
+            } else if (edge === 1) { // top -> bottom
+                startY = -100; endY = vh + 100;
+                startX = Math.random() * vw; endX = startX;
+            } else if (edge === 2) { // right -> left
+                startX = vw + 100; endX = -100;
+                startY = Math.random() * vh; endY = startY;
+            } else { // bottom -> top
+                startY = vh + 100; endY = -100;
+                startX = Math.random() * vw; endX = startX;
+            }
+
+            const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+
+            spaceship.style.left = startX + 'px';
+            spaceship.style.top = startY + 'px';
+
+            trail.style.right = '100%';
+            trail.style.top = '50%';
+            trail.style.transform = 'translateY(-50%)';
+
+            const duration = 10 + Math.random() * 5;
+            const driftAmp = 10; // very small drift
+            const phase = Math.random() * Math.PI * 2;
+
+            let startTime = null;
+            let rafId;
+
+            function animate(ts) {
+                if (!startTime) startTime = ts;
+                const t = (ts - startTime) / (duration * 1000);
+
+                if (t < 1 && !spaceship.classList.contains('captured')) {
+                    const x = startX + (endX - startX) * t;
+                    const y = startY + (endY - startY) * t;
+
+                    // perpendicular micro drift (doesn't "curve" the path, just tiny wobble)
+                    const dirX = endX - startX;
+                    const dirY = endY - startY;
+                    const len = Math.hypot(dirX, dirY) || 1;
+                    const nx = -dirY / len;
+                    const ny = dirX / len;
+                    const wobble = Math.sin(t * Math.PI * 2 + phase) * driftAmp;
+
+                    const wx = x + nx * wobble;
+                    const wy = y + ny * wobble;
+
+                    spaceship.style.left = wx + 'px';
+                    spaceship.style.top = wy + 'px';
+                    spaceship.style.transform = `rotate(${angle}deg)`;
+
+                    const shipCenterX = wx + 27.5;
+                    const shipCenterY = wy + 27.5;
+
+                    for (const bh of blackHoles) {
+                        const r = bh.element.getBoundingClientRect();
+                        const bhX = r.left + r.width / 2;
+                        const bhY = r.top + r.height / 2;
+                        const bhRadius = r.width / 2;
+
+                        const dist = Math.hypot(shipCenterX - bhX, shipCenterY - bhY);
+
+                        if (dist < bhRadius * 1.5 && !spaceship.classList.contains('captured')) {
+                            spaceship.classList.add('captured');
+                            trail.style.opacity = '0';
+
+                            spaceship.style.setProperty('--bh-x', (bhX - wx - 27.5) + 'px');
+                            spaceship.style.setProperty('--bh-y', (bhY - wy - 27.5) + 'px');
+
+                            cancelAnimationFrame(rafId);
+                            setTimeout(() => spaceship.remove(), 2000);
+                            return;
+                        }
+                    }
+
+                    rafId = requestAnimationFrame(animate);
+                } else {
+                    if (!spaceship.classList.contains('captured')) spaceship.remove();
+                }
+            }
+
+            spaceContainer.appendChild(spaceship);
+            rafId = requestAnimationFrame(animate);
+        }
+
+        setInterval(createSpaceship, 1500);
+        for (let i = 0; i < 5; i++) setTimeout(createSpaceship, i * 400);
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(10, 10, 10, 0.95)';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.5)';
+            } else {
+                header.style.background = 'rgba(10, 10, 10, 0.7)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Scroll reveal animation
+        const reveals = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            reveals.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                if (elementTop < window.innerHeight - 100) element.classList.add('active');
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
+
+        // Cursor spotlight (clean, no invalid querySelector)
+        document.addEventListener('mousemove', (e) => {
+            document.body.style.setProperty('--mouse-x', e.clientX + 'px');
+            document.body.style.setProperty('--mouse-y', e.clientY + 'px');
+            document.body.classList.add('mouse-active');
+        });
+
+        // Add magnetic effect to cards
+        document.querySelectorAll('.project-card, .skill-category').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const deltaX = (x - centerX) / centerX;
+                const deltaY = (y - centerY) / centerY;
+
+                card.style.transform = `
+                    perspective(1000px)
+                    rotateY(${deltaX * 5}deg)
+                    rotateX(${-deltaY * 5}deg)
+                    translateY(-15px)
+                    scale(1.02)
+                `;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+
+        // Parallax effect for particles
+        document.addEventListener('mousemove', (e) => {
+            const particles = document.querySelectorAll('.particle');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            particles.forEach((particle, index) => {
+                const speed = (index % 3 + 1) * 0.5;
+                const xMove = (x - 0.5) * 20 * speed;
+                const yMove = (y - 0.5) * 20 * speed;
+                particle.style.transform = `translate(${xMove}px, ${yMove}px)`;
+            });
+        });
+    </script>
 </body>
 </html>

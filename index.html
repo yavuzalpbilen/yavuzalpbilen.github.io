@@ -360,56 +360,95 @@
             50% { opacity: 1; transform: scale(1.5); }
         }
 
-        /* Black Holes */
+        /* Black Holes - Interstellar Style */
         .black-hole {
             position: absolute;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, 
-                transparent 0%, 
-                transparent 30%,
-                rgba(50, 50, 50, 0.8) 35%,
-                rgba(30, 30, 30, 0.9) 40%,
-                rgba(10, 10, 10, 1) 50%,
-                #000000 60%
+            background: radial-gradient(circle at 35% 35%, 
+                #000000 0%,
+                #000000 25%,
+                #0a0a0a 30%,
+                transparent 40%
             );
             box-shadow: 
-                0 0 40px rgba(100, 100, 100, 0.4),
-                inset 0 0 30px rgba(0, 0, 0, 0.8);
-            animation: rotateBlackHole 20s linear infinite;
+                inset 0 0 50px rgba(0, 0, 0, 1),
+                0 0 30px rgba(0, 0, 0, 0.8);
+            animation: rotateBlackHole 30s linear infinite;
         }
 
+        /* Event Horizon */
         .black-hole::before {
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 150%;
-            height: 150%;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            background: radial-gradient(circle, 
-                transparent 40%, 
-                rgba(80, 80, 80, 0.3) 50%, 
-                transparent 70%
-            );
-            animation: accretionDisk 10s linear infinite;
+            background: #000000;
+            box-shadow: 
+                0 0 20px rgba(0, 0, 0, 0.9),
+                inset 0 0 20px rgba(0, 0, 0, 1);
         }
 
+        /* Accretion Disk - Glowing ring */
         .black-hole::after {
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 200%;
-            height: 200%;
+            width: 180%;
+            height: 180%;
             border-radius: 50%;
-            background: radial-gradient(circle, 
-                transparent 50%, 
-                rgba(100, 100, 100, 0.1) 60%, 
-                transparent 80%
+            background: 
+                radial-gradient(ellipse at center,
+                    transparent 35%,
+                    rgba(255, 150, 50, 0.3) 40%,
+                    rgba(255, 180, 80, 0.5) 45%,
+                    rgba(255, 200, 100, 0.4) 50%,
+                    rgba(200, 150, 80, 0.3) 55%,
+                    rgba(150, 100, 50, 0.2) 60%,
+                    transparent 70%
+                );
+            animation: accretionDisk 15s linear infinite;
+            filter: blur(3px);
+        }
+
+        /* Gravitational lensing effect */
+        .black-hole-container {
+            position: relative;
+        }
+
+        .gravitational-lens {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250%;
+            height: 250%;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                transparent 30%,
+                rgba(100, 100, 120, 0.05) 45%,
+                rgba(80, 80, 100, 0.08) 50%,
+                rgba(60, 60, 80, 0.05) 55%,
+                transparent 70%
             );
-            animation: accretionDisk 15s linear infinite reverse;
+            pointer-events: none;
+            animation: lensDistortion 20s ease-in-out infinite;
+        }
+
+        @keyframes lensDistortion {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.05);
+                opacity: 0.8;
+            }
         }
 
         @keyframes rotateBlackHole {
@@ -422,22 +461,82 @@
             100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
-        /* Spaceships */
+        /* Spaceships - Stealth style */
         .spaceship {
             position: absolute;
-            font-size: 20px;
-            animation: flyShip 25s linear infinite;
-            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-            z-index: 1;
+            width: 55px;
+            height: 55px;
+            z-index: 10;
+            filter: drop-shadow(0 0 8px rgba(60, 100, 140, 0.5));
         }
 
-        @keyframes flyShip {
+        .spaceship svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Engine trail - darker, more subtle */
+        .trail {
+            position: absolute;
+            width: 90px;
+            height: 5px;
+            background: linear-gradient(90deg, 
+                rgba(80, 130, 180, 0.8),
+                rgba(100, 150, 200, 0.6),
+                rgba(120, 170, 220, 0.4),
+                rgba(140, 190, 230, 0.2),
+                transparent
+            );
+            border-radius: 50%;
+            filter: blur(4px);
+            animation: trailPulse 0.2s ease-in-out infinite;
+            box-shadow: 
+                0 0 12px rgba(80, 130, 180, 0.6),
+                0 0 20px rgba(60, 110, 160, 0.3);
+            z-index: 9;
+        }
+
+        /* Secondary trail particles */
+        .trail::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                rgba(180, 200, 220, 0.5),
+                rgba(150, 180, 210, 0.3),
+                transparent
+            );
+            border-radius: 50%;
+            filter: blur(2px);
+        }
+
+        @keyframes trailPulse {
+            0%, 100% { 
+                opacity: 0.85;
+                transform: scaleX(1) scaleY(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: scaleX(1.25) scaleY(1.15);
+            }
+        }
+
+        .spaceship.captured {
+            animation: capturedByBlackHole 2s ease-in forwards !important;
+        }
+
+        @keyframes capturedByBlackHole {
             0% {
                 transform: translate(0, 0) rotate(0deg) scale(1);
                 opacity: 1;
             }
+            50% {
+                transform: translate(var(--bh-x), var(--bh-y)) rotate(360deg) scale(0.5);
+                opacity: 0.8;
+            }
             100% {
-                transform: translate(var(--end-x), var(--end-y)) rotate(720deg) scale(0);
+                transform: translate(var(--bh-x), var(--bh-y)) rotate(720deg) scale(0);
                 opacity: 0;
             }
         }
@@ -1164,87 +1263,253 @@
             { top: '70%', right: '25%', size: 130 }
         ];
 
+        const blackHoles = [];
         blackHolePositions.forEach((pos, index) => {
+            const container = document.createElement('div');
+            container.className = 'black-hole-container';
+            container.style.position = 'absolute';
+            if (pos.top) container.style.top = pos.top;
+            if (pos.bottom) container.style.bottom = pos.bottom;
+            if (pos.left) container.style.left = pos.left;
+            if (pos.right) container.style.right = pos.right;
+            
             const blackHole = document.createElement('div');
             blackHole.className = 'black-hole';
             blackHole.style.width = pos.size + 'px';
             blackHole.style.height = pos.size + 'px';
-            if (pos.top) blackHole.style.top = pos.top;
-            if (pos.bottom) blackHole.style.bottom = pos.bottom;
-            if (pos.left) blackHole.style.left = pos.left;
-            if (pos.right) blackHole.style.right = pos.right;
-            blackHole.style.animationDuration = (15 + Math.random() * 10) + 's';
-            spaceContainer.appendChild(blackHole);
-
-            // Create spaceships for each black hole
-            setInterval(() => {
-                createSpaceship(blackHole, pos);
-            }, 3000 + Math.random() * 2000);
+            blackHole.style.animationDuration = (20 + Math.random() * 15) + 's';
+            
+            const lens = document.createElement('div');
+            lens.className = 'gravitational-lens';
+            
+            container.appendChild(blackHole);
+            container.appendChild(lens);
+            spaceContainer.appendChild(container);
+            
+            blackHoles.push({ element: blackHole, pos: pos });
         });
 
-        // Function to create spaceship
-        function createSpaceship(blackHole, blackHolePos) {
+        // SVG for B-2 Spirit style spaceship - flying wing with sharp swept wings
+        const spaceshipSVG = `
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Main center body -->
+                <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z" 
+                      fill="url(#centerBody)" stroke="#0a0a0a" stroke-width="1.5"/>
+                
+                <!-- Sharp swept wings (B-2 style) - FROM CENTER -->
+                <!-- Top wing -->
+                <path d="M 50 38 L 35 26 L 23 21 L 20 24 L 25 31 L 37 36 L 50 41 Z" 
+                      fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
+                <!-- Bottom wing -->
+                <path d="M 50 62 L 35 74 L 23 79 L 20 76 L 25 69 L 37 64 L 50 59 Z" 
+                      fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
+                
+                <!-- Wing leading edge highlights -->
+                <path d="M 50 38 L 35 26 L 23 21" stroke="#4a4a4a" stroke-width="0.8" opacity="0.7"/>
+                <path d="M 50 62 L 35 74 L 23 79" stroke="#4a4a4a" stroke-width="0.8" opacity="0.7"/>
+                
+                <!-- Wing tips (pointed) -->
+                <path d="M 23 21 L 20 24 L 25 26" fill="#1a1a1a"/>
+                <path d="M 23 79 L 20 76 L 25 74" fill="#1a1a1a"/>
+                
+                <!-- Cockpit (minimal, blended) -->
+                <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
+                <ellipse cx="68" cy="52" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
+                
+                <!-- Center body panels -->
+                <path d="M 40 45 L 65 45" stroke="#2a2a2a" stroke-width="0.4" opacity="0.5"/>
+                <path d="M 40 55 L 65 55" stroke="#2a2a2a" stroke-width="0.4" opacity="0.5"/>
+                <path d="M 45 50 L 70 50" stroke="#2a2a2a" stroke-width="0.3" opacity="0.4"/>
+                
+                <!-- Wing surface details -->
+                <path d="M 40 34 L 47 39" stroke="#1a1a1a" stroke-width="0.4" opacity="0.5"/>
+                <path d="M 40 66 L 47 61" stroke="#1a1a1a" stroke-width="0.4" opacity="0.5"/>
+                <path d="M 30 28 L 37 34" stroke="#2a2a2a" stroke-width="0.3" opacity="0.4"/>
+                <path d="M 30 72 L 37 66" stroke="#2a2a2a" stroke-width="0.3" opacity="0.4"/>
+                
+                <!-- Engine exhausts (hidden on top surface) -->
+                <rect x="18" y="46" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
+                <rect x="18" y="51.5" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
+                
+                <!-- Engine glow -->
+                <ellipse cx="22" cy="47" rx="6" ry="2" fill="#3070a0" opacity="0.75">
+                    <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
+                </ellipse>
+                <ellipse cx="22" cy="53" rx="6" ry="2" fill="#3070a0" opacity="0.75">
+                    <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
+                </ellipse>
+                
+                <!-- Inner engine core (brighter) -->
+                <ellipse cx="21" cy="47" rx="3.5" ry="1.5" fill="#5090d0" opacity="0.9">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="0.15s" repeatCount="indefinite"/>
+                </ellipse>
+                <ellipse cx="21" cy="53" rx="3.5" ry="1.5" fill="#5090d0" opacity="0.9">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="0.15s" repeatCount="indefinite"/>
+                </ellipse>
+                
+                <!-- Nose detail -->
+                <path d="M 75 48 L 80 50 L 75 52" stroke="#5a5a5a" stroke-width="1" fill="none"/>
+                
+                <!-- Serrated trailing edge (B-2 signature) -->
+                <path d="M 15 50 L 18 48 L 20 50 L 18 52 Z" fill="#0a0a0a" stroke="#000000" stroke-width="0.5"/>
+                
+                <!-- Wing panel lines -->
+                <path d="M 27 24 L 43 36" stroke="#1a1a1a" stroke-width="0.3" opacity="0.4"/>
+                <path d="M 27 76 L 43 64" stroke="#1a1a1a" stroke-width="0.3" opacity="0.4"/>
+                
+                <!-- Stealth facets on wings -->
+                <path d="M 35 31 L 43 38 L 47 39" fill="#1a1a1a" opacity="0.15"/>
+                <path d="M 35 69 L 43 62 L 47 61" fill="#1a1a1a" opacity="0.15"/>
+                
+                <!-- Body reinforcement -->
+                <path d="M 50 38 L 58 42 L 62 50 L 58 58 L 50 62 L 42 58 L 38 50 L 42 42 Z"
+                      fill="url(#reinforcement)" stroke="#1a1a1a" stroke-width="0.8" opacity="0.6"/>
+                
+                <!-- Gradients -->
+                <defs>
+                    <radialGradient id="centerBody" cx="60%" cy="50%">
+                        <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+                    </radialGradient>
+                    <linearGradient id="wingGradient" x1="100%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+                    </linearGradient>
+                    <radialGradient id="reinforcement" cx="50%" cy="50%">
+                        <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
+                    </radialGradient>
+                </defs>
+            </svg>
+        `;
+
+        // Function to create spaceship with trail
+        function createSpaceship() {
             const spaceship = document.createElement('div');
             spaceship.className = 'spaceship';
-            spaceship.textContent = '🚀';
+            spaceship.innerHTML = spaceshipSVG;
             
-            // Random starting position (from edges)
+            // Create engine trail
+            const trail = document.createElement('div');
+            trail.className = 'trail';
+            spaceship.appendChild(trail);
+            
+            // Random starting position from edges
             const edge = Math.floor(Math.random() * 4);
-            let startX, startY;
-            
-            switch(edge) {
-                case 0: // top
-                    startX = Math.random() * 100;
-                    startY = -5;
-                    break;
-                case 1: // right
-                    startX = 105;
-                    startY = Math.random() * 100;
-                    break;
-                case 2: // bottom
-                    startX = Math.random() * 100;
-                    startY = 105;
-                    break;
-                case 3: // left
-                    startX = -5;
-                    startY = Math.random() * 100;
-                    break;
-            }
-            
-            spaceship.style.left = startX + '%';
-            spaceship.style.top = startY + '%';
-            
-            // Calculate black hole center position
-            const rect = blackHole.getBoundingClientRect();
-            const bhCenterX = rect.left + rect.width / 2;
-            const bhCenterY = rect.top + rect.height / 2;
+            let startX, startY, angle;
+            let endX, endY;
             
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
             
-            const endX = (bhCenterX / viewportWidth * 100) - startX;
-            const endY = (bhCenterY / viewportHeight * 100) - startY;
+            // Start from edges and fly straight across
+            switch(edge) {
+                case 0: // from left to right
+                    startX = -100;
+                    startY = Math.random() * viewportHeight;
+                    endX = viewportWidth + 100;
+                    endY = startY + (Math.random() - 0.5) * 200;
+                    angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                    break;
+                case 1: // from top to bottom
+                    startX = Math.random() * viewportWidth;
+                    startY = -100;
+                    endX = startX + (Math.random() - 0.5) * 200;
+                    endY = viewportHeight + 100;
+                    angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                    break;
+                case 2: // from right to left
+                    startX = viewportWidth + 100;
+                    startY = Math.random() * viewportHeight;
+                    endX = -100;
+                    endY = startY + (Math.random() - 0.5) * 200;
+                    angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                    break;
+                case 3: // from bottom to top
+                    startX = Math.random() * viewportWidth;
+                    startY = viewportHeight + 100;
+                    endX = startX + (Math.random() - 0.5) * 200;
+                    endY = -100;
+                    angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                    break;
+            }
             
-            spaceship.style.setProperty('--end-x', endX + '%');
-            spaceship.style.setProperty('--end-y', endY + '%');
+            spaceship.style.left = startX + 'px';
+            spaceship.style.top = startY + 'px';
             
-            const duration = 15 + Math.random() * 10;
-            spaceship.style.animationDuration = duration + 's';
+            // Position trail behind the ship
+            trail.style.right = '100%';
+            trail.style.top = '50%';
+            trail.style.transform = 'translateY(-50%)';
+            trail.style.transformOrigin = 'right center';
+            
+            const duration = 10 + Math.random() * 5;
+            
+            // Animate the spaceship
+            let startTime = null;
+            let animationId;
+            
+            function animate(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = (timestamp - startTime) / (duration * 1000);
+                
+                if (progress < 1 && !spaceship.classList.contains('captured')) {
+                    const currentX = startX + (endX - startX) * progress;
+                    const currentY = startY + (endY - startY) * progress;
+                    
+                    spaceship.style.left = currentX + 'px';
+                    spaceship.style.top = currentY + 'px';
+                    spaceship.style.transform = `rotate(${angle}deg)`;
+                    
+                    // Check collision with black holes
+                    const shipCenterX = currentX + 27.5;
+                    const shipCenterY = currentY + 27.5;
+                    
+                    blackHoles.forEach(bh => {
+                        const bhRect = bh.element.getBoundingClientRect();
+                        const bhCenterX = bhRect.left + bhRect.width / 2;
+                        const bhCenterY = bhRect.top + bhRect.height / 2;
+                        const bhRadius = bhRect.width / 2;
+                        
+                        const distance = Math.sqrt(
+                            Math.pow(shipCenterX - bhCenterX, 2) + 
+                            Math.pow(shipCenterY - bhCenterY, 2)
+                        );
+                        
+                        if (distance < bhRadius * 1.5 && !spaceship.classList.contains('captured')) {
+                            spaceship.classList.add('captured');
+                            trail.style.opacity = '0';
+                            
+                            spaceship.style.setProperty('--bh-x', (bhCenterX - currentX - 27.5) + 'px');
+                            spaceship.style.setProperty('--bh-y', (bhCenterY - currentY - 27.5) + 'px');
+                            
+                            cancelAnimationFrame(animationId);
+                            
+                            setTimeout(() => {
+                                spaceship.remove();
+                            }, 2000);
+                        }
+                    });
+                    
+                    animationId = requestAnimationFrame(animate);
+                } else if (!spaceship.classList.contains('captured')) {
+                    spaceship.remove();
+                }
+            }
             
             spaceContainer.appendChild(spaceship);
-            
-            setTimeout(() => {
-                spaceship.remove();
-            }, duration * 1000);
+            animationId = requestAnimationFrame(animate);
         }
 
+        // Create spaceships continuously
+        setInterval(createSpaceship, 1500);
+        
         // Initial spaceships
-        setTimeout(() => {
-            const blackHoles = document.querySelectorAll('.black-hole');
-            blackHoles.forEach((bh, index) => {
-                createSpaceship(bh, blackHolePositions[index]);
-            });
-        }, 1000);
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => createSpaceship(), i * 400);
+        }
 
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

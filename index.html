@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Designer Portfolio - Level & Environment Design Specialist</title>
+    <title>Game Designer Portfolio</title>
     <style>
         * {
             margin: 0;
@@ -13,13 +13,13 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0a0a0a;
-            color: #e0e0e0;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            color: #fff;
             overflow-x: hidden;
         }
 
         header {
-            padding: 1.5rem 5%;
+            padding: 2rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -27,76 +27,74 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            background: rgba(15, 15, 15, 0.95);
+            background: rgba(10, 10, 10, 0.8);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            color: #fff;
+            background: linear-gradient(45deg, #ffffff, #cccccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         nav a {
-            color: #b0b0b0;
+            color: #fff;
             text-decoration: none;
             margin-left: 2rem;
             transition: color 0.3s;
             font-weight: 500;
-            font-size: 0.95rem;
         }
 
         nav a:hover {
-            color: #fff;
+            color: #cccccc;
         }
 
         .hero {
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 2rem;
-            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            position: relative;
+            overflow: hidden;
         }
 
         .hero-content {
-            max-width: 800px;
+            z-index: 2;
+            padding: 2rem;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 4rem;
             margin-bottom: 1rem;
-            color: #fff;
-            font-weight: 700;
-            line-height: 1.2;
+            animation: fadeInUp 1s ease;
         }
 
-        .hero .role {
-            font-size: 1.8rem;
-            color: #888;
-            margin-bottom: 1.5rem;
-            font-weight: 300;
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: #cccccc;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease 0.2s backwards;
         }
 
         .hero .specialization {
             font-size: 1.2rem;
-            color: #fff;
-            margin-bottom: 2.5rem;
-            padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: inline-block;
-            border-radius: 5px;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.3s backwards;
         }
 
-        .hero .tools {
+        .tools {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
             justify-content: center;
             margin-bottom: 2rem;
             flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.4s backwards;
         }
 
         .tool-badge {
@@ -104,185 +102,253 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.8rem 1.5rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
             font-size: 1rem;
-            color: #b0b0b0;
+            color: #e0e0e0;
         }
 
-        .scroll-indicator {
-            margin-top: 3rem;
-            color: #666;
-            font-size: 0.9rem;
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(45deg, #666666, #888888);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 1s ease 0.5s backwards;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4), transparent);
+            border-radius: 50%;
+            animation: float 6s infinite;
         }
 
         section {
-            padding: 6rem 5%;
+            padding: 5rem 5%;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        .section-header {
-            margin-bottom: 4rem;
-        }
-
-        .section-title {
+        h2 {
             font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            color: #fff;
-            font-weight: 600;
-        }
-
-        .section-subtitle {
-            font-size: 1.1rem;
-            color: #666;
+            margin-bottom: 3rem;
+            text-align: center;
+            background: linear-gradient(45deg, #ffffff, #aaaaaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
         }
 
         .project-card {
-            background: #141414;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
             overflow: hidden;
-            transition: transform 0.3s, border-color 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .project-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.15);
         }
 
         .project-image {
             width: 100%;
-            height: 280px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            height: 250px;
+            background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
+            font-size: 3rem;
             position: relative;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .project-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .project-card:hover .project-image::after {
+            left: 100%;
         }
 
         .project-info {
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         .project-info h3 {
-            margin-bottom: 0.8rem;
-            font-size: 1.6rem;
-            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
         }
 
         .project-role {
-            color: #888;
+            color: #999;
             font-size: 0.9rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             font-style: italic;
         }
 
         .project-info p {
             color: #b0b0b0;
-            line-height: 1.7;
-            margin-bottom: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
         }
 
         .project-tags {
             display: flex;
-            gap: 0.6rem;
+            gap: 0.5rem;
             flex-wrap: wrap;
         }
 
         .tag {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 0.4rem 1rem;
-            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
             font-size: 0.85rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #999;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .background-section {
-            background: #141414;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 3rem;
-        }
-
-        .background-grid {
+        .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
         }
 
-        .background-item {
-            padding-bottom: 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .skill-category {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .background-item:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
+        .skill-category h3 {
+            margin-bottom: 1.5rem;
+            color: #cccccc;
         }
 
-        .background-item h3 {
-            color: #fff;
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .background-item .institution {
-            color: #888;
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .background-item .date {
-            color: #666;
-            font-size: 0.9rem;
+        .skill-item {
             margin-bottom: 1rem;
         }
 
-        .background-item p {
-            color: #b0b0b0;
-            line-height: 1.7;
-        }
-
-        .background-item ul {
-            color: #b0b0b0;
-            line-height: 1.7;
-            margin-left: 1.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .background-item li {
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 0.5rem;
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #888888, #666666);
+            border-radius: 10px;
+            animation: fillBar 1.5s ease;
+        }
+
+        .contact {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            margin: 0 5%;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #888888;
+            color: #cccccc;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .contact-link:hover {
+            background: #888888;
+            color: #0a0a0a;
         }
 
         footer {
             text-align: center;
-            padding: 3rem 2rem;
+            padding: 2rem;
+            margin-top: 3rem;
             color: #666;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin-top: 4rem;
         }
 
-        footer a {
-            color: #888;
-            text-decoration: none;
-            margin: 0 1rem;
-            transition: color 0.3s;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        footer a:hover {
-            color: #fff;
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            25% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            50% {
+                transform: translateY(-10px) translateX(-10px);
+            }
+            75% {
+                transform: translateY(-15px) translateX(5px);
+            }
+        }
+
+        @keyframes fillBar {
+            from {
+                width: 0;
+            }
         }
 
         @media (max-width: 768px) {
@@ -290,53 +356,32 @@
                 font-size: 2.5rem;
             }
             
-            .hero .role {
-                font-size: 1.4rem;
-            }
-
-            .hero .specialization {
-                font-size: 1rem;
-            }
-            
             nav {
                 display: none;
             }
             
-            .projects-grid {
+            .projects-grid, .skills-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .background-grid {
-                grid-template-columns: 1fr;
-            }
-
-            section {
-                padding: 4rem 5%;
-            }
-
-            .section-title {
-                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo">Portfolio</div>
+        <div class="logo">GameDev</div>
         <nav>
             <a href="#projects">Projects</a>
-            <a href="#background">Background</a>
+            <a href="#skills">Background</a>
             <a href="#contact">Contact</a>
         </nav>
     </header>
 
     <section class="hero">
+        <div class="particles" id="particles"></div>
         <div class="hero-content">
             <h1>Game Designer</h1>
-            <p class="role">Certified Game Designer</p>
-            <div class="specialization">
-                Specializing in Level Design & Environment Design
-            </div>
+            <p class="subtitle">Certified Game Designer</p>
+            <p class="specialization">Specializing in Level Design & Environment Design</p>
             <div class="tools">
                 <div class="tool-badge">
                     <span>🎮</span>
@@ -347,24 +392,19 @@
                     <span>Unreal Engine</span>
                 </div>
             </div>
-            <div class="scroll-indicator">↓ Scroll to explore</div>
+            <a href="#projects" class="cta-button">View My Work</a>
         </div>
     </section>
 
     <section id="projects">
-        <div class="section-header">
-            <h2 class="section-title">Projects</h2>
-            <p class="section-subtitle">Level design and environment design work across multiple titles</p>
-        </div>
+        <h2>Featured Projects</h2>
         <div class="projects-grid">
             <div class="project-card">
-                <div class="project-image" style="background: linear-gradient(135deg, #2d3436 0%, #1e272e 100%);">
-                    🏙️
-                </div>
+                <div class="project-image" style="background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);">🏙️</div>
                 <div class="project-info">
                     <h3>Urban Warfare</h3>
                     <div class="project-role">Level Designer & Environment Artist</div>
-                    <p>Designed and built 8 multiplayer maps featuring urban environments. Created vertical gameplay spaces with multiple routes and strategic points. Focused on balanced sightlines and cover placement for competitive play.</p>
+                    <p>Designed and built 8 multiplayer maps featuring urban environments. Created vertical gameplay spaces with multiple routes and strategic points.</p>
                     <div class="project-tags">
                         <span class="tag">Unity</span>
                         <span class="tag">Multiplayer</span>
@@ -374,13 +414,11 @@
             </div>
 
             <div class="project-card">
-                <div class="project-image" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);">
-                    🌲
-                </div>
+                <div class="project-image" style="background: linear-gradient(135deg, #5a5a5a 0%, #3a3a3a 100%);">🌲</div>
                 <div class="project-info">
                     <h3>Forest of Echoes</h3>
                     <div class="project-role">Environment Designer</div>
-                    <p>Crafted atmospheric forest environments for single-player adventure game. Designed exploration-focused levels with environmental storytelling elements. Implemented lighting and fog systems to enhance mood and guide players.</p>
+                    <p>Crafted atmospheric forest environments for single-player adventure. Designed exploration-focused levels with environmental storytelling elements.</p>
                     <div class="project-tags">
                         <span class="tag">Unreal Engine</span>
                         <span class="tag">Adventure</span>
@@ -390,13 +428,11 @@
             </div>
 
             <div class="project-card">
-                <div class="project-image" style="background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);">
-                    🏰
-                </div>
+                <div class="project-image" style="background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);">🏰</div>
                 <div class="project-info">
                     <h3>Siege Masters</h3>
                     <div class="project-role">Level Designer</div>
-                    <p>Developed castle siege levels with destructible environments and dynamic objectives. Created asymmetric maps balancing attacker and defender advantages. Integrated verticality and chokepoints for tactical gameplay.</p>
+                    <p>Developed castle siege levels with destructible environments and dynamic objectives. Created asymmetric maps balancing attacker and defender advantages.</p>
                     <div class="project-tags">
                         <span class="tag">Unity</span>
                         <span class="tag">Strategy</span>
@@ -406,13 +442,11 @@
             </div>
 
             <div class="project-card">
-                <div class="project-image" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
-                    🌊
-                </div>
+                <div class="project-image" style="background: linear-gradient(135deg, #2a2a2a 0%, #4a4a4a 100%);">🌊</div>
                 <div class="project-info">
                     <h3>Deep Blue</h3>
                     <div class="project-role">Environment & Level Designer</div>
-                    <p>Designed underwater exploration levels with unique navigation challenges. Created atmospheric environments using volumetric lighting and particle effects. Developed verticality-focused level design for 3D movement mechanics.</p>
+                    <p>Designed underwater exploration levels with unique navigation challenges. Created atmospheric environments using volumetric lighting and particle effects.</p>
                     <div class="project-tags">
                         <span class="tag">Unreal Engine</span>
                         <span class="tag">Exploration</span>
@@ -423,69 +457,136 @@
         </div>
     </section>
 
-    <section id="background">
-        <div class="section-header">
-            <h2 class="section-title">Education & Experience</h2>
-            <p class="section-subtitle">Professional background and training</p>
-        </div>
-        <div class="background-section">
-            <div class="background-grid">
-                <div>
-                    <div class="background-item">
-                        <h3>Game Design Certification</h3>
-                        <div class="institution">Game Design Academy</div>
-                        <div class="date">2020 - 2022</div>
-                        <p>Comprehensive game design program covering systems design, level design, player psychology, and game mechanics. Specialized coursework in level design and environment art for games.</p>
+    <section id="skills">
+        <h2>Education & Experience</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3>Education</h3>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Game Design Certification</span>
                     </div>
+                    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Game Design Academy - Comprehensive program covering systems design, level design, and game mechanics with specialization in level and environment design.</p>
+                </div>
+                <div class="skill-item" style="margin-top: 1.5rem;">
+                    <div class="skill-name">
+                        <span>Unity Certification</span>
+                    </div>
+                    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Unity Technologies - Certified in level design tools, lighting systems, and environment optimization.</p>
+                </div>
+            </div>
 
-                    <div class="background-item">
-                        <h3>Unity Certification</h3>
-                        <div class="institution">Unity Technologies</div>
-                        <div class="date">2021</div>
-                        <p>Certified Unity Developer focusing on level design tools, lighting systems, and environment optimization techniques.</p>
+            <div class="skill-category">
+                <h3>Level Design Skills</h3>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Level Design</span>
+                        <span>95%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 95%;"></div>
                     </div>
                 </div>
-
-                <div>
-                    <div class="background-item">
-                        <h3>Level Designer</h3>
-                        <div class="institution">Independent Game Studio</div>
-                        <div class="date">2022 - Present</div>
-                        <ul>
-                            <li>Design and implement game levels using Unity and Unreal Engine</li>
-                            <li>Create environment layouts with focus on player flow and engagement</li>
-                            <li>Collaborate with artists and programmers to realize design vision</li>
-                            <li>Conduct playtesting and iterate based on player feedback</li>
-                        </ul>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Environment Design</span>
+                        <span>92%</span>
                     </div>
-
-                    <div class="background-item">
-                        <h3>Environment Artist & Designer</h3>
-                        <div class="institution">Freelance Projects</div>
-                        <div class="date">2020 - 2022</div>
-                        <ul>
-                            <li>Designed atmospheric game environments for multiple indie titles</li>
-                            <li>Specialized in environment storytelling and mood creation</li>
-                            <li>Worked with various teams to establish visual and spatial design</li>
-                        </ul>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 92%;"></div>
                     </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Player Flow Design</span>
+                        <span>90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 90%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Engine Experience</h3>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Unity</span>
+                        <span>92%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 92%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Unreal Engine</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 85%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Lighting & VFX</span>
+                        <span>88%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 88%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Professional Experience</h3>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Level Designer</span>
+                    </div>
+                    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Independent Studio (2022 - Present) - Design and implement game levels, create environment layouts, collaborate with teams.</p>
+                </div>
+                <div class="skill-item" style="margin-top: 1.5rem;">
+                    <div class="skill-name">
+                        <span>Environment Designer</span>
+                    </div>
+                    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Freelance (2020 - 2022) - Designed atmospheric environments, specialized in environmental storytelling.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer id="contact">
-        <p style="margin-bottom: 1rem; font-size: 1.1rem; color: #888;">Let's create something together</p>
-        <div>
-            <a href="mailto:contact@example.com">Email</a>
-            <a href="#">LinkedIn</a>
-            <a href="#">ArtStation</a>
-            <a href="#">Twitter</a>
+    <section id="contact" class="contact">
+        <h2>Let's Create Something Amazing</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 1rem;">Available for freelance projects and collaborations</p>
+        <div class="contact-links">
+            <a href="mailto:contact@example.com" class="contact-link">Email Me</a>
+            <a href="#" class="contact-link">LinkedIn</a>
+            <a href="#" class="contact-link">ArtStation</a>
+            <a href="#" class="contact-link">Portfolio</a>
         </div>
-        <p style="margin-top: 2rem; font-size: 0.9rem;">© 2025 All rights reserved</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Game Designer Portfolio. Crafted with passion for games.</p>
     </footer>
 
     <script>
+        // Create floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = Math.random() * 4 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -497,13 +598,15 @@
             });
         });
 
-        // Header background on scroll
+        // Header scroll effect
         window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.style.background = 'rgba(10, 10, 10, 0.98)';
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(10, 10, 10, 0.95)';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
             } else {
-                header.style.background = 'rgba(15, 15, 15, 0.95)';
+                header.style.background = 'rgba(10, 10, 10, 0.8)';
+                header.style.boxShadow = 'none';
             }
         });
     </script>

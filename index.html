@@ -26,16 +26,47 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(80, 80, 80, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(100, 100, 100, 0.1) 0%, transparent 50%);
-            animation: gradientShift 15s ease infinite;
+            background: radial-gradient(circle at 20% 50%, rgba(80, 80, 80, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(100, 100, 100, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 20%, rgba(90, 90, 90, 0.1) 0%, transparent 50%);
+            animation: gradientShift 20s ease infinite;
             pointer-events: none;
             z-index: 0;
         }
 
         @keyframes gradientShift {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.6; }
+            0%, 100% { 
+                opacity: 0.4;
+                transform: scale(1) rotate(0deg);
+            }
+            33% { 
+                opacity: 0.6;
+                transform: scale(1.1) rotate(5deg);
+            }
+            66% { 
+                opacity: 0.5;
+                transform: scale(0.95) rotate(-5deg);
+            }
+        }
+
+        /* Spotlight effect that follows cursor */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+            opacity: 0;
+        }
+
+        body.mouse-active::after {
+            opacity: 1;
         }
 
         header {
@@ -128,6 +159,27 @@
             margin-bottom: 1rem;
             animation: fadeInUp 1s ease, glow 3s ease-in-out infinite;
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1::before {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            color: transparent;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { background-position: -500%; }
+            100% { background-position: 500%; }
         }
 
         @keyframes glow {
@@ -221,6 +273,23 @@
             transition: width 0.6s, height 0.6s;
         }
 
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: buttonShine 3s infinite;
+        }
+
+        @keyframes buttonShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
         .cta-button:hover::before {
             width: 300px;
             height: 300px;
@@ -269,6 +338,67 @@
             pointer-events: none;
             z-index: 0;
             opacity: 0.5;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        /* Floating shapes */
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: floatShape 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            left: 10%;
+            border-radius: 50%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 3s;
+        }
+
+        .shape:nth-child(3) {
+            width: 120px;
+            height: 120px;
+            bottom: 20%;
+            left: 20%;
+            border-radius: 50%;
+            animation-delay: 6s;
+        }
+
+        @keyframes floatShape {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-30px) rotate(180deg);
+                opacity: 0.6;
+            }
         }
 
         section {
@@ -334,6 +464,34 @@
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
             transition: left 0.5s;
+        }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, 
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            background-size: 200% 200%;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            animation: borderGlow 3s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes borderGlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 200%; }
+        }
+
+        .project-card:hover::after {
+            opacity: 1;
         }
 
         .project-card:hover::before {
@@ -677,6 +835,11 @@
 <body>
     <div class="particles" id="particles"></div>
     <div class="grid-lines"></div>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
     
     <header>
         <div class="logo">GameDev</div>
@@ -689,7 +852,7 @@
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Game Designer</h1>
+            <h1 data-text="Game Designer">Game Designer</h1>
             <p class="subtitle">Certified Game Designer</p>
             <p class="specialization">Specializing in Level Design & Environment Design</p>
             <div class="tools">
@@ -938,6 +1101,97 @@
 
         window.addEventListener('scroll', revealOnScroll);
         revealOnScroll(); // Initial check
+
+        // Cursor spotlight effect
+        let mouseX = 0, mouseY = 0;
+        let currentX = 0, currentY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            document.body.classList.add('mouse-active');
+        });
+
+        function updateSpotlight() {
+            currentX += (mouseX - currentX) * 0.1;
+            currentY += (mouseY - currentY) * 0.1;
+            
+            document.body.style.setProperty('--mouse-x', currentX + 'px');
+            document.body.style.setProperty('--mouse-y', currentY + 'px');
+            
+            if (document.body.classList.contains('mouse-active')) {
+                const spotlight = document.body;
+                spotlight.style.setProperty('--mouse-x', currentX + 'px');
+                spotlight.style.setProperty('--mouse-y', currentY + 'px');
+                
+                const afterElement = window.getComputedStyle(spotlight, '::after');
+                spotlight.style.setProperty('--spotlight-x', currentX + 'px');
+                spotlight.style.setProperty('--spotlight-y', currentY + 'px');
+            }
+            
+            requestAnimationFrame(updateSpotlight);
+        }
+
+        updateSpotlight();
+
+        // Apply spotlight position via CSS variable
+        document.addEventListener('mousemove', (e) => {
+            const spotlight = document.querySelector('body::after');
+            document.body.style.setProperty('--mouse-x', e.clientX + 'px');
+            document.body.style.setProperty('--mouse-y', e.clientY + 'px');
+        });
+
+        // Update body::after position with CSS variable
+        const style = document.createElement('style');
+        style.textContent = `
+            body::after {
+                left: var(--mouse-x, 50%);
+                top: var(--mouse-y, 50%);
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add magnetic effect to cards
+        document.querySelectorAll('.project-card, .skill-category').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const deltaX = (x - centerX) / centerX;
+                const deltaY = (y - centerY) / centerY;
+                
+                card.style.transform = `
+                    perspective(1000px)
+                    rotateY(${deltaX * 5}deg)
+                    rotateX(${-deltaY * 5}deg)
+                    translateY(-15px)
+                    scale(1.02)
+                `;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+
+        // Parallax effect for particles
+        document.addEventListener('mousemove', (e) => {
+            const particles = document.querySelectorAll('.particle');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            particles.forEach((particle, index) => {
+                const speed = (index % 3 + 1) * 0.5;
+                const xMove = (x - 0.5) * 20 * speed;
+                const yMove = (y - 0.5) * 20 * speed;
+                
+                particle.style.transform = `translate(${xMove}px, ${yMove}px)`;
+            });
+        });
     </script>
 </body>
 </html>

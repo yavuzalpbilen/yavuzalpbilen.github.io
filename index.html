@@ -13,6 +13,7 @@
       background: linear-gradient(135deg, #0a0a0a 0%, #141420 50%, #1f1f2a 100%);
       color: #fff;
       overflow-x: hidden;
+      cursor: none; /* cursoru gizleyip karadelik cursor kullanacağız */
     }
 
     /* Animated gradient background */
@@ -35,24 +36,6 @@
       33% { opacity: 0.65; transform: scale(1.1) rotate(5deg); }
       66% { opacity: 0.55; transform: scale(0.98) rotate(-5deg); }
     }
-
-    /* Spotlight that follows cursor */
-    body::after {
-      content: '';
-      position: fixed;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 1;
-      transform: translate(-50%, -50%);
-      transition: opacity 0.3s;
-      opacity: 0;
-      left: var(--mouse-x, 50%);
-      top: var(--mouse-y, 50%);
-    }
-
-    body.mouse-active::after { opacity: 1; }
 
     header {
       padding: 2rem 5%;
@@ -89,7 +72,6 @@
       background: linear-gradient(90deg, #ffffff, transparent);
       transition: width 0.3s;
     }
-
     .logo:hover::after { width: 100%; }
 
     nav a {
@@ -112,7 +94,6 @@
       background: #ffffff;
       transition: width 0.3s;
     }
-
     nav a:hover::before { width: 100%; }
     nav a:hover { color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
 
@@ -328,7 +309,6 @@
       50% { opacity: 1; transform: scale(1.5); }
     }
 
-    /* Drift helper for background objects */
     .drift {
       will-change: transform;
       animation-name: driftMove;
@@ -341,7 +321,6 @@
       50% { transform: translate3d(var(--dx, 20px), var(--dy, 12px), 0) rotate(var(--dr, 2deg)); }
     }
 
-    /* Nebula */
     .nebula {
       position: absolute;
       width: 520px;
@@ -353,7 +332,6 @@
       mix-blend-mode: screen;
     }
 
-    /* Galaxy */
     .galaxy {
       position: absolute;
       width: 600px;
@@ -375,13 +353,13 @@
       mask-image: radial-gradient(circle, rgba(0,0,0,1) 25%, rgba(0,0,0,0) 70%);
     }
 
-    /* ===== PLANETS (BU EKLENDİ) ===== */
+    /* ===== PLANETS ===== */
     .planet {
       position: absolute;
       border-radius: 50%;
       z-index: 0;
       pointer-events: none;
-      opacity: 0.32;              /* görünür */
+      opacity: 0.32;
       filter: saturate(1.15);
       box-shadow:
         0 0 45px rgba(255,255,255,0.08),
@@ -389,7 +367,6 @@
       transform: translateZ(0);
     }
 
-    /* Atmosphere glow */
     .planet::before {
       content: '';
       position: absolute;
@@ -400,7 +377,6 @@
       opacity: 0.9;
     }
 
-    /* Specular highlight */
     .planet::after {
       content: '';
       position: absolute;
@@ -411,7 +387,6 @@
       mix-blend-mode: screen;
     }
 
-    /* subtle texture overlay */
     .planet .texture {
       position: absolute;
       inset: 0;
@@ -424,7 +399,6 @@
       filter: blur(0.5px);
     }
 
-    /* Ring planet */
     .planet-ring {
       position: absolute;
       left: 50%;
@@ -444,14 +418,12 @@
       mix-blend-mode: screen;
     }
 
-    /* Occlusion: ring behind planet */
     .planet-ring.behind {
       -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 0 46%, rgba(0,0,0,1) 52%);
       mask-image: radial-gradient(circle at 50% 50%, transparent 0 46%, rgba(0,0,0,1) 52%);
       opacity: 0.45;
     }
 
-    /* Occlusion: ring in front planet */
     .planet-ring.front {
       -webkit-mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0 46%, transparent 52%);
       mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0 46%, transparent 52%);
@@ -641,11 +613,7 @@
     }
 
     .skill-category:hover::before { opacity: 1; animation: rotate 10s linear infinite; }
-
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     .skill-category:hover {
       transform: translateY(-10px);
@@ -769,22 +737,16 @@
       z-index: 1;
     }
 
-    /* Scroll reveal */
     .reveal { opacity: 0; transform: translateY(50px); transition: all 0.6s ease; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes float {
       0%, 100% { transform: translateY(0) translateX(0); }
       25% { transform: translateY(-20px) translateX(10px); }
       50% { transform: translateY(-10px) translateX(-10px); }
       75% { transform: translateY(-15px) translateX(5px); }
     }
-
     @keyframes fillBar { from { width: 0; } }
 
     /* ===== Black Holes ===== */
@@ -897,15 +859,39 @@
       50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.8; }
     }
 
-    @keyframes rotateBlackHole {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes rotateBlackHole { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes accretionDisk { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    /* ===== Cursor Black Hole (YENİ) ===== */
+    .cursor-black-hole {
+      position: fixed;
+      left: var(--cx, 50vw);
+      top: var(--cy, 50vh);
+      width: 64px;
+      height: 64px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.12s ease;
+      filter: drop-shadow(0 0 20px rgba(0,0,0,0.7));
     }
 
-    @keyframes accretionDisk {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    .cursor-black-hole.active { opacity: 1; }
+
+    .cursor-black-hole .black-hole {
+      width: 100%;
+      height: 100%;
+      animation-duration: 10s;
+      box-shadow:
+        inset 0 0 45px rgba(0,0,0,1),
+        0 0 22px rgba(0,0,0,0.85);
     }
+
+    .cursor-black-hole .bh-swirl { opacity: 0.38; filter: blur(8px); }
+    .cursor-black-hole .gravitational-lens { opacity: 0.45; animation-duration: 10s; }
+    .cursor-black-hole .black-hole::after { opacity: 0.55; filter: blur(2.5px); }
 
     /* ===== Spaceships ===== */
     .spaceship {
@@ -916,7 +902,6 @@
       filter: drop-shadow(0 0 8px rgba(60, 100, 140, 0.5));
       pointer-events: none;
     }
-
     .spaceship svg { width: 100%; height: 100%; }
 
     .trail {
@@ -970,6 +955,8 @@
       .hero h1 { font-size: 2.5rem; }
       nav { display: none; }
       .projects-grid, .skills-grid { grid-template-columns: 1fr; }
+      body { cursor: auto; } /* mobilde cursor kapatma */
+      .cursor-black-hole { display: none; } /* mobilde gizle */
     }
   </style>
 </head>
@@ -979,6 +966,14 @@
   <div class="space-dust" id="dust"></div>
   <div class="particles" id="particles"></div>
   <div class="floating-shapes" id="space-objects"></div>
+
+  <!-- Cursor Black Hole -->
+  <div class="cursor-black-hole" id="cursorBH" aria-hidden="true">
+    <div class="black-hole">
+      <div class="bh-swirl"></div>
+    </div>
+    <div class="gravitational-lens"></div>
+  </div>
 
   <header>
     <div class="logo">GameDev</div>
@@ -1239,7 +1234,7 @@
       spaceContainer.appendChild(gal);
     });
 
-    // ===== PLANETS (GERÇEKTEN EKLİYORUZ) =====
+    // ===== PLANETS =====
     function addPlanet(opts) {
       const p = document.createElement('div');
       p.className = 'planet';
@@ -1247,25 +1242,21 @@
       p.style.height = opts.size + 'px';
       p.style.opacity = (opts.opacity ?? 0.32);
 
-      // positioning
       if (opts.top) p.style.top = opts.top;
       if (opts.bottom) p.style.bottom = opts.bottom;
       if (opts.left) p.style.left = opts.left;
       if (opts.right) p.style.right = opts.right;
 
-      // surface gradient
       p.style.background = `radial-gradient(circle at 30% 28%,
         ${opts.colors[0]} 0%,
         ${opts.colors[1]} 35%,
         ${opts.colors[2]} 70%,
         ${opts.colors[3]} 100%)`;
 
-      // texture
       const tex = document.createElement('div');
       tex.className = 'texture';
       p.appendChild(tex);
 
-      // ring (optional) - behind + front split for depth
       if (opts.ring) {
         const ringBehind = document.createElement('div');
         ringBehind.className = 'planet-ring behind';
@@ -1285,45 +1276,29 @@
       spaceContainer.appendChild(p);
     }
 
-    // Big ring planet (top-right)
     addPlanet({
-      top: '10%',
-      right: '5%',
-      size: 270,
-      opacity: 0.35,
+      top: '10%', right: '5%', size: 270, opacity: 0.35,
       colors: ['rgba(170,220,255,0.55)','rgba(80,140,210,0.35)','rgba(30,60,110,0.22)','rgba(10,12,20,0.10)'],
       ring: { rotate: -22, behindOpacity: 0.40, frontOpacity: 0.70 },
       driftMin: 45, driftMax: 95
     });
 
-    // Warm planet (bottom-right)
     addPlanet({
-      bottom: '8%',
-      right: '9%',
-      size: 310,
-      opacity: 0.30,
+      bottom: '8%', right: '9%', size: 310, opacity: 0.30,
       colors: ['rgba(255,230,190,0.40)','rgba(200,140,90,0.28)','rgba(90,60,40,0.18)','rgba(10,8,8,0.10)'],
       ring: null,
       driftMin: 40, driftMax: 90
     });
 
-    // Greenish ring planet (mid-left)
     addPlanet({
-      top: '62%',
-      left: '3%',
-      size: 220,
-      opacity: 0.28,
+      top: '62%', left: '3%', size: 220, opacity: 0.28,
       colors: ['rgba(200,255,240,0.35)','rgba(90,190,160,0.26)','rgba(40,95,85,0.18)','rgba(10,15,12,0.10)'],
       ring: { rotate: 14, behindOpacity: 0.38, frontOpacity: 0.62 },
       driftMin: 42, driftMax: 90
     });
 
-    // Small icy planet (center-ish)
     addPlanet({
-      top: '40%',
-      left: '44%',
-      size: 160,
-      opacity: 0.22,
+      top: '40%', left: '44%', size: 160, opacity: 0.22,
       colors: ['rgba(240,250,255,0.35)','rgba(140,200,240,0.22)','rgba(60,120,170,0.16)','rgba(10,12,20,0.10)'],
       ring: null,
       driftMin: 38, driftMax: 80
@@ -1368,7 +1343,40 @@
       blackHoles.push({ element: blackHole });
     });
 
-    // ===== Spaceship SVG (seninki) =====
+    // ===== Cursor Black Hole logic (YENİ) =====
+    const cursorBH = document.getElementById('cursorBH');
+    const cursorState = {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+      active: false,
+      radius: 32, // px (64/2)
+      captureMultiplier: 1.55
+    };
+
+    function setCursorPos(x, y) {
+      cursorState.x = x;
+      cursorState.y = y;
+      document.documentElement.style.setProperty('--cx', x + 'px');
+      document.documentElement.style.setProperty('--cy', y + 'px');
+    }
+
+    window.addEventListener('mousemove', (e) => {
+      cursorState.active = true;
+      cursorBH.classList.add('active');
+      setCursorPos(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('mouseleave', () => {
+      cursorState.active = false;
+      cursorBH.classList.remove('active');
+    });
+
+    window.addEventListener('blur', () => {
+      cursorState.active = false;
+      cursorBH.classList.remove('active');
+    });
+
+    // ===== Spaceship SVG =====
     const spaceshipSVG = `
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
@@ -1387,7 +1395,6 @@
         <ellipse cx="22" cy="53" rx="6" ry="2" fill="#3070a0" opacity="0.75">
           <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
         </ellipse>
-
         <defs>
           <radialGradient id="centerBody" cx="60%" cy="50%">
             <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
@@ -1402,6 +1409,15 @@
         </defs>
       </svg>
     `;
+
+    // Helper: set capture towards a point (x,y)
+    function captureShip(spaceship, trail, targetX, targetY, shipX, shipY) {
+      spaceship.classList.add('captured');
+      trail.style.opacity = '0';
+      spaceship.style.setProperty('--bh-x', (targetX - shipX - 27.5) + 'px');
+      spaceship.style.setProperty('--bh-y', (targetY - shipY - 27.5) + 'px');
+      setTimeout(() => spaceship.remove(), 2000);
+    }
 
     function createSpaceship() {
       const spaceship = document.createElement('div');
@@ -1456,6 +1472,7 @@
           const x = startX + (endX - startX) * t;
           const y = startY + (endY - startY) * t;
 
+          // slight perpendicular drift
           const dirX = endX - startX;
           const dirY = endY - startY;
           const len = Math.hypot(dirX, dirY) || 1;
@@ -1473,6 +1490,7 @@
           const shipCenterX = wx + 27.5;
           const shipCenterY = wy + 27.5;
 
+          // 1) Fixed black holes
           for (const bh of blackHoles) {
             const r = bh.element.getBoundingClientRect();
             const bhX = r.left + r.width / 2;
@@ -1480,14 +1498,26 @@
             const bhRadius = r.width / 2;
 
             const dist = Math.hypot(shipCenterX - bhX, shipCenterY - bhY);
-
-            if (dist < bhRadius * 1.5 && !spaceship.classList.contains('captured')) {
+            if (dist < bhRadius * 1.5) {
               spaceship.classList.add('captured');
               trail.style.opacity = '0';
-
               spaceship.style.setProperty('--bh-x', (bhX - wx - 27.5) + 'px');
               spaceship.style.setProperty('--bh-y', (bhY - wy - 27.5) + 'px');
+              cancelAnimationFrame(rafId);
+              setTimeout(() => spaceship.remove(), 2000);
+              return;
+            }
+          }
 
+          // 2) Cursor black hole (YENİ)
+          if (cursorState.active) {
+            const distC = Math.hypot(shipCenterX - cursorState.x, shipCenterY - cursorState.y);
+            const captureR = cursorState.radius * cursorState.captureMultiplier;
+            if (distC < captureR) {
+              spaceship.classList.add('captured');
+              trail.style.opacity = '0';
+              spaceship.style.setProperty('--bh-x', (cursorState.x - wx - 27.5) + 'px');
+              spaceship.style.setProperty('--bh-y', (cursorState.y - wy - 27.5) + 'px');
               cancelAnimationFrame(rafId);
               setTimeout(() => spaceship.remove(), 2000);
               return;
@@ -1538,13 +1568,6 @@
     };
     window.addEventListener('scroll', revealOnScroll);
     revealOnScroll();
-
-    // Cursor spotlight
-    document.addEventListener('mousemove', (e) => {
-      document.body.style.setProperty('--mouse-x', e.clientX + 'px');
-      document.body.style.setProperty('--mouse-y', e.clientY + 'px');
-      document.body.classList.add('mouse-active');
-    });
 
     // Magnetic cards
     document.querySelectorAll('.project-card, .skill-category').forEach(card => {

@@ -1,4 +1,14 @@
-<!DOCTYPE html>
+/* Floating shapes */
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -350,127 +360,67 @@
             50% { opacity: 1; transform: scale(1.5); }
         }
 
-        /* Floating shapes container */
-        .floating-shapes {
-            position: fixed;
+        /* Black Holes - Interstellar Style */
+        .black-hole {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, 
+                #000000 0%,
+                #000000 25%,
+                #0a0a0a 30%,
+                transparent 40%
+            );
+            box-shadow: 
+                inset 0 0 50px rgba(0, 0, 0, 1),
+                0 0 30px rgba(0, 0, 0, 0.8);
+            animation: rotateBlackHole 30s linear infinite;
+        }
+
+        /* Event Horizon */
+        .black-hole::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 100%;
             height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        /* Black Hole - upgraded layers */
-        .black-hole-container {
-            position: absolute;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .black-hole {
-            position: relative;
             border-radius: 50%;
-            width: 140px;
-            height: 140px;
-            transform: translateZ(0);
-            will-change: transform;
-            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.6));
+            background: #000000;
+            box-shadow: 
+                0 0 20px rgba(0, 0, 0, 0.9),
+                inset 0 0 20px rgba(0, 0, 0, 1);
         }
 
-        /* Core / event horizon */
-        .bh-core {
+        /* Accretion Disk - Glowing ring */
+        .black-hole::after {
+            content: '';
             position: absolute;
-            inset: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180%;
+            height: 180%;
             border-radius: 50%;
-            background: radial-gradient(circle at 40% 35%,
-                rgba(15, 15, 15, 1) 0%,
-                rgba(0, 0, 0, 1) 35%,
-                rgba(0, 0, 0, 1) 60%,
-                rgba(10, 10, 10, 1) 78%,
-                rgba(0, 0, 0, 1) 100%
-            );
-            box-shadow:
-                inset 0 0 50px rgba(0, 0, 0, 1),
-                inset 0 0 120px rgba(0, 0, 0, 0.9);
-        }
-
-        /* Subtle inward “flow” shading */
-        .bh-flow {
-            position: absolute;
-            inset: -8%;
-            border-radius: 50%;
-            background:
-                conic-gradient(from 0deg,
-                    rgba(255, 255, 255, 0.00) 0deg,
-                    rgba(255, 255, 255, 0.06) 60deg,
-                    rgba(255, 255, 255, 0.00) 130deg,
-                    rgba(255, 255, 255, 0.05) 200deg,
-                    rgba(255, 255, 255, 0.00) 360deg
-                );
-            filter: blur(10px);
-            opacity: 0.35;
-            animation: bhSwirl 10s linear infinite;
-            mix-blend-mode: soft-light;
-            mask-image: radial-gradient(circle, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 72%);
-            -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 72%);
-        }
-
-        @keyframes bhSwirl {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Accretion disk */
-        .bh-disk {
-            position: absolute;
-            inset: -40%;
-            border-radius: 50%;
-            background:
+            background: 
                 radial-gradient(ellipse at center,
                     transparent 35%,
-                    rgba(255, 150, 50, 0.18) 40%,
-                    rgba(255, 180, 80, 0.40) 46%,
-                    rgba(255, 210, 120, 0.28) 52%,
-                    rgba(200, 150, 80, 0.18) 58%,
-                    rgba(150, 100, 50, 0.12) 64%,
-                    transparent 72%
+                    rgba(255, 150, 50, 0.3) 40%,
+                    rgba(255, 180, 80, 0.5) 45%,
+                    rgba(255, 200, 100, 0.4) 50%,
+                    rgba(200, 150, 80, 0.3) 55%,
+                    rgba(150, 100, 50, 0.2) 60%,
+                    transparent 70%
                 );
+            animation: accretionDisk 15s linear infinite;
             filter: blur(3px);
-            animation: diskSpin 7.5s linear infinite;
-            opacity: 0.9;
-            transform: rotate(18deg);
-        }
-
-        /* Add a second “hot streak” that flows around */
-        .bh-streak {
-            position: absolute;
-            inset: -42%;
-            border-radius: 50%;
-            background:
-                conic-gradient(from 90deg,
-                    rgba(255, 200, 120, 0.0) 0deg,
-                    rgba(255, 200, 120, 0.0) 40deg,
-                    rgba(255, 220, 150, 0.30) 75deg,
-                    rgba(255, 180, 90, 0.15) 95deg,
-                    rgba(255, 200, 120, 0.0) 120deg,
-                    rgba(255, 200, 120, 0.0) 360deg
-                );
-            filter: blur(7px);
-            opacity: 0.75;
-            animation: diskSpin 4.2s linear infinite reverse;
-            mix-blend-mode: screen;
-            mask-image: radial-gradient(circle, rgba(0,0,0,0) 35%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 74%);
-            -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,0) 35%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 74%);
-        }
-
-        @keyframes diskSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         /* Gravitational lensing effect */
+        .black-hole-container {
+            position: relative;
+        }
+
         .gravitational-lens {
             position: absolute;
             top: 50%;
@@ -501,65 +451,74 @@
             }
         }
 
-        /* Spaceships - upgraded */
+        @keyframes rotateBlackHole {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes accretionDisk {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Spaceships - Stealth style */
         .spaceship {
             position: absolute;
-            width: 62px;
-            height: 62px;
+            width: 55px;
+            height: 55px;
             z-index: 10;
-            transform: translateZ(0);
-            will-change: transform, left, top;
-            filter: drop-shadow(0 0 10px rgba(90, 140, 200, 0.35));
+            filter: drop-shadow(0 0 8px rgba(60, 100, 140, 0.5));
         }
 
         .spaceship svg {
             width: 100%;
             height: 100%;
-            transform: translateZ(0);
         }
 
-        /* Engine trail */
+        /* Engine trail - darker, more subtle */
         .trail {
             position: absolute;
-            width: 110px;
-            height: 6px;
+            width: 90px;
+            height: 5px;
             background: linear-gradient(90deg, 
-                rgba(90, 150, 220, 0.85),
-                rgba(120, 190, 250, 0.55),
-                rgba(160, 220, 255, 0.28),
+                rgba(80, 130, 180, 0.8),
+                rgba(100, 150, 200, 0.6),
+                rgba(120, 170, 220, 0.4),
+                rgba(140, 190, 230, 0.2),
                 transparent
             );
-            border-radius: 50px;
+            border-radius: 50%;
             filter: blur(4px);
-            animation: trailPulse 0.22s ease-in-out infinite;
+            animation: trailPulse 0.2s ease-in-out infinite;
             box-shadow: 
-                0 0 16px rgba(90, 150, 220, 0.6),
-                0 0 28px rgba(80, 130, 200, 0.25);
+                0 0 12px rgba(80, 130, 180, 0.6),
+                0 0 20px rgba(60, 110, 160, 0.3);
             z-index: 9;
-            opacity: 0.95;
         }
 
+        /* Secondary trail particles */
         .trail::before {
             content: '';
             position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg,
-                rgba(230, 245, 255, 0.40),
-                rgba(180, 220, 255, 0.22),
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                rgba(180, 200, 220, 0.5),
+                rgba(150, 180, 210, 0.3),
                 transparent
             );
-            border-radius: 50px;
+            border-radius: 50%;
             filter: blur(2px);
         }
 
         @keyframes trailPulse {
             0%, 100% { 
-                opacity: 0.8;
+                opacity: 0.85;
                 transform: scaleX(1) scaleY(1);
             }
             50% { 
                 opacity: 1;
-                transform: scaleX(1.28) scaleY(1.12);
+                transform: scaleX(1.25) scaleY(1.15);
             }
         }
 
@@ -1296,7 +1255,7 @@
             spaceContainer.appendChild(nebula);
         });
 
-        // Create black holes (upgraded internal layers)
+        // Create black holes
         const blackHolePositions = [
             { top: '15%', left: '20%', size: 120 },
             { top: '50%', right: '15%', size: 150 },
@@ -1305,134 +1264,124 @@
         ];
 
         const blackHoles = [];
-        blackHolePositions.forEach((pos) => {
+        blackHolePositions.forEach((pos, index) => {
             const container = document.createElement('div');
             container.className = 'black-hole-container';
-
+            container.style.position = 'absolute';
             if (pos.top) container.style.top = pos.top;
             if (pos.bottom) container.style.bottom = pos.bottom;
             if (pos.left) container.style.left = pos.left;
             if (pos.right) container.style.right = pos.right;
-
+            
             const blackHole = document.createElement('div');
             blackHole.className = 'black-hole';
             blackHole.style.width = pos.size + 'px';
             blackHole.style.height = pos.size + 'px';
-
-            // Build layers
-            const core = document.createElement('div');
-            core.className = 'bh-core';
-
-            const flow = document.createElement('div');
-            flow.className = 'bh-flow';
-
-            const disk = document.createElement('div');
-            disk.className = 'bh-disk';
-
-            const streak = document.createElement('div');
-            streak.className = 'bh-streak';
-
-            blackHole.appendChild(disk);
-            blackHole.appendChild(streak);
-            blackHole.appendChild(flow);
-            blackHole.appendChild(core);
-
+            blackHole.style.animationDuration = (20 + Math.random() * 15) + 's';
+            
             const lens = document.createElement('div');
             lens.className = 'gravitational-lens';
-
+            
             container.appendChild(blackHole);
             container.appendChild(lens);
             spaceContainer.appendChild(container);
-
+            
             blackHoles.push({ element: blackHole, pos: pos });
         });
 
-        // Upgraded stealth spaceship SVG (cleaner silhouette + better materials + subtle engine shimmer)
+        // SVG for B-2 Spirit style spaceship - flying wing with sharp swept wings
         const spaceshipSVG = `
-            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Main center body -->
+                <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z" 
+                      fill="url(#centerBody)" stroke="#0a0a0a" stroke-width="1.5"/>
+                
+                <!-- Sharp swept wings (B-2 style) - FROM CENTER -->
+                <!-- Top wing -->
+                <path d="M 50 38 L 35 26 L 23 21 L 20 24 L 25 31 L 37 36 L 50 41 Z" 
+                      fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
+                <!-- Bottom wing -->
+                <path d="M 50 62 L 35 74 L 23 79 L 20 76 L 25 69 L 37 64 L 50 59 Z" 
+                      fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
+                
+                <!-- Wing leading edge highlights -->
+                <path d="M 50 38 L 35 26 L 23 21" stroke="#4a4a4a" stroke-width="0.8" opacity="0.7"/>
+                <path d="M 50 62 L 35 74 L 23 79" stroke="#4a4a4a" stroke-width="0.8" opacity="0.7"/>
+                
+                <!-- Wing tips (pointed) -->
+                <path d="M 23 21 L 20 24 L 25 26" fill="#1a1a1a"/>
+                <path d="M 23 79 L 20 76 L 25 74" fill="#1a1a1a"/>
+                
+                <!-- Cockpit (minimal, blended) -->
+                <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
+                <ellipse cx="68" cy="52" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
+                
+                <!-- Center body panels -->
+                <path d="M 40 45 L 65 45" stroke="#2a2a2a" stroke-width="0.4" opacity="0.5"/>
+                <path d="M 40 55 L 65 55" stroke="#2a2a2a" stroke-width="0.4" opacity="0.5"/>
+                <path d="M 45 50 L 70 50" stroke="#2a2a2a" stroke-width="0.3" opacity="0.4"/>
+                
+                <!-- Wing surface details -->
+                <path d="M 40 34 L 47 39" stroke="#1a1a1a" stroke-width="0.4" opacity="0.5"/>
+                <path d="M 40 66 L 47 61" stroke="#1a1a1a" stroke-width="0.4" opacity="0.5"/>
+                <path d="M 30 28 L 37 34" stroke="#2a2a2a" stroke-width="0.3" opacity="0.4"/>
+                <path d="M 30 72 L 37 66" stroke="#2a2a2a" stroke-width="0.3" opacity="0.4"/>
+                
+                <!-- Engine exhausts (hidden on top surface) -->
+                <rect x="18" y="46" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
+                <rect x="18" y="51.5" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
+                
+                <!-- Engine glow -->
+                <ellipse cx="22" cy="47" rx="6" ry="2" fill="#3070a0" opacity="0.75">
+                    <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
+                </ellipse>
+                <ellipse cx="22" cy="53" rx="6" ry="2" fill="#3070a0" opacity="0.75">
+                    <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
+                </ellipse>
+                
+                <!-- Inner engine core (brighter) -->
+                <ellipse cx="21" cy="47" rx="3.5" ry="1.5" fill="#5090d0" opacity="0.9">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="0.15s" repeatCount="indefinite"/>
+                </ellipse>
+                <ellipse cx="21" cy="53" rx="3.5" ry="1.5" fill="#5090d0" opacity="0.9">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="0.15s" repeatCount="indefinite"/>
+                </ellipse>
+                
+                <!-- Nose detail -->
+                <path d="M 75 48 L 80 50 L 75 52" stroke="#5a5a5a" stroke-width="1" fill="none"/>
+                
+                <!-- Serrated trailing edge (B-2 signature) -->
+                <path d="M 15 50 L 18 48 L 20 50 L 18 52 Z" fill="#0a0a0a" stroke="#000000" stroke-width="0.5"/>
+                
+                <!-- Wing panel lines -->
+                <path d="M 27 24 L 43 36" stroke="#1a1a1a" stroke-width="0.3" opacity="0.4"/>
+                <path d="M 27 76 L 43 64" stroke="#1a1a1a" stroke-width="0.3" opacity="0.4"/>
+                
+                <!-- Stealth facets on wings -->
+                <path d="M 35 31 L 43 38 L 47 39" fill="#1a1a1a" opacity="0.15"/>
+                <path d="M 35 69 L 43 62 L 47 61" fill="#1a1a1a" opacity="0.15"/>
+                
+                <!-- Body reinforcement -->
+                <path d="M 50 38 L 58 42 L 62 50 L 58 58 L 50 62 L 42 58 L 38 50 L 42 42 Z"
+                      fill="url(#reinforcement)" stroke="#1a1a1a" stroke-width="0.8" opacity="0.6"/>
+                
+                <!-- Gradients -->
                 <defs>
-                    <linearGradient id="metalA" x1="20%" y1="0%" x2="80%" y2="100%">
-                        <stop offset="0%" stop-color="#2b2f35"/>
-                        <stop offset="45%" stop-color="#14171b"/>
-                        <stop offset="100%" stop-color="#07090b"/>
-                    </linearGradient>
-                    <linearGradient id="metalB" x1="0%" y1="50%" x2="100%" y2="50%">
-                        <stop offset="0%" stop-color="#3a4049"/>
-                        <stop offset="55%" stop-color="#1a1f26"/>
-                        <stop offset="100%" stop-color="#0b0e12"/>
-                    </linearGradient>
-                    <radialGradient id="cockpitGlow" cx="70%" cy="48%" r="60%">
-                        <stop offset="0%" stop-color="rgba(120,200,255,0.95)"/>
-                        <stop offset="55%" stop-color="rgba(80,150,220,0.35)"/>
-                        <stop offset="100%" stop-color="rgba(20,40,60,0.0)"/>
+                    <radialGradient id="centerBody" cx="60%" cy="50%">
+                        <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
                     </radialGradient>
-                    <radialGradient id="engineGlow" cx="50%" cy="50%" r="70%">
-                        <stop offset="0%" stop-color="rgba(120,210,255,0.95)"/>
-                        <stop offset="50%" stop-color="rgba(80,160,230,0.55)"/>
-                        <stop offset="100%" stop-color="rgba(20,60,90,0.0)"/>
+                    <linearGradient id="wingGradient" x1="100%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+                    </linearGradient>
+                    <radialGradient id="reinforcement" cx="50%" cy="50%">
+                        <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
                     </radialGradient>
                 </defs>
-
-                <!-- Main flying-wing body (sleek) -->
-                <path d="M16 60 
-                         L32 50 
-                         L54 42 
-                         L74 44
-                         L100 60
-                         L74 76
-                         L54 78
-                         L32 70 Z"
-                      fill="url(#metalA)" stroke="#050607" stroke-width="2" stroke-linejoin="round"/>
-
-                <!-- Inner armor plate -->
-                <path d="M34 60 
-                         L46 53 
-                         L60 49 
-                         L76 52
-                         L90 60
-                         L76 68
-                         L60 71
-                         L46 67 Z"
-                      fill="url(#metalB)" opacity="0.7" stroke="rgba(255,255,255,0.05)" stroke-width="1.2" />
-
-                <!-- Sharp wing cutouts / stealth facets -->
-                <path d="M32 50 L24 44 L18 47 L24 54 L32 57 Z"
-                      fill="#0c0f13" opacity="0.85"/>
-                <path d="M32 70 L24 76 L18 73 L24 66 L32 63 Z"
-                      fill="#0c0f13" opacity="0.85"/>
-
-                <!-- Nose highlight -->
-                <path d="M94 58 L104 60 L94 62" fill="none" stroke="rgba(220,220,220,0.25)" stroke-width="2" stroke-linecap="round"/>
-
-                <!-- Cockpit -->
-                <path d="M72 54 
-                         C78 52, 84 54, 86 60
-                         C84 66, 78 68, 72 66
-                         C70 62, 70 58, 72 54 Z"
-                      fill="rgba(10,20,30,0.55)" stroke="rgba(140,210,255,0.25)" stroke-width="1.2"/>
-
-                <!-- Cockpit soft glow -->
-                <ellipse cx="80" cy="60" rx="18" ry="12" fill="url(#cockpitGlow)" opacity="0.35"/>
-
-                <!-- Panel lines -->
-                <path d="M40 56 L78 56" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-                <path d="M40 64 L78 64" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-                <path d="M52 50 L68 70" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-
-                <!-- Engine ports -->
-                <rect x="16" y="54" width="14" height="4" rx="2" fill="#050607" opacity="0.85"/>
-                <rect x="16" y="62" width="14" height="4" rx="2" fill="#050607" opacity="0.85"/>
-
-                <!-- Engine glow (animated by SVG) -->
-                <ellipse cx="22" cy="56" rx="10" ry="6" fill="url(#engineGlow)" opacity="0.75">
-                    <animate attributeName="opacity" values="0.45;0.85;0.45" dur="0.22s" repeatCount="indefinite"/>
-                </ellipse>
-                <ellipse cx="22" cy="64" rx="10" ry="6" fill="url(#engineGlow)" opacity="0.75">
-                    <animate attributeName="opacity" values="0.50;0.9;0.50" dur="0.22s" repeatCount="indefinite"/>
-                </ellipse>
-
-                <!-- Tiny trailing edge notches -->
-                <path d="M16 60 L20 58 L22 60 L20 62 Z" fill="#020304" opacity="0.9"/>
             </svg>
         `;
 
@@ -1457,32 +1406,32 @@
             
             // Start from edges and fly straight across
             switch(edge) {
-                case 0: // left -> right
-                    startX = -120;
+                case 0: // from left to right
+                    startX = -100;
                     startY = Math.random() * viewportHeight;
-                    endX = viewportWidth + 120;
-                    endY = startY + (Math.random() - 0.5) * 260;
+                    endX = viewportWidth + 100;
+                    endY = startY + (Math.random() - 0.5) * 200;
                     angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
                     break;
-                case 1: // top -> bottom
+                case 1: // from top to bottom
                     startX = Math.random() * viewportWidth;
-                    startY = -120;
-                    endX = startX + (Math.random() - 0.5) * 260;
-                    endY = viewportHeight + 120;
+                    startY = -100;
+                    endX = startX + (Math.random() - 0.5) * 200;
+                    endY = viewportHeight + 100;
                     angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
                     break;
-                case 2: // right -> left
-                    startX = viewportWidth + 120;
+                case 2: // from right to left
+                    startX = viewportWidth + 100;
                     startY = Math.random() * viewportHeight;
-                    endX = -120;
-                    endY = startY + (Math.random() - 0.5) * 260;
+                    endX = -100;
+                    endY = startY + (Math.random() - 0.5) * 200;
                     angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
                     break;
-                case 3: // bottom -> top
+                case 3: // from bottom to top
                     startX = Math.random() * viewportWidth;
-                    startY = viewportHeight + 120;
-                    endX = startX + (Math.random() - 0.5) * 260;
-                    endY = -120;
+                    startY = viewportHeight + 100;
+                    endX = startX + (Math.random() - 0.5) * 200;
+                    endY = -100;
                     angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
                     break;
             }
@@ -1496,69 +1445,60 @@
             trail.style.transform = 'translateY(-50%)';
             trail.style.transformOrigin = 'right center';
             
-            const duration = 9 + Math.random() * 4.5;
-
+            const duration = 10 + Math.random() * 5;
+            
             // Animate the spaceship
             let startTime = null;
             let animationId;
-
-            // Slight “banking” wobble for more life (subtle)
-            const bankAmp = 3 + Math.random() * 4;
-            const bankSpeed = 1.6 + Math.random() * 1.4;
-
+            
             function animate(timestamp) {
                 if (!startTime) startTime = timestamp;
-                const t = (timestamp - startTime) / (duration * 1000);
+                const progress = (timestamp - startTime) / (duration * 1000);
                 
-                if (t < 1 && !spaceship.classList.contains('captured')) {
-                    // smoothstep for nicer motion
-                    const progress = t * t * (3 - 2 * t);
-
+                if (progress < 1 && !spaceship.classList.contains('captured')) {
                     const currentX = startX + (endX - startX) * progress;
                     const currentY = startY + (endY - startY) * progress;
-
-                    const bank = Math.sin((timestamp / 1000) * bankSpeed) * bankAmp;
-
+                    
                     spaceship.style.left = currentX + 'px';
                     spaceship.style.top = currentY + 'px';
-                    spaceship.style.transform = `rotate(${angle + bank}deg)`;
-
-                    // Collision with black holes
-                    const shipCenterX = currentX + 31;
-                    const shipCenterY = currentY + 31;
-
+                    spaceship.style.transform = `rotate(${angle}deg)`;
+                    
+                    // Check collision with black holes
+                    const shipCenterX = currentX + 27.5;
+                    const shipCenterY = currentY + 27.5;
+                    
                     blackHoles.forEach(bh => {
                         const bhRect = bh.element.getBoundingClientRect();
                         const bhCenterX = bhRect.left + bhRect.width / 2;
                         const bhCenterY = bhRect.top + bhRect.height / 2;
                         const bhRadius = bhRect.width / 2;
-
+                        
                         const distance = Math.sqrt(
                             Math.pow(shipCenterX - bhCenterX, 2) + 
                             Math.pow(shipCenterY - bhCenterY, 2)
                         );
-
-                        if (distance < bhRadius * 1.55 && !spaceship.classList.contains('captured')) {
+                        
+                        if (distance < bhRadius * 1.5 && !spaceship.classList.contains('captured')) {
                             spaceship.classList.add('captured');
                             trail.style.opacity = '0';
-
-                            spaceship.style.setProperty('--bh-x', (bhCenterX - currentX - 31) + 'px');
-                            spaceship.style.setProperty('--bh-y', (bhCenterY - currentY - 31) + 'px');
-
+                            
+                            spaceship.style.setProperty('--bh-x', (bhCenterX - currentX - 27.5) + 'px');
+                            spaceship.style.setProperty('--bh-y', (bhCenterY - currentY - 27.5) + 'px');
+                            
                             cancelAnimationFrame(animationId);
-
+                            
                             setTimeout(() => {
                                 spaceship.remove();
                             }, 2000);
                         }
                     });
-
+                    
                     animationId = requestAnimationFrame(animate);
                 } else if (!spaceship.classList.contains('captured')) {
                     spaceship.remove();
                 }
             }
-
+            
             spaceContainer.appendChild(spaceship);
             animationId = requestAnimationFrame(animate);
         }
@@ -1596,23 +1536,58 @@
 
         // Scroll reveal animation
         const reveals = document.querySelectorAll('.reveal');
+        
         const revealOnScroll = () => {
             reveals.forEach(element => {
                 const elementTop = element.getBoundingClientRect().top;
                 const elementVisible = 100;
+                
                 if (elementTop < window.innerHeight - elementVisible) {
                     element.classList.add('active');
                 }
             });
         };
+
         window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
+        revealOnScroll(); // Initial check
 
         // Cursor spotlight effect
+        let mouseX = 0, mouseY = 0;
+        let currentX = 0, currentY = 0;
+
         document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            document.body.classList.add('mouse-active');
+        });
+
+        function updateSpotlight() {
+            currentX += (mouseX - currentX) * 0.1;
+            currentY += (mouseY - currentY) * 0.1;
+            
+            document.body.style.setProperty('--mouse-x', currentX + 'px');
+            document.body.style.setProperty('--mouse-y', currentY + 'px');
+            
+            if (document.body.classList.contains('mouse-active')) {
+                const spotlight = document.body;
+                spotlight.style.setProperty('--mouse-x', currentX + 'px');
+                spotlight.style.setProperty('--mouse-y', currentY + 'px');
+                
+                const afterElement = window.getComputedStyle(spotlight, '::after');
+                spotlight.style.setProperty('--spotlight-x', currentX + 'px');
+                spotlight.style.setProperty('--spotlight-y', currentY + 'px');
+            }
+            
+            requestAnimationFrame(updateSpotlight);
+        }
+
+        updateSpotlight();
+
+        // Apply spotlight position via CSS variable
+        document.addEventListener('mousemove', (e) => {
+            const spotlight = document.querySelector('body::after');
             document.body.style.setProperty('--mouse-x', e.clientX + 'px');
             document.body.style.setProperty('--mouse-y', e.clientY + 'px');
-            document.body.classList.add('mouse-active');
         });
 
         // Update body::after position with CSS variable
@@ -1631,13 +1606,13 @@
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-
+                
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-
+                
                 const deltaX = (x - centerX) / centerX;
                 const deltaY = (y - centerY) / centerY;
-
+                
                 card.style.transform = `
                     perspective(1000px)
                     rotateY(${deltaX * 5}deg)
@@ -1657,11 +1632,12 @@
             const particles = document.querySelectorAll('.particle');
             const x = e.clientX / window.innerWidth;
             const y = e.clientY / window.innerHeight;
-
+            
             particles.forEach((particle, index) => {
                 const speed = (index % 3 + 1) * 0.5;
                 const xMove = (x - 0.5) * 20 * speed;
                 const yMove = (y - 0.5) * 20 * speed;
+                
                 particle.style.transform = `translate(${xMove}px, ${yMove}px)`;
             });
         });

@@ -1,1646 +1,1399 @@
-/* Floating shapes */
-        .floating-shapes {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Designer Portfolio</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
-            color: #fff;
-            overflow-x: hidden;
-        }
-
-        /* Animated gradient background */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(80, 80, 80, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(100, 100, 100, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 50% 20%, rgba(90, 90, 90, 0.1) 0%, transparent 50%);
-            animation: gradientShift 20s ease infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { 
-                opacity: 0.4;
-                transform: scale(1) rotate(0deg);
-            }
-            33% { 
-                opacity: 0.6;
-                transform: scale(1.1) rotate(5deg);
-            }
-            66% { 
-                opacity: 0.5;
-                transform: scale(0.95) rotate(-5deg);
-            }
-        }
-
-        /* Spotlight effect that follows cursor */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.3s;
-            opacity: 0;
-        }
-
-        body.mouse-active::after {
-            opacity: 1;
-        }
-
-        header {
-            padding: 2rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            background: rgba(10, 10, 10, 0.7);
-            backdrop-filter: blur(20px);
-            transition: all 0.3s ease;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ffffff, #cccccc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-        }
-
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #ffffff, transparent);
-            transition: width 0.3s;
-        }
-
-        .logo:hover::after {
-            width: 100%;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin-left: 2rem;
-            transition: all 0.3s;
-            font-weight: 500;
-            position: relative;
-            padding: 0.5rem 0;
-        }
-
-        nav a::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #ffffff;
-            transition: width 0.3s;
-        }
-
-        nav a:hover::before {
-            width: 100%;
-        }
-
-        nav a:hover {
-            color: #ffffff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-content {
-            z-index: 2;
-            padding: 2rem;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            animation: fadeInUp 1s ease, glow 3s ease-in-out infinite;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            position: relative;
-            display: inline-block;
-        }
-
-        .hero h1::before {
-            content: attr(data-text);
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            color: transparent;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% { background-position: -500%; }
-            100% { background-position: 500%; }
-        }
-
-        @keyframes glow {
-            0%, 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
-            50% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.4); }
-        }
-
-        .hero .subtitle {
-            font-size: 1.5rem;
-            color: #cccccc;
-            margin-bottom: 1rem;
-            animation: fadeInUp 1s ease 0.2s backwards;
-        }
-
-        .hero .specialization {
-            font-size: 1.2rem;
-            color: #ffffff;
-            margin-bottom: 2rem;
-            animation: fadeInUp 1s ease 0.3s backwards;
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s;
-        }
-
-        .hero .specialization:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.05);
-            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
-        }
-
-        .tools {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            animation: fadeInUp 1s ease 0.4s backwards;
-        }
-
-        .tool-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            font-size: 1rem;
-            color: #e0e0e0;
-            transition: all 0.3s;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-        }
-
-        .tool-badge:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: linear-gradient(45deg, #666666, #888888);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: all 0.3s;
-            animation: fadeInUp 1s ease 0.5s backwards, pulse 2s ease-in-out infinite;
-            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .cta-button::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: rotate(45deg);
-            animation: buttonShine 3s infinite;
-        }
-
-        @keyframes buttonShine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
-
-        .cta-button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3);
-        }
-
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1); }
-            50% { box-shadow: 0 5px 30px rgba(255, 255, 255, 0.2); }
-        }
-
-        .particles {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            top: 0;
-            left: 0;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent);
-            border-radius: 50%;
-            animation: float 6s infinite;
-            filter: blur(1px);
-        }
-
-        /* Stars background */
-        .stars-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 3s infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.5); }
-        }
-
-        /* Black Holes - Interstellar Style */
-        .black-hole {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, 
-                #000000 0%,
-                #000000 25%,
-                #0a0a0a 30%,
-                transparent 40%
-            );
-            box-shadow: 
-                inset 0 0 50px rgba(0, 0, 0, 1),
-                0 0 30px rgba(0, 0, 0, 0.8);
-            animation: rotateBlackHole 30s linear infinite;
-        }
-
-        /* Event Horizon */
-        .black-hole::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: #000000;
-            box-shadow: 
-                0 0 20px rgba(0, 0, 0, 0.9),
-                inset 0 0 20px rgba(0, 0, 0, 1);
-        }
-
-        /* Accretion Disk - Glowing ring */
-        .black-hole::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 180%;
-            height: 180%;
-            border-radius: 50%;
-            background: 
-                radial-gradient(ellipse at center,
-                    transparent 35%,
-                    rgba(255, 150, 50, 0.3) 40%,
-                    rgba(255, 180, 80, 0.5) 45%,
-                    rgba(255, 200, 100, 0.4) 50%,
-                    rgba(200, 150, 80, 0.3) 55%,
-                    rgba(150, 100, 50, 0.2) 60%,
-                    transparent 70%
-                );
-            animation: accretionDisk 15s linear infinite;
-            filter: blur(3px);
-        }
-
-        /* Gravitational lensing effect */
-        .black-hole-container {
-            position: relative;
-        }
-
-        .gravitational-lens {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 250%;
-            height: 250%;
-            border-radius: 50%;
-            background: radial-gradient(circle,
-                transparent 30%,
-                rgba(100, 100, 120, 0.05) 45%,
-                rgba(80, 80, 100, 0.08) 50%,
-                rgba(60, 60, 80, 0.05) 55%,
-                transparent 70%
-            );
-            pointer-events: none;
-            animation: lensDistortion 20s ease-in-out infinite;
-        }
-
-        @keyframes lensDistortion {
-            0%, 100% { 
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.6;
-            }
-            50% { 
-                transform: translate(-50%, -50%) scale(1.05);
-                opacity: 0.8;
-            }
-        }
-
-        @keyframes rotateBlackHole {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes accretionDisk {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        /* Spaceships - Stealth style */
-        .spaceship {
-            position: absolute;
-            width: 55px;
-            height: 55px;
-            z-index: 10;
-            filter: drop-shadow(0 0 8px rgba(60, 100, 140, 0.5));
-        }
-
-        .spaceship svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Engine trail - darker, more subtle */
-        .trail {
-            position: absolute;
-            width: 90px;
-            height: 5px;
-            background: linear-gradient(90deg, 
-                rgba(80, 130, 180, 0.8),
-                rgba(100, 150, 200, 0.6),
-                rgba(120, 170, 220, 0.4),
-                rgba(140, 190, 230, 0.2),
-                transparent
-            );
-            border-radius: 50%;
-            filter: blur(4px);
-            animation: trailPulse 0.2s ease-in-out infinite;
-            box-shadow: 
-                0 0 12px rgba(80, 130, 180, 0.6),
-                0 0 20px rgba(60, 110, 160, 0.3);
-            z-index: 9;
-        }
-
-        /* Secondary trail particles */
-        .trail::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                rgba(180, 200, 220, 0.5),
-                rgba(150, 180, 210, 0.3),
-                transparent
-            );
-            border-radius: 50%;
-            filter: blur(2px);
-        }
-
-        @keyframes trailPulse {
-            0%, 100% { 
-                opacity: 0.85;
-                transform: scaleX(1) scaleY(1);
-            }
-            50% { 
-                opacity: 1;
-                transform: scaleX(1.25) scaleY(1.15);
-            }
-        }
-
-        .spaceship.captured {
-            animation: capturedByBlackHole 2s ease-in forwards !important;
-        }
-
-        @keyframes capturedByBlackHole {
-            0% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: translate(var(--bh-x), var(--bh-y)) rotate(360deg) scale(0.5);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translate(var(--bh-x), var(--bh-y)) rotate(720deg) scale(0);
-                opacity: 0;
-            }
-        }
-
-        /* Nebula effect */
-        .nebula {
-            position: fixed;
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.15;
-            animation: nebulaPulse 10s ease-in-out infinite;
-        }
-
-        @keyframes nebulaPulse {
-            0%, 100% { 
-                transform: scale(1);
-                opacity: 0.15;
-            }
-            50% { 
-                transform: scale(1.2);
-                opacity: 0.25;
-            }
-        }
-
-        section {
-            padding: 5rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            text-align: center;
-            background: linear-gradient(45deg, #ffffff, #aaaaaa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #888888, transparent);
-            animation: expandLine 2s ease-in-out infinite;
-        }
-
-        @keyframes expandLine {
-            0%, 100% { width: 100px; }
-            50% { width: 200px; }
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 20px;
-            overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            cursor: pointer;
-        }
-
-        .project-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .project-card::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, 
-                transparent,
-                rgba(255, 255, 255, 0.1),
-                transparent,
-                rgba(255, 255, 255, 0.1),
-                transparent
-            );
-            background-size: 200% 200%;
-            border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.5s;
-            animation: borderGlow 3s linear infinite;
-            z-index: -1;
-        }
-
-        @keyframes borderGlow {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 200% 200%; }
-        }
-
-        .project-card:hover::after {
-            opacity: 1;
-        }
-
-        .project-card:hover::before {
-            left: 100%;
-        }
-
-        .project-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .project-image {
-            width: 100%;
-            height: 250px;
-            background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-
-        .project-card:hover .project-image {
-            transform: scale(1.1);
-            filter: brightness(1.2);
-        }
-
-        .project-image::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .project-card:hover .project-image::after {
-            left: 100%;
-        }
-
-        .project-info {
-            padding: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .project-card:hover .project-info {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .project-info h3 {
-            margin-bottom: 0.5rem;
-            font-size: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .project-card:hover .project-info h3 {
-            color: #ffffff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        }
-
-        .project-role {
-            color: #999;
-            font-size: 0.9rem;
-            margin-bottom: 0.8rem;
-            font-style: italic;
-        }
-
-        .project-info p {
-            color: #b0b0b0;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .project-tags {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s;
-        }
-
-        .project-card:hover .tag {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .skill-category {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .skill-category::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-
-        .skill-category:hover::before {
-            opacity: 1;
-            animation: rotate 10s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .skill-category:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .skill-category h3 {
-            margin-bottom: 1.5rem;
-            color: #cccccc;
-            position: relative;
-            z-index: 1;
-        }
-
-        .skill-item {
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .skill-name {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-
-        .skill-bar {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .skill-bar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        .skill-progress {
-            height: 100%;
-            background: linear-gradient(90deg, #888888, #aaaaaa, #888888);
-            background-size: 200% 100%;
-            border-radius: 10px;
-            animation: fillBar 1.5s ease, gradientMove 3s ease infinite;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        }
-
-        @keyframes gradientMove {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .contact {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 4rem 2rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .contact::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-            animation: rotate 15s linear infinite;
-        }
-
-        .contact h2,
-        .contact p,
-        .contact-links {
-            position: relative;
-            z-index: 1;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .contact-link {
-            padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid #888888;
-            color: #cccccc;
-            text-decoration: none;
-            border-radius: 10px;
-            transition: all 0.3s;
-            font-weight: bold;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .contact-link::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.5s, height 0.5s;
-        }
-
-        .contact-link:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .contact-link:hover {
-            background: #888888;
-            color: #0a0a0a;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-            color: #666;
-        }
-
-        /* Scroll reveal animation */
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.6s ease;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0) translateX(0);
-            }
-            25% {
-                transform: translateY(-20px) translateX(10px);
-            }
-            50% {
-                transform: translateY(-10px) translateX(-10px);
-            }
-            75% {
-                transform: translateY(-15px) translateX(5px);
-            }
-        }
-
-        @keyframes fillBar {
-            from {
-                width: 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            nav {
-                display: none;
-            }
-            
-            .projects-grid, .skills-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Designer Portfolio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Animated gradient background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(80, 80, 80, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(100, 100, 100, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 20%, rgba(90, 90, 90, 0.1) 0%, transparent 50%);
+      animation: gradientShift 20s ease infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { opacity: 0.4; transform: scale(1) rotate(0deg); }
+      33% { opacity: 0.6; transform: scale(1.1) rotate(5deg); }
+      66% { opacity: 0.5; transform: scale(0.95) rotate(-5deg); }
+    }
+
+    /* Spotlight effect that follows cursor */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+
+    body.mouse-active::after { opacity: 1; }
+
+    header {
+      padding: 2rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(20px);
+      transition: all 0.3s ease;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      background: linear-gradient(45deg, #ffffff, #cccccc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #ffffff, transparent);
+      transition: width 0.3s;
+    }
+    .logo:hover::after { width: 100%; }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 2rem;
+      transition: all 0.3s;
+      font-weight: 500;
+      position: relative;
+      padding: 0.5rem 0;
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0;
+      height: 2px;
+      background: #ffffff;
+      transition: width 0.3s;
+    }
+
+    nav a:hover::before { width: 100%; }
+    nav a:hover {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content { z-index: 2; padding: 2rem; }
+
+    .hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s ease, glow 3s ease-in-out infinite;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero h1::before {
+      content: attr(data-text);
+      position: absolute;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      color: transparent;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine { 0% { background-position: -500%; } 100% { background-position: 500%; } }
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+      50% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.4); }
+    }
+
+    .hero .subtitle {
+      font-size: 1.5rem;
+      color: #cccccc;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s ease 0.2s backwards;
+    }
+
+    .hero .specialization {
+      font-size: 1.2rem;
+      color: #ffffff;
+      margin-bottom: 2rem;
+      animation: fadeInUp 1s ease 0.3s backwards;
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+    }
+
+    .hero .specialization:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.05);
+      box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
+    }
+
+    .tools {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      animation: fadeInUp 1s ease 0.4s backwards;
+    }
+
+    .tool-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      font-size: 1rem;
+      color: #e0e0e0;
+      transition: all 0.3s;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+
+    .tool-badge:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(45deg, #666666, #888888);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: all 0.3s;
+      animation: fadeInUp 1s ease 0.5s backwards, pulse 2s ease-in-out infinite;
+      box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 0; height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .cta-button::after {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+      animation: buttonShine 3s infinite;
+    }
+
+    @keyframes buttonShine {
+      0% { transform: translateX(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    .cta-button:hover::before { width: 300px; height: 300px; }
+    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3); }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1); }
+      50% { box-shadow: 0 5px 30px rgba(255, 255, 255, 0.2); }
+    }
+
+    /* ==== SPACE LAYERS (fixed, whole site background) ==== */
+    .stars-background, .particles, .floating-shapes {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0; /* background layer */
+    }
+
+    .particle {
+      position: absolute;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent);
+      border-radius: 50%;
+      animation: float 6s infinite;
+      filter: blur(1px);
+    }
+
+    .star {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+
+    /* Space objects are BEHIND content */
+    section, footer, #contact { position: relative; z-index: 2; }
+    header { z-index: 1000; }
+
+    /* Black Holes */
+    .black-hole-container { position: absolute; z-index: 0; }
+    .black-hole {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%,
+        #000000 0%,
+        #000000 25%,
+        #0a0a0a 30%,
+        transparent 40%
+      );
+      box-shadow:
+        inset 0 0 50px rgba(0, 0, 0, 1),
+        0 0 30px rgba(0, 0, 0, 0.8);
+      animation: rotateBlackHole 30s linear infinite;
+    }
+
+    .black-hole::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      background: #000000;
+      box-shadow:
+        0 0 20px rgba(0, 0, 0, 0.9),
+        inset 0 0 20px rgba(0, 0, 0, 1);
+    }
+
+    /* Accretion Disk */
+    .black-hole::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 180%; height: 180%;
+      border-radius: 50%;
+      background:
+        radial-gradient(ellipse at center,
+          transparent 35%,
+          rgba(255, 150, 50, 0.3) 40%,
+          rgba(255, 180, 80, 0.5) 45%,
+          rgba(255, 200, 100, 0.4) 50%,
+          rgba(200, 150, 80, 0.3) 55%,
+          rgba(150, 100, 50, 0.2) 60%,
+          transparent 70%
+        );
+      animation: accretionDisk 15s linear infinite;
+      filter: blur(3px);
+    }
+
+    /* Extra inner swirl (flow effect) */
+    .bh-swirl {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 135%; height: 135%;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        rgba(255,255,255,0.00) 0deg,
+        rgba(255,255,255,0.06) 60deg,
+        rgba(255,255,255,0.00) 140deg,
+        rgba(255,255,255,0.05) 220deg,
+        rgba(255,255,255,0.00) 360deg
+      );
+      filter: blur(10px);
+      opacity: 0.35;
+      animation: swirlSpin 10s linear infinite;
+      mix-blend-mode: soft-light;
+      -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%);
+      mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%);
+      pointer-events: none;
+    }
+
+    @keyframes swirlSpin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    .gravitational-lens {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 250%; height: 250%;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        transparent 30%,
+        rgba(100, 100, 120, 0.05) 45%,
+        rgba(80, 80, 100, 0.08) 50%,
+        rgba(60, 60, 80, 0.05) 55%,
+        transparent 70%
+      );
+      pointer-events: none;
+      animation: lensDistortion 20s ease-in-out infinite;
+    }
+
+    @keyframes lensDistortion {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+      50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.8; }
+    }
+
+    @keyframes rotateBlackHole { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes accretionDisk { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    /* Spaceships */
+    .spaceship {
+      position: absolute;
+      width: 55px;
+      height: 55px;
+      z-index: 1; /* still behind content because content is z-index 2 */
+      filter: drop-shadow(0 0 8px rgba(60, 100, 140, 0.5));
+      pointer-events: none;
+    }
+
+    .spaceship svg { width: 100%; height: 100%; }
+
+    .trail {
+      position: absolute;
+      width: 90px;
+      height: 5px;
+      background: linear-gradient(90deg,
+        rgba(80, 130, 180, 0.8),
+        rgba(100, 150, 200, 0.6),
+        rgba(120, 170, 220, 0.4),
+        rgba(140, 190, 230, 0.2),
+        transparent
+      );
+      border-radius: 50%;
+      filter: blur(4px);
+      animation: trailPulse 0.2s ease-in-out infinite;
+      box-shadow:
+        0 0 12px rgba(80, 130, 180, 0.6),
+        0 0 20px rgba(60, 110, 160, 0.3);
+      z-index: 0;
+    }
+
+    .trail::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg,
+        rgba(180, 200, 220, 0.5),
+        rgba(150, 180, 210, 0.3),
+        transparent
+      );
+      border-radius: 50%;
+      filter: blur(2px);
+    }
+
+    @keyframes trailPulse {
+      0%, 100% { opacity: 0.85; transform: scaleX(1) scaleY(1); }
+      50% { opacity: 1; transform: scaleX(1.25) scaleY(1.15); }
+    }
+
+    .spaceship.captured { animation: capturedByBlackHole 2s ease-in forwards !important; }
+
+    @keyframes capturedByBlackHole {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+      50% { transform: translate(var(--bh-x), var(--bh-y)) rotate(360deg) scale(0.5); opacity: 0.8; }
+      100% { transform: translate(var(--bh-x), var(--bh-y)) rotate(720deg) scale(0); opacity: 0; }
+    }
+
+    /* Nebula */
+    .nebula {
+      position: absolute;
+      width: 460px;
+      height: 460px;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.16;
+      animation: nebulaPulse 10s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    @keyframes nebulaPulse {
+      0%, 100% { transform: scale(1); opacity: 0.14; }
+      50% { transform: scale(1.2); opacity: 0.24; }
+    }
+
+    /* Planets */
+    .planet {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(0px);
+      opacity: 0.18;
+      box-shadow: 0 0 60px rgba(255,255,255,0.06);
+      z-index: 0;
+    }
+    .planet::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.22), transparent 45%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .planet-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) rotate(-18deg);
+      width: 160%;
+      height: 38%;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center,
+        rgba(255,255,255,0.0) 30%,
+        rgba(255,255,255,0.10) 45%,
+        rgba(255,255,255,0.05) 55%,
+        rgba(255,255,255,0.0) 70%
+      );
+      filter: blur(2px);
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    /* Galaxies */
+    .galaxy {
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background:
+        conic-gradient(
+          from 0deg,
+          rgba(255,255,255,0.00) 0deg,
+          rgba(180,220,255,0.08) 50deg,
+          rgba(255,255,255,0.00) 120deg,
+          rgba(200,170,255,0.06) 200deg,
+          rgba(255,255,255,0.00) 360deg
+        );
+      filter: blur(18px);
+      opacity: 0.12;
+      animation: galaxySpin 40s linear infinite;
+      mix-blend-mode: screen;
+      z-index: 0;
+      -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 25%, rgba(0,0,0,0) 70%);
+      mask-image: radial-gradient(circle, rgba(0,0,0,1) 25%, rgba(0,0,0,0) 70%);
+    }
+
+    @keyframes galaxySpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    section {
+      padding: 5rem 5%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      text-align: center;
+      background: linear-gradient(45deg, #ffffff, #aaaaaa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #888888, transparent);
+      animation: expandLine 2s ease-in-out infinite;
+    }
+
+    @keyframes expandLine {
+      0%, 100% { width: 100px; }
+      50% { width: 200px; }
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .project-card::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(45deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+      );
+      background-size: 200% 200%;
+      border-radius: 20px;
+      opacity: 0;
+      transition: opacity 0.5s;
+      animation: borderGlow 3s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes borderGlow { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
+    .project-card:hover::after { opacity: 1; }
+    .project-card:hover::before { left: 100%; }
+
+    .project-card:hover {
+      transform: translateY(-15px) scale(1.02);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .project-image {
+      width: 100%;
+      height: 250px;
+      background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .project-card:hover .project-image { transform: scale(1.1); filter: brightness(1.2); }
+    .project-image::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+    .project-card:hover .project-image::after { left: 100%; }
+
+    .project-info { padding: 1.5rem; transition: all 0.3s; }
+    .project-card:hover .project-info { background: rgba(255, 255, 255, 0.02); }
+
+    .project-info h3 { margin-bottom: 0.5rem; font-size: 1.5rem; transition: all 0.3s; }
+    .project-card:hover .project-info h3 { color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
+
+    .project-role { color: #999; font-size: 0.9rem; margin-bottom: 0.8rem; font-style: italic; }
+    .project-info p { color: #b0b0b0; line-height: 1.6; margin-bottom: 1rem; }
+
+    .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tag {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s;
+    }
+    .project-card:hover .tag {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .skill-category {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-category::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .skill-category:hover::before { opacity: 1; animation: rotate 10s linear infinite; }
+    @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    .skill-category:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .skill-category h3 { margin-bottom: 1.5rem; color: #cccccc; position: relative; z-index: 1; }
+    .skill-item { margin-bottom: 1rem; position: relative; z-index: 1; }
+    .skill-name { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+
+    .skill-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .skill-bar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
+
+    .skill-progress {
+      height: 100%;
+      background: linear-gradient(90deg, #888888, #aaaaaa, #888888);
+      background-size: 200% 100%;
+      border-radius: 10px;
+      animation: fillBar 1.5s ease, gradientMove 3s ease infinite;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    @keyframes gradientMove {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .contact {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 4rem 2rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+      animation: rotate 15s linear infinite;
+    }
+
+    .contact h2, .contact p, .contact-links { position: relative; z-index: 1; }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .contact-link {
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #888888;
+      color: #cccccc;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.3s;
+      font-weight: bold;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-link::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 0; height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.5s, height 0.5s;
+    }
+
+    .contact-link:hover::before { width: 300px; height: 300px; }
+    .contact-link:hover {
+      background: #888888;
+      color: #0a0a0a;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      color: #666;
+    }
+
+    /* Scroll reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.6s ease;
+    }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      25% { transform: translateY(-20px) translateX(10px); }
+      50% { transform: translateY(-10px) translateX(-10px); }
+      75% { transform: translateY(-15px) translateX(5px); }
+    }
+
+    @keyframes fillBar { from { width: 0; } }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; }
+      nav { display: none; }
+      .projects-grid, .skills-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-    <div class="stars-background" id="stars"></div>
-    <div class="particles" id="particles"></div>
-    <div class="floating-shapes" id="space-objects">
-        <!-- Black holes and spaceships will be added here -->
+  <div class="stars-background" id="stars"></div>
+  <div class="particles" id="particles"></div>
+  <div class="floating-shapes" id="space-objects">
+    <!-- black holes, ships, planets, galaxies, nebulas -->
+  </div>
+
+  <header>
+    <div class="logo">GameDev</div>
+    <nav>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Background</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1 data-text="Game Designer">Game Designer</h1>
+      <p class="subtitle">Certified Game Designer</p>
+      <p class="specialization">Specializing in Level Design & Environment Design</p>
+      <div class="tools">
+        <div class="tool-badge"><span>🎮</span><span>Unity Engine</span></div>
+        <div class="tool-badge"><span>⚡</span><span>Unreal Engine</span></div>
+      </div>
+      <a href="#projects" class="cta-button">View My Work</a>
     </div>
-    
-    <header>
-        <div class="logo">GameDev</div>
-        <nav>
-            <a href="#projects">Projects</a>
-            <a href="#skills">Background</a>
-            <a href="#contact">Contact</a>
-        </nav>
-    </header>
+  </section>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1 data-text="Game Designer">Game Designer</h1>
-            <p class="subtitle">Certified Game Designer</p>
-            <p class="specialization">Specializing in Level Design & Environment Design</p>
-            <div class="tools">
-                <div class="tool-badge">
-                    <span>🎮</span>
-                    <span>Unity Engine</span>
-                </div>
-                <div class="tool-badge">
-                    <span>⚡</span>
-                    <span>Unreal Engine</span>
-                </div>
-            </div>
-            <a href="#projects" class="cta-button">View My Work</a>
+  <section id="projects">
+    <h2>Featured Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="project-image" style="background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);">🏙️</div>
+        <div class="project-info">
+          <h3>Urban Warfare</h3>
+          <div class="project-role">Level Designer & Environment Artist</div>
+          <p>Designed and built 8 multiplayer maps featuring urban environments. Created vertical gameplay spaces with multiple routes and strategic points.</p>
+          <div class="project-tags">
+            <span class="tag">Unity</span><span class="tag">Multiplayer</span><span class="tag">Level Design</span>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <section id="projects">
-        <h2>Featured Projects</h2>
-        <div class="projects-grid">
-            <div class="project-card reveal">
-                <div class="project-image" style="background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);">🏙️</div>
-                <div class="project-info">
-                    <h3>Urban Warfare</h3>
-                    <div class="project-role">Level Designer & Environment Artist</div>
-                    <p>Designed and built 8 multiplayer maps featuring urban environments. Created vertical gameplay spaces with multiple routes and strategic points.</p>
-                    <div class="project-tags">
-                        <span class="tag">Unity</span>
-                        <span class="tag">Multiplayer</span>
-                        <span class="tag">Level Design</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card reveal">
-                <div class="project-image" style="background: linear-gradient(135deg, #5a5a5a 0%, #3a3a3a 100%);">🌲</div>
-                <div class="project-info">
-                    <h3>Forest of Echoes</h3>
-                    <div class="project-role">Environment Designer</div>
-                    <p>Crafted atmospheric forest environments for single-player adventure. Designed exploration-focused levels with environmental storytelling elements.</p>
-                    <div class="project-tags">
-                        <span class="tag">Unreal Engine</span>
-                        <span class="tag">Adventure</span>
-                        <span class="tag">Environment Design</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card reveal">
-                <div class="project-image" style="background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);">🏰</div>
-                <div class="project-info">
-                    <h3>Siege Masters</h3>
-                    <div class="project-role">Level Designer</div>
-                    <p>Developed castle siege levels with destructible environments and dynamic objectives. Created asymmetric maps balancing attacker and defender advantages.</p>
-                    <div class="project-tags">
-                        <span class="tag">Unity</span>
-                        <span class="tag">Strategy</span>
-                        <span class="tag">Level Design</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card reveal">
-                <div class="project-image" style="background: linear-gradient(135deg, #2a2a2a 0%, #4a4a4a 100%);">🌊</div>
-                <div class="project-info">
-                    <h3>Deep Blue</h3>
-                    <div class="project-role">Environment & Level Designer</div>
-                    <p>Designed underwater exploration levels with unique navigation challenges. Created atmospheric environments using volumetric lighting and particle effects.</p>
-                    <div class="project-tags">
-                        <span class="tag">Unreal Engine</span>
-                        <span class="tag">Exploration</span>
-                        <span class="tag">Environment Design</span>
-                    </div>
-                </div>
-            </div>
+      <div class="project-card reveal">
+        <div class="project-image" style="background: linear-gradient(135deg, #5a5a5a 0%, #3a3a3a 100%);">🌲</div>
+        <div class="project-info">
+          <h3>Forest of Echoes</h3>
+          <div class="project-role">Environment Designer</div>
+          <p>Crafted atmospheric forest environments for single-player adventure. Designed exploration-focused levels with environmental storytelling elements.</p>
+          <div class="project-tags">
+            <span class="tag">Unreal Engine</span><span class="tag">Adventure</span><span class="tag">Environment Design</span>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <section id="skills">
-        <h2>Education & Experience</h2>
-        <div class="skills-grid">
-            <div class="skill-category reveal">
-                <h3>Education</h3>
-                <div class="skill-item">
-                    <div class="skill-name">
-                        <span>Game Design Certification</span>
-                    </div>
-                    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Game Design Academy - Comprehensive program covering systems design, level design, and game mechanics with specialization in level and environment design.</p>
-                </div>
-                <div class="skill-item" style="margin-top: 1.5rem;">
-                    <div class="skill-name">
-                        <span>Unity Certification</span>
-                    </div>
-                    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Unity Technologies - Certified in level design tools, lighting systems, and environment optimization.</p>
-                </div>
-            </div>
-
-            <div class="skill-category reveal">
-                <h3>Level Design Skills</h3>
-                <div class="skill-item">
-                    <div class="skill-name">
-                        <span>Level Design</span>
-                        <span>95%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 95%;"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-name">
-                        <span>Environment Design</span>
-                        <span>92%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 92%;"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-name">
-                        <span>Player Flow Design</span>
-                        <span>90%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 90%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-category reveal">
-                <h3>Engine Experience</h3>
-                <div class="skill-item">
-                    <div class="skill-name">
-                        <span>Unity</span>
-                        <span>92%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 92%;"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-name">
-                        <span>Unreal Engine</span>
-                        <span>85%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 85%;"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-name">
-                        <span>Lighting & VFX</span>
-                        <span>88%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 88%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-category reveal">
-                <h3>Professional Experience</h3>
-                <div class="skill-item">
-                    <div class="skill-name">
-                        <span>Level Designer</span>
-                    </div>
-                    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Independent Studio (2022 - Present) - Design and implement game levels, create environment layouts, collaborate with teams.</p>
-                </div>
-                <div class="skill-item" style="margin-top: 1.5rem;">
-                    <div class="skill-name">
-                        <span>Environment Designer</span>
-                    </div>
-                    <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Freelance (2020 - 2022) - Designed atmospheric environments, specialized in environmental storytelling.</p>
-                </div>
-            </div>
+      <div class="project-card reveal">
+        <div class="project-image" style="background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);">🏰</div>
+        <div class="project-info">
+          <h3>Siege Masters</h3>
+          <div class="project-role">Level Designer</div>
+          <p>Developed castle siege levels with destructible environments and dynamic objectives. Created asymmetric maps balancing attacker and defender advantages.</p>
+          <div class="project-tags">
+            <span class="tag">Unity</span><span class="tag">Strategy</span><span class="tag">Level Design</span>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <div id="contact">
-        <section class="contact reveal">
-            <h2>Let's Create Something Amazing</h2>
-            <p style="font-size: 1.2rem; margin-bottom: 1rem;">Available for freelance projects and collaborations</p>
-            <div class="contact-links">
-                <a href="mailto:contact@example.com" class="contact-link">Email Me</a>
-                <a href="#" class="contact-link">LinkedIn</a>
-                <a href="#" class="contact-link">ArtStation</a>
-                <a href="#" class="contact-link">Portfolio</a>
-            </div>
-        </section>
+      <div class="project-card reveal">
+        <div class="project-image" style="background: linear-gradient(135deg, #2a2a2a 0%, #4a4a4a 100%);">🌊</div>
+        <div class="project-info">
+          <h3>Deep Blue</h3>
+          <div class="project-role">Environment & Level Designer</div>
+          <p>Designed underwater exploration levels with unique navigation challenges. Created atmospheric environments using volumetric lighting and particle effects.</p>
+          <div class="project-tags">
+            <span class="tag">Unreal Engine</span><span class="tag">Exploration</span><span class="tag">Environment Design</span>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <footer>
-        <p>&copy; 2025 Game Designer Portfolio. Crafted with passion for games.</p>
-    </footer>
+  <section id="skills">
+    <h2>Education & Experience</h2>
+    <div class="skills-grid">
+      <div class="skill-category reveal">
+        <h3>Education</h3>
+        <div class="skill-item">
+          <div class="skill-name"><span>Game Design Certification</span></div>
+          <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Game Design Academy - Comprehensive program covering systems design, level design, and game mechanics with specialization in level and environment design.</p>
+        </div>
+        <div class="skill-item" style="margin-top: 1.5rem;">
+          <div class="skill-name"><span>Unity Certification</span></div>
+          <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Unity Technologies - Certified in level design tools, lighting systems, and environment optimization.</p>
+        </div>
+      </div>
 
-    <script>
-        // Create stars
-        const starsContainer = document.getElementById('stars');
-        for (let i = 0; i < 200; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 3 + 's';
-            star.style.animationDuration = (Math.random() * 2 + 2) + 's';
-            starsContainer.appendChild(star);
+      <div class="skill-category reveal">
+        <h3>Level Design Skills</h3>
+        <div class="skill-item">
+          <div class="skill-name"><span>Level Design</span><span>95%</span></div>
+          <div class="skill-bar"><div class="skill-progress" style="width: 95%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Environment Design</span><span>92%</span></div>
+          <div class="skill-bar"><div class="skill-progress" style="width: 92%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Player Flow Design</span><span>90%</span></div>
+          <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-category reveal">
+        <h3>Engine Experience</h3>
+        <div class="skill-item">
+          <div class="skill-name"><span>Unity</span><span>92%</span></div>
+          <div class="skill-bar"><div class="skill-progress" style="width: 92%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Unreal Engine</span><span>85%</span></div>
+          <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Lighting & VFX</span><span>88%</span></div>
+          <div class="skill-bar"><div class="skill-progress" style="width: 88%;"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-category reveal">
+        <h3>Professional Experience</h3>
+        <div class="skill-item">
+          <div class="skill-name"><span>Level Designer</span></div>
+          <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Independent Studio (2022 - Present) - Design and implement game levels, create environment layouts, collaborate with teams.</p>
+        </div>
+        <div class="skill-item" style="margin-top: 1.5rem;">
+          <div class="skill-name"><span>Environment Designer</span></div>
+          <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">Freelance (2020 - 2022) - Designed atmospheric environments, specialized in environmental storytelling.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="contact">
+    <section class="contact reveal">
+      <h2>Let's Create Something Amazing</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 1rem;">Available for freelance projects and collaborations</p>
+      <div class="contact-links">
+        <a href="mailto:contact@example.com" class="contact-link">Email Me</a>
+        <a href="#" class="contact-link">LinkedIn</a>
+        <a href="#" class="contact-link">ArtStation</a>
+        <a href="#" class="contact-link">Portfolio</a>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Game Designer Portfolio. Crafted with passion for games.</p>
+  </footer>
+
+  <script>
+    // Stars
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 220; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.animationDelay = Math.random() * 3 + 's';
+      star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      starsContainer.appendChild(star);
+    }
+
+    // Particles
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 55; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      const size = Math.random() * 5 + 2;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 6 + 's';
+      particle.style.animationDuration = (Math.random() * 5 + 4) + 's';
+      particlesContainer.appendChild(particle);
+    }
+
+    const spaceContainer = document.getElementById('space-objects');
+
+    // Extra nebulas
+    const nebulas = [
+      { top: '8%', left: '12%', color: 'rgba(70, 80, 120, 0.35)', size: 520 },
+      { top: '58%', right: '8%', color: 'rgba(90, 70, 120, 0.30)', size: 480 },
+      { bottom: '18%', left: '22%', color: 'rgba(60, 90, 110, 0.30)', size: 520 },
+      { bottom: '5%', right: '28%', color: 'rgba(90, 90, 130, 0.22)', size: 560 }
+    ];
+
+    nebulas.forEach(neb => {
+      const n = document.createElement('div');
+      n.className = 'nebula';
+      n.style.width = (neb.size || 460) + 'px';
+      n.style.height = (neb.size || 460) + 'px';
+      n.style.background = `radial-gradient(circle, ${neb.color}, transparent 60%)`;
+      if (neb.top) n.style.top = neb.top;
+      if (neb.bottom) n.style.bottom = neb.bottom;
+      if (neb.left) n.style.left = neb.left;
+      if (neb.right) n.style.right = neb.right;
+      spaceContainer.appendChild(n);
+    });
+
+    // Galaxies
+    const galaxies = [
+      { top: '22%', left: '55%', size: 540, rotate: 18 },
+      { top: '72%', left: '8%', size: 620, rotate: -12 }
+    ];
+
+    galaxies.forEach(g => {
+      const gal = document.createElement('div');
+      gal.className = 'galaxy';
+      gal.style.width = g.size + 'px';
+      gal.style.height = g.size + 'px';
+      gal.style.top = g.top;
+      gal.style.left = g.left;
+      gal.style.transform = `rotate(${g.rotate}deg)`;
+      spaceContainer.appendChild(gal);
+    });
+
+    // Planets
+    function addPlanet({ top, left, right, bottom, size, colors, ring }) {
+      const p = document.createElement('div');
+      p.className = 'planet';
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.background = `radial-gradient(circle at 30% 30%, ${colors[0]} 0%, ${colors[1]} 35%, ${colors[2]} 70%, ${colors[3]} 100%)`;
+      if (top) p.style.top = top;
+      if (bottom) p.style.bottom = bottom;
+      if (left) p.style.left = left;
+      if (right) p.style.right = right;
+
+      if (ring) {
+        const r = document.createElement('div');
+        r.className = 'planet-ring';
+        r.style.transform = `translate(-50%, -50%) rotate(${ring.rotate || -18}deg)`;
+        r.style.opacity = ring.opacity ?? 0.45;
+        p.appendChild(r);
+      }
+      spaceContainer.appendChild(p);
+    }
+
+    addPlanet({
+      top: '12%', right: '6%',
+      size: 220,
+      colors: ['rgba(170,210,255,0.35)','rgba(90,120,180,0.22)','rgba(40,60,100,0.16)','rgba(10,15,25,0.08)'],
+      ring: { rotate: -22, opacity: 0.42 }
+    });
+
+    addPlanet({
+      bottom: '10%', right: '8%',
+      size: 260,
+      colors: ['rgba(255,220,170,0.22)','rgba(170,120,80,0.16)','rgba(80,55,40,0.12)','rgba(10,8,8,0.08)'],
+      ring: null
+    });
+
+    addPlanet({
+      top: '62%', left: '3%',
+      size: 190,
+      colors: ['rgba(200,255,230,0.18)','rgba(80,160,130,0.14)','rgba(40,80,70,0.12)','rgba(10,15,12,0.08)'],
+      ring: { rotate: 14, opacity: 0.38 }
+    });
+
+    // Black holes (fixed positions, behind content)
+    const blackHolePositions = [
+      { top: '16%', left: '18%', size: 120 },
+      { top: '52%', right: '14%', size: 150 },
+      { bottom: '24%', left: '28%', size: 110 },
+      { top: '76%', right: '22%', size: 130 }
+    ];
+
+    const blackHoles = [];
+    blackHolePositions.forEach((pos) => {
+      const container = document.createElement('div');
+      container.className = 'black-hole-container';
+      if (pos.top) container.style.top = pos.top;
+      if (pos.bottom) container.style.bottom = pos.bottom;
+      if (pos.left) container.style.left = pos.left;
+      if (pos.right) container.style.right = pos.right;
+
+      const blackHole = document.createElement('div');
+      blackHole.className = 'black-hole';
+      blackHole.style.width = pos.size + 'px';
+      blackHole.style.height = pos.size + 'px';
+      blackHole.style.animationDuration = (20 + Math.random() * 15) + 's';
+
+      // extra swirl layer
+      const swirl = document.createElement('div');
+      swirl.className = 'bh-swirl';
+      swirl.style.animationDuration = (8 + Math.random() * 8) + 's';
+      blackHole.appendChild(swirl);
+
+      const lens = document.createElement('div');
+      lens.className = 'gravitational-lens';
+
+      container.appendChild(blackHole);
+      container.appendChild(lens);
+      spaceContainer.appendChild(container);
+
+      blackHoles.push({ element: blackHole });
+    });
+
+    // ORIGINAL spaceship SVG (your old style)
+    const spaceshipSVG = `
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <!-- Main center body -->
+        <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
+              fill="url(#centerBody)" stroke="#0a0a0a" stroke-width="1.5"/>
+
+        <!-- Sharp swept wings (B-2 style) - FROM CENTER -->
+        <path d="M 50 38 L 35 26 L 23 21 L 20 24 L 25 31 L 37 36 L 50 41 Z"
+              fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
+        <path d="M 50 62 L 35 74 L 23 79 L 20 76 L 25 69 L 37 64 L 50 59 Z"
+              fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
+
+        <!-- Wing leading edge highlights -->
+        <path d="M 50 38 L 35 26 L 23 21" stroke="#4a4a4a" stroke-width="0.8" opacity="0.7"/>
+        <path d="M 50 62 L 35 74 L 23 79" stroke="#4a4a4a" stroke-width="0.8" opacity="0.7"/>
+
+        <!-- Cockpit -->
+        <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
+        <ellipse cx="68" cy="52" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
+
+        <!-- Engine exhausts -->
+        <rect x="18" y="46" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
+        <rect x="18" y="51.5" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
+
+        <!-- Engine glow -->
+        <ellipse cx="22" cy="47" rx="6" ry="2" fill="#3070a0" opacity="0.75">
+          <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
+        </ellipse>
+        <ellipse cx="22" cy="53" rx="6" ry="2" fill="#3070a0" opacity="0.75">
+          <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
+        </ellipse>
+
+        <!-- Inner engine core -->
+        <ellipse cx="21" cy="47" rx="3.5" ry="1.5" fill="#5090d0" opacity="0.9">
+          <animate attributeName="opacity" values="0.7;1;0.7" dur="0.15s" repeatCount="indefinite"/>
+        </ellipse>
+        <ellipse cx="21" cy="53" rx="3.5" ry="1.5" fill="#5090d0" opacity="0.9">
+          <animate attributeName="opacity" values="0.7;1;0.7" dur="0.15s" repeatCount="indefinite"/>
+        </ellipse>
+
+        <!-- Nose detail -->
+        <path d="M 75 48 L 80 50 L 75 52" stroke="#5a5a5a" stroke-width="1" fill="none"/>
+
+        <!-- Body reinforcement -->
+        <path d="M 50 38 L 58 42 L 62 50 L 58 58 L 50 62 L 42 58 L 38 50 L 42 42 Z"
+              fill="url(#reinforcement)" stroke="#1a1a1a" stroke-width="0.8" opacity="0.6"/>
+
+        <defs>
+          <radialGradient id="centerBody" cx="60%" cy="50%">
+            <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+          </radialGradient>
+          <linearGradient id="wingGradient" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+          </linearGradient>
+          <radialGradient id="reinforcement" cx="50%" cy="50%">
+            <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
+          </radialGradient>
+        </defs>
+      </svg>
+    `;
+
+    // STRAIGHT-LINE Spaceship
+    function createSpaceship() {
+      const spaceship = document.createElement('div');
+      spaceship.className = 'spaceship';
+      spaceship.innerHTML = spaceshipSVG;
+
+      const trail = document.createElement('div');
+      trail.className = 'trail';
+      spaceship.appendChild(trail);
+
+      const edge = Math.floor(Math.random() * 4);
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      let startX, startY, endX, endY;
+
+      // absolutely straight:
+      if (edge === 0) { // left -> right (same Y)
+        startX = -100; endX = vw + 100;
+        startY = Math.random() * vh; endY = startY;
+      } else if (edge === 1) { // top -> bottom (same X)
+        startY = -100; endY = vh + 100;
+        startX = Math.random() * vw; endX = startX;
+      } else if (edge === 2) { // right -> left (same Y)
+        startX = vw + 100; endX = -100;
+        startY = Math.random() * vh; endY = startY;
+      } else { // bottom -> top (same X)
+        startY = vh + 100; endY = -100;
+        startX = Math.random() * vw; endX = startX;
+      }
+
+      const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+
+      spaceship.style.left = startX + 'px';
+      spaceship.style.top = startY + 'px';
+
+      // trail behind
+      trail.style.right = '100%';
+      trail.style.top = '50%';
+      trail.style.transform = 'translateY(-50%)';
+
+      const duration = 10 + Math.random() * 5;
+
+      let startTime = null;
+      let rafId;
+
+      function animate(ts) {
+        if (!startTime) startTime = ts;
+        const progress = (ts - startTime) / (duration * 1000);
+
+        if (progress < 1 && !spaceship.classList.contains('captured')) {
+          const x = startX + (endX - startX) * progress;
+          const y = startY + (endY - startY) * progress;
+
+          spaceship.style.left = x + 'px';
+          spaceship.style.top = y + 'px';
+          spaceship.style.transform = `rotate(${angle}deg)`;
+
+          // collision with black holes
+          const shipCenterX = x + 27.5;
+          const shipCenterY = y + 27.5;
+
+          blackHoles.forEach(bh => {
+            const r = bh.element.getBoundingClientRect();
+            const bhX = r.left + r.width / 2;
+            const bhY = r.top + r.height / 2;
+            const bhRadius = r.width / 2;
+
+            const dist = Math.hypot(shipCenterX - bhX, shipCenterY - bhY);
+
+            if (dist < bhRadius * 1.5 && !spaceship.classList.contains('captured')) {
+              spaceship.classList.add('captured');
+              trail.style.opacity = '0';
+
+              spaceship.style.setProperty('--bh-x', (bhX - x - 27.5) + 'px');
+              spaceship.style.setProperty('--bh-y', (bhY - y - 27.5) + 'px');
+
+              cancelAnimationFrame(rafId);
+              setTimeout(() => spaceship.remove(), 2000);
+            }
+          });
+
+          rafId = requestAnimationFrame(animate);
+        } else {
+          if (!spaceship.classList.contains('captured')) spaceship.remove();
         }
+      }
 
-        // Create floating particles
-        const particlesContainer = document.getElementById('particles');
-        for (let i = 0; i < 50; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            const size = Math.random() * 5 + 2;
-            particle.style.width = size + 'px';
-            particle.style.height = size + 'px';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 6 + 's';
-            particle.style.animationDuration = (Math.random() * 5 + 4) + 's';
-            particlesContainer.appendChild(particle);
-        }
+      spaceContainer.appendChild(spaceship);
+      rafId = requestAnimationFrame(animate);
+    }
 
-        // Create black holes and spaceships
-        const spaceContainer = document.getElementById('space-objects');
-        
-        // Create nebulas
-        const nebulas = [
-            { top: '10%', left: '15%', color: 'rgba(60, 60, 80, 0.3)' },
-            { top: '60%', right: '10%', color: 'rgba(70, 70, 90, 0.3)' },
-            { bottom: '20%', left: '20%', color: 'rgba(50, 50, 70, 0.3)' }
-        ];
+    setInterval(createSpaceship, 1500);
+    for (let i = 0; i < 5; i++) setTimeout(createSpaceship, i * 400);
 
-        nebulas.forEach(neb => {
-            const nebula = document.createElement('div');
-            nebula.className = 'nebula';
-            nebula.style.background = `radial-gradient(circle, ${neb.color}, transparent)`;
-            if (neb.top) nebula.style.top = neb.top;
-            if (neb.bottom) nebula.style.bottom = neb.bottom;
-            if (neb.left) nebula.style.left = neb.left;
-            if (neb.right) nebula.style.right = neb.right;
-            spaceContainer.appendChild(nebula);
-        });
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
 
-        // Create black holes
-        const blackHolePositions = [
-            { top: '15%', left: '20%', size: 120 },
-            { top: '50%', right: '15%', size: 150 },
-            { bottom: '25%', left: '30%', size: 100 },
-            { top: '70%', right: '25%', size: 130 }
-        ];
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 100) {
+        header.style.background = 'rgba(10, 10, 10, 0.95)';
+        header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.5)';
+      } else {
+        header.style.background = 'rgba(10, 10, 10, 0.7)';
+        header.style.boxShadow = 'none';
+      }
+    });
 
-        const blackHoles = [];
-        blackHolePositions.forEach((pos, index) => {
-            const container = document.createElement('div');
-            container.className = 'black-hole-container';
-            container.style.position = 'absolute';
-            if (pos.top) container.style.top = pos.top;
-            if (pos.bottom) container.style.bottom = pos.bottom;
-            if (pos.left) container.style.left = pos.left;
-            if (pos.right) container.style.right = pos.right;
-            
-            const blackHole = document.createElement('div');
-            blackHole.className = 'black-hole';
-            blackHole.style.width = pos.size + 'px';
-            blackHole.style.height = pos.size + 'px';
-            blackHole.style.animationDuration = (20 + Math.random() * 15) + 's';
-            
-            const lens = document.createElement('div');
-            lens.className = 'gravitational-lens';
-            
-            container.appendChild(blackHole);
-            container.appendChild(lens);
-            spaceContainer.appendChild(container);
-            
-            blackHoles.push({ element: blackHole, pos: pos });
-        });
+    // Reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const revealOnScroll = () => {
+      reveals.forEach(el => {
+        const top = el.getBoundingClientRect().top;
+        if (top < window.innerHeight - 100) el.classList.add('active');
+      });
+    };
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
 
-        // SVG for B-2 Spirit style spaceship - flying wing with sharp swept wings
-        const spaceshipSVG = `
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <!-- Main center body -->
-                <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z" 
-                      fill="url(#centerBody)" stroke="#0a0a0a" stroke-width="1.5"/>
-                
-                <!-- Sharp swept wings (B-2 style) - FROM CENTER -->
-                <!-- Top wing -->
-                <path d="M 50 38 L 35 26 L 23 21 L 20 24 L 25 31 L 37 36 L 50 41 Z" 
-                      fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
-                <!-- Bottom wing -->
-                <path d="M 50 62 L 35 74 L 23 79 L 20 76 L 25 69 L 37 64 L 50 59 Z" 
-                      fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
-                
-                <!-- Wing leading edge highlights -->
-                <path d="M 50 38 L 35 26 L 23 21" stroke="#4a4a4a" stroke-width="0.8" opacity="0.7"/>
-                <path d="M 50 62 L 35 74 L 23 79" stroke="#4a4a4a" stroke-width="0.8" opacity="0.7"/>
-                
-                <!-- Wing tips (pointed) -->
-                <path d="M 23 21 L 20 24 L 25 26" fill="#1a1a1a"/>
-                <path d="M 23 79 L 20 76 L 25 74" fill="#1a1a1a"/>
-                
-                <!-- Cockpit (minimal, blended) -->
-                <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
-                <ellipse cx="68" cy="52" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
-                
-                <!-- Center body panels -->
-                <path d="M 40 45 L 65 45" stroke="#2a2a2a" stroke-width="0.4" opacity="0.5"/>
-                <path d="M 40 55 L 65 55" stroke="#2a2a2a" stroke-width="0.4" opacity="0.5"/>
-                <path d="M 45 50 L 70 50" stroke="#2a2a2a" stroke-width="0.3" opacity="0.4"/>
-                
-                <!-- Wing surface details -->
-                <path d="M 40 34 L 47 39" stroke="#1a1a1a" stroke-width="0.4" opacity="0.5"/>
-                <path d="M 40 66 L 47 61" stroke="#1a1a1a" stroke-width="0.4" opacity="0.5"/>
-                <path d="M 30 28 L 37 34" stroke="#2a2a2a" stroke-width="0.3" opacity="0.4"/>
-                <path d="M 30 72 L 37 66" stroke="#2a2a2a" stroke-width="0.3" opacity="0.4"/>
-                
-                <!-- Engine exhausts (hidden on top surface) -->
-                <rect x="18" y="46" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
-                <rect x="18" y="51.5" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
-                
-                <!-- Engine glow -->
-                <ellipse cx="22" cy="47" rx="6" ry="2" fill="#3070a0" opacity="0.75">
-                    <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
-                </ellipse>
-                <ellipse cx="22" cy="53" rx="6" ry="2" fill="#3070a0" opacity="0.75">
-                    <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
-                </ellipse>
-                
-                <!-- Inner engine core (brighter) -->
-                <ellipse cx="21" cy="47" rx="3.5" ry="1.5" fill="#5090d0" opacity="0.9">
-                    <animate attributeName="opacity" values="0.7;1;0.7" dur="0.15s" repeatCount="indefinite"/>
-                </ellipse>
-                <ellipse cx="21" cy="53" rx="3.5" ry="1.5" fill="#5090d0" opacity="0.9">
-                    <animate attributeName="opacity" values="0.7;1;0.7" dur="0.15s" repeatCount="indefinite"/>
-                </ellipse>
-                
-                <!-- Nose detail -->
-                <path d="M 75 48 L 80 50 L 75 52" stroke="#5a5a5a" stroke-width="1" fill="none"/>
-                
-                <!-- Serrated trailing edge (B-2 signature) -->
-                <path d="M 15 50 L 18 48 L 20 50 L 18 52 Z" fill="#0a0a0a" stroke="#000000" stroke-width="0.5"/>
-                
-                <!-- Wing panel lines -->
-                <path d="M 27 24 L 43 36" stroke="#1a1a1a" stroke-width="0.3" opacity="0.4"/>
-                <path d="M 27 76 L 43 64" stroke="#1a1a1a" stroke-width="0.3" opacity="0.4"/>
-                
-                <!-- Stealth facets on wings -->
-                <path d="M 35 31 L 43 38 L 47 39" fill="#1a1a1a" opacity="0.15"/>
-                <path d="M 35 69 L 43 62 L 47 61" fill="#1a1a1a" opacity="0.15"/>
-                
-                <!-- Body reinforcement -->
-                <path d="M 50 38 L 58 42 L 62 50 L 58 58 L 50 62 L 42 58 L 38 50 L 42 42 Z"
-                      fill="url(#reinforcement)" stroke="#1a1a1a" stroke-width="0.8" opacity="0.6"/>
-                
-                <!-- Gradients -->
-                <defs>
-                    <radialGradient id="centerBody" cx="60%" cy="50%">
-                        <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
-                        <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
-                    </radialGradient>
-                    <linearGradient id="wingGradient" x1="100%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
-                        <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
-                    </linearGradient>
-                    <radialGradient id="reinforcement" cx="50%" cy="50%">
-                        <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
-                    </radialGradient>
-                </defs>
-            </svg>
+    // Spotlight
+    document.addEventListener('mousemove', (e) => {
+      document.body.style.setProperty('--mouse-x', e.clientX + 'px');
+      document.body.style.setProperty('--mouse-y', e.clientY + 'px');
+      document.body.classList.add('mouse-active');
+    });
+
+    const style = document.createElement('style');
+    style.textContent = `
+      body::after { left: var(--mouse-x, 50%); top: var(--mouse-y, 50%); }
+    `;
+    document.head.appendChild(style);
+
+    // Magnetic effect
+    document.querySelectorAll('.project-card, .skill-category').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const dx = (x - centerX) / centerX;
+        const dy = (y - centerY) / centerY;
+
+        card.style.transform = `
+          perspective(1000px)
+          rotateY(${dx * 5}deg)
+          rotateX(${-dy * 5}deg)
+          translateY(-15px)
+          scale(1.02)
         `;
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
 
-        // Function to create spaceship with trail
-        function createSpaceship() {
-            const spaceship = document.createElement('div');
-            spaceship.className = 'spaceship';
-            spaceship.innerHTML = spaceshipSVG;
-            
-            // Create engine trail
-            const trail = document.createElement('div');
-            trail.className = 'trail';
-            spaceship.appendChild(trail);
-            
-            // Random starting position from edges
-            const edge = Math.floor(Math.random() * 4);
-            let startX, startY, angle;
-            let endX, endY;
-            
-            const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
-            
-            // Start from edges and fly straight across
-            switch(edge) {
-                case 0: // from left to right
-                    startX = -100;
-                    startY = Math.random() * viewportHeight;
-                    endX = viewportWidth + 100;
-                    endY = startY + (Math.random() - 0.5) * 200;
-                    angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
-                    break;
-                case 1: // from top to bottom
-                    startX = Math.random() * viewportWidth;
-                    startY = -100;
-                    endX = startX + (Math.random() - 0.5) * 200;
-                    endY = viewportHeight + 100;
-                    angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
-                    break;
-                case 2: // from right to left
-                    startX = viewportWidth + 100;
-                    startY = Math.random() * viewportHeight;
-                    endX = -100;
-                    endY = startY + (Math.random() - 0.5) * 200;
-                    angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
-                    break;
-                case 3: // from bottom to top
-                    startX = Math.random() * viewportWidth;
-                    startY = viewportHeight + 100;
-                    endX = startX + (Math.random() - 0.5) * 200;
-                    endY = -100;
-                    angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
-                    break;
-            }
-            
-            spaceship.style.left = startX + 'px';
-            spaceship.style.top = startY + 'px';
-            
-            // Position trail behind the ship
-            trail.style.right = '100%';
-            trail.style.top = '50%';
-            trail.style.transform = 'translateY(-50%)';
-            trail.style.transformOrigin = 'right center';
-            
-            const duration = 10 + Math.random() * 5;
-            
-            // Animate the spaceship
-            let startTime = null;
-            let animationId;
-            
-            function animate(timestamp) {
-                if (!startTime) startTime = timestamp;
-                const progress = (timestamp - startTime) / (duration * 1000);
-                
-                if (progress < 1 && !spaceship.classList.contains('captured')) {
-                    const currentX = startX + (endX - startX) * progress;
-                    const currentY = startY + (endY - startY) * progress;
-                    
-                    spaceship.style.left = currentX + 'px';
-                    spaceship.style.top = currentY + 'px';
-                    spaceship.style.transform = `rotate(${angle}deg)`;
-                    
-                    // Check collision with black holes
-                    const shipCenterX = currentX + 27.5;
-                    const shipCenterY = currentY + 27.5;
-                    
-                    blackHoles.forEach(bh => {
-                        const bhRect = bh.element.getBoundingClientRect();
-                        const bhCenterX = bhRect.left + bhRect.width / 2;
-                        const bhCenterY = bhRect.top + bhRect.height / 2;
-                        const bhRadius = bhRect.width / 2;
-                        
-                        const distance = Math.sqrt(
-                            Math.pow(shipCenterX - bhCenterX, 2) + 
-                            Math.pow(shipCenterY - bhCenterY, 2)
-                        );
-                        
-                        if (distance < bhRadius * 1.5 && !spaceship.classList.contains('captured')) {
-                            spaceship.classList.add('captured');
-                            trail.style.opacity = '0';
-                            
-                            spaceship.style.setProperty('--bh-x', (bhCenterX - currentX - 27.5) + 'px');
-                            spaceship.style.setProperty('--bh-y', (bhCenterY - currentY - 27.5) + 'px');
-                            
-                            cancelAnimationFrame(animationId);
-                            
-                            setTimeout(() => {
-                                spaceship.remove();
-                            }, 2000);
-                        }
-                    });
-                    
-                    animationId = requestAnimationFrame(animate);
-                } else if (!spaceship.classList.contains('captured')) {
-                    spaceship.remove();
-                }
-            }
-            
-            spaceContainer.appendChild(spaceship);
-            animationId = requestAnimationFrame(animate);
-        }
+    // Parallax particles
+    document.addEventListener('mousemove', (e) => {
+      const ps = document.querySelectorAll('.particle');
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
 
-        // Create spaceships continuously
-        setInterval(createSpaceship, 1500);
-        
-        // Initial spaceships
-        for (let i = 0; i < 5; i++) {
-            setTimeout(() => createSpaceship(), i * 400);
-        }
-
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(10, 10, 10, 0.95)';
-                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.5)';
-            } else {
-                header.style.background = 'rgba(10, 10, 10, 0.7)';
-                header.style.boxShadow = 'none';
-            }
-        });
-
-        // Scroll reveal animation
-        const reveals = document.querySelectorAll('.reveal');
-        
-        const revealOnScroll = () => {
-            reveals.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const elementVisible = 100;
-                
-                if (elementTop < window.innerHeight - elementVisible) {
-                    element.classList.add('active');
-                }
-            });
-        };
-
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll(); // Initial check
-
-        // Cursor spotlight effect
-        let mouseX = 0, mouseY = 0;
-        let currentX = 0, currentY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            document.body.classList.add('mouse-active');
-        });
-
-        function updateSpotlight() {
-            currentX += (mouseX - currentX) * 0.1;
-            currentY += (mouseY - currentY) * 0.1;
-            
-            document.body.style.setProperty('--mouse-x', currentX + 'px');
-            document.body.style.setProperty('--mouse-y', currentY + 'px');
-            
-            if (document.body.classList.contains('mouse-active')) {
-                const spotlight = document.body;
-                spotlight.style.setProperty('--mouse-x', currentX + 'px');
-                spotlight.style.setProperty('--mouse-y', currentY + 'px');
-                
-                const afterElement = window.getComputedStyle(spotlight, '::after');
-                spotlight.style.setProperty('--spotlight-x', currentX + 'px');
-                spotlight.style.setProperty('--spotlight-y', currentY + 'px');
-            }
-            
-            requestAnimationFrame(updateSpotlight);
-        }
-
-        updateSpotlight();
-
-        // Apply spotlight position via CSS variable
-        document.addEventListener('mousemove', (e) => {
-            const spotlight = document.querySelector('body::after');
-            document.body.style.setProperty('--mouse-x', e.clientX + 'px');
-            document.body.style.setProperty('--mouse-y', e.clientY + 'px');
-        });
-
-        // Update body::after position with CSS variable
-        const style = document.createElement('style');
-        style.textContent = `
-            body::after {
-                left: var(--mouse-x, 50%);
-                top: var(--mouse-y, 50%);
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Add magnetic effect to cards
-        document.querySelectorAll('.project-card, .skill-category').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const deltaX = (x - centerX) / centerX;
-                const deltaY = (y - centerY) / centerY;
-                
-                card.style.transform = `
-                    perspective(1000px)
-                    rotateY(${deltaX * 5}deg)
-                    rotateX(${-deltaY * 5}deg)
-                    translateY(-15px)
-                    scale(1.02)
-                `;
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = '';
-            });
-        });
-
-        // Parallax effect for particles
-        document.addEventListener('mousemove', (e) => {
-            const particles = document.querySelectorAll('.particle');
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            
-            particles.forEach((particle, index) => {
-                const speed = (index % 3 + 1) * 0.5;
-                const xMove = (x - 0.5) * 20 * speed;
-                const yMove = (y - 0.5) * 20 * speed;
-                
-                particle.style.transform = `translate(${xMove}px, ${yMove}px)`;
-            });
-        });
-    </script>
+      ps.forEach((p, i) => {
+        const speed = (i % 3 + 1) * 0.5;
+        p.style.transform = `translate(${(x - 0.5) * 20 * speed}px, ${(y - 0.5) * 20 * speed}px)`;
+      });
+    });
+  </script>
 </body>
 </html>

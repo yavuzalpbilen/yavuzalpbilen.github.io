@@ -685,7 +685,9 @@
 
         ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 
-        const count = Math.floor((W * H) / 16000);
+        // ✅ YILDIZLAR 2x: 16000 -> 8000
+        const count = Math.floor((W * H) / 8000);
+
         stars = new Array(count).fill(0).map(() => ({
           x: Math.random() * W,
           y: Math.random() * H,

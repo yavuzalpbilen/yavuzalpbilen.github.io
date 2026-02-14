@@ -8,12 +8,14 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    :root { --header-h: 92px; } /* JS ile güncellenecek */
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #0a0a0a 0%, #141420 50%, #1f1f2a 100%);
       color: #fff;
       overflow-x: hidden;
-      cursor: auto; /* normal sayfada cursor normal */
+      cursor: auto;
     }
 
     /* Stars: entire page */
@@ -37,7 +39,7 @@
       50% { opacity: 1; transform: scale(1.35); }
     }
 
-    /* Subtle space haze (still global but super light) */
+    /* Subtle space haze */
     body::before {
       content: '';
       position: fixed;
@@ -101,18 +103,20 @@
 
     /* HERO */
     .hero {
-      height: 100vh;
+      /* header yüzünden kısa görünmesin diye */
+      min-height: calc(100vh - var(--header-h));
+      padding-top: var(--header-h);
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       position: relative;
       overflow: hidden;
-      cursor: none; /* sadece hero'da cursor yok */
+      cursor: none;
       z-index: 5;
     }
 
-    /* Hero-only space layer (does NOT follow scroll; it scrolls away with hero) */
+    /* Hero-only space layer */
     .hero-space {
       position: absolute;
       inset: 0;
@@ -282,11 +286,7 @@
     @keyframes planetDriftC { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(-10px, -8px, 0); } }
 
     /* ===== BLACK HOLES ===== */
-    .black-hole-container {
-      position: absolute;
-      z-index: 2;
-      pointer-events: none;
-    }
+    .black-hole-container { position: absolute; z-index: 2; pointer-events: none; }
 
     .black-hole {
       position: absolute;
@@ -333,7 +333,6 @@
       filter: blur(3px);
       opacity: 0.85;
     }
-
     .bh-swirl {
       position: absolute;
       top: 50%; left: 50%;
@@ -357,7 +356,6 @@
       mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%);
       pointer-events: none;
     }
-
     .gravitational-lens {
       position: absolute;
       top: 50%; left: 50%;
@@ -376,7 +374,6 @@
       animation: lensDistortion 48s ease-in-out infinite;
       opacity: 0.75;
     }
-
     @keyframes lensDistortion {
       0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.55; }
       50% { transform: translate(-50%, -50%) scale(1.02); opacity: 0.8; }
@@ -385,39 +382,31 @@
     @keyframes accretionDisk { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
     @keyframes swirlSpin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-    /* ===== CURSOR BLACK HOLE (hero-only) ===== */
+    /* ===== CURSOR BLACK HOLE ===== */
     .cursor-bh {
       position: absolute;
       width: 84px;
       height: 84px;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 7; /* ships should be above to see them go in */
+      z-index: 7;
       opacity: 0;
       transform: translate(-50%, -50%);
       transition: opacity 0.18s ease;
     }
     .cursor-bh.active { opacity: 1; }
-
-    .cursor-bh .black-hole {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      animation: rotateBlackHole 35s linear infinite;
-    }
+    .cursor-bh .black-hole { position: absolute; inset: 0; width: 100%; height: 100%; animation: rotateBlackHole 35s linear infinite; }
     .cursor-bh .black-hole::after { animation: accretionDisk 30s linear infinite; }
     .cursor-bh .bh-swirl { animation: swirlSpin 25s linear infinite; opacity: 0.22; }
     .cursor-bh .gravitational-lens { width: 210%; height: 210%; opacity: 0.55; animation: lensDistortion 30s ease-in-out infinite; }
 
-    /* ===== SHIPS / ASTEROIDS (hero-only) ===== */
+    /* ===== SHIPS / ASTEROIDS ===== */
     .spaceship, .asteroid {
       position: absolute;
       pointer-events: none;
       will-change: transform, left, top, opacity;
-      z-index: 8; /* above cursor BH */
+      z-index: 8; /* üstte kalsın */
     }
-
     .spaceship {
       width: 55px;
       height: 55px;
@@ -442,7 +431,6 @@
       top: 50%;
       transform: translateY(-50%);
     }
-
     .asteroid {
       width: 40px;
       height: 40px;
@@ -450,7 +438,7 @@
       opacity: 0.88;
     }
 
-    /* Content sections */
+    /* Content */
     section, footer { position: relative; z-index: 10; }
     section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
     h2 {
@@ -522,16 +510,15 @@
       .hero h1 { font-size: 2.5rem; }
       nav { display: none; }
       .projects-grid, .skills-grid { grid-template-columns: 1fr; }
-      .hero { cursor: auto; } /* mobilde cursor gizlemeyelim */
+      .hero { cursor: auto; }
     }
   </style>
 </head>
 
 <body>
-  <!-- GLOBAL stars (entire page) -->
   <div class="stars-background" id="stars"></div>
 
-  <header>
+  <header id="site-header">
     <div class="logo">GameDev</div>
     <nav>
       <a href="#projects">Projects</a>
@@ -541,18 +528,11 @@
   </header>
 
   <section class="hero" id="hero">
-    <!-- HERO-only space layer -->
     <div class="hero-space" id="hero-space">
-      <!-- planets -->
       <div id="hero-planets"></div>
-
-      <!-- blackholes -->
       <div id="hero-blackholes"></div>
-
-      <!-- ships + asteroids -->
       <div id="hero-objects"></div>
 
-      <!-- cursor black hole -->
       <div class="cursor-bh" id="cursor-bh">
         <div class="black-hole"></div>
         <div class="gravitational-lens"></div>
@@ -677,7 +657,16 @@
   </footer>
 
   <script>
-    // ====== GLOBAL STARS (entire page) ======
+    // ====== header height -> hero fit fix ======
+    function syncHeaderHeight() {
+      const header = document.getElementById('site-header');
+      const h = header ? header.getBoundingClientRect().height : 92;
+      document.documentElement.style.setProperty('--header-h', h + 'px');
+    }
+    addEventListener('load', syncHeaderHeight);
+    addEventListener('resize', syncHeaderHeight);
+
+    // ====== GLOBAL STARS ======
     const starsContainer = document.getElementById('stars');
     const STAR_COUNT = 190;
 
@@ -702,9 +691,8 @@
       starsContainer.appendChild(star);
     }
 
-    // ====== HERO SPACE SETUP ======
+    // ====== HERO SPACE ======
     const hero = document.getElementById('hero');
-    const heroSpace = document.getElementById('hero-space');
     const planetsHost = document.getElementById('hero-planets');
     const blackholesHost = document.getElementById('hero-blackholes');
     const objectsHost = document.getElementById('hero-objects');
@@ -712,18 +700,13 @@
     // Cursor BH
     const cursorBH = document.getElementById('cursor-bh');
     const cursorBHCore = cursorBH.querySelector('.black-hole');
-    const cursorBHLens = cursorBH.querySelector('.gravitational-lens');
 
-    // Build cursor BH internal swirl & lens (same visuals as BH)
-    const swirl = document.createElement('div');
-    swirl.className = 'bh-swirl';
-    cursorBHCore.appendChild(swirl);
+    // add swirl into cursor BH core
+    const cursorSwirl = document.createElement('div');
+    cursorSwirl.className = 'bh-swirl';
+    cursorBHCore.appendChild(cursorSwirl);
 
-    // Cursor BH styles
-    cursorBHCore.style.width = '100%';
-    cursorBHCore.style.height = '100%';
-
-    // ====== PLANETS (hero-only) ======
+    // ====== PLANETS ======
     function makePlanet({ top, left, right, bottom, size, gradient, hasRing, driftClass, opacity }) {
       const p = document.createElement('div');
       p.className = `planet ${driftClass || 'drift-a'}`;
@@ -750,7 +733,6 @@
       planetsHost.appendChild(p);
     }
 
-    // Planet set (geri geldi)
     makePlanet({
       top: '12%', right: '7%',
       size: 260, opacity: 0.58, driftClass: 'drift-b', hasRing: true,
@@ -795,7 +777,7 @@
         rgba(2,6,8,1) 100%)`
     });
 
-    // ====== BLACK HOLES (2) hero-only ======
+    // ====== BLACK HOLES (2) ======
     const blackHoles = [];
 
     function createBlackHole({ top, left, right, bottom, size }) {
@@ -823,13 +805,13 @@
       container.appendChild(lens);
       blackholesHost.appendChild(container);
 
-      blackHoles.push({ container, bh });
+      blackHoles.push({ bh });
     }
 
     createBlackHole({ top: '18%', left: '15%', size: 140 });
     createBlackHole({ top: '58%', right: '12%', size: 165 });
 
-    // ====== SHIPS / ASTEROIDS (6 + 6) hero-only, slow drift ======
+    // ====== SHIPS / ASTEROIDS (NO SPAWN / NO RESPAWN) ======
     const spaceshipSVG = `
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
@@ -893,12 +875,12 @@
     const objects = [];
     function rand(min, max) { return min + Math.random() * (max - min); }
 
-    function spawnObject(obj) {
+    function initObject(obj) {
       const rect = hero.getBoundingClientRect();
       const w = rect.width;
       const h = rect.height;
 
-      obj.captured = false;
+      obj.dead = false;
       obj.captureT = 0;
       obj.opacity = obj.type === 'ship' ? 0.95 : 0.88;
       obj.scale = 1;
@@ -906,13 +888,13 @@
       obj.x = rand(0.12, 0.88) * w;
       obj.y = rand(0.18, 0.82) * h;
 
-      const speed = obj.type === 'ship' ? rand(0.8, 1.6) : rand(0.7, 1.5); // px/sec (aşırı yavaş)
+      const speed = obj.type === 'ship' ? rand(0.8, 1.6) : rand(0.7, 1.5); // çok yavaş
       const ang = rand(0, Math.PI * 2);
       obj.vx = Math.cos(ang) * speed;
       obj.vy = Math.sin(ang) * speed;
 
       obj.rot = rand(0, 360);
-      obj.rotSpeed = obj.type === 'ship' ? rand(-0.25, 0.25) : rand(-0.35, 0.35); // deg/sec (çok az)
+      obj.rotSpeed = obj.type === 'ship' ? rand(-0.25, 0.25) : rand(-0.35, 0.35);
 
       obj.drift = rand(1.2, 3.0);
       obj.wobbleSpeed = rand(0.10, 0.18);
@@ -934,10 +916,9 @@
       el.appendChild(trail);
 
       objectsHost.appendChild(el);
-
       const obj = { type: 'ship', el };
       objects.push(obj);
-      spawnObject(obj);
+      initObject(obj);
     }
 
     function createAsteroid() {
@@ -950,10 +931,9 @@
       el.style.height = size + 'px';
 
       objectsHost.appendChild(el);
-
       const obj = { type: 'asteroid', el };
       objects.push(obj);
-      spawnObject(obj);
+      initObject(obj);
     }
 
     for (let i = 0; i < 6; i++) createShip();
@@ -961,7 +941,7 @@
 
     // ====== CURSOR BH tracking (hero-only) ======
     let mouseInHero = false;
-    let mouseX = 0, mouseY = 0; // hero-relative
+    let mouseX = 0, mouseY = 0;
 
     function setCursorBH(x, y) {
       cursorBH.style.left = x + 'px';
@@ -988,7 +968,6 @@
     // ====== Capture logic (cursor BH + static BHs) ======
     function getBHCentersHeroSpace() {
       const rectHero = hero.getBoundingClientRect();
-
       const centers = [];
 
       // static BHs
@@ -1001,19 +980,15 @@
         });
       }
 
-      // cursor BH (only if in hero)
+      // cursor BH
       if (mouseInHero) {
-        centers.push({
-          x: mouseX,
-          y: mouseY,
-          radius: 42
-        });
+        centers.push({ x: mouseX, y: mouseY, radius: 42 });
       }
 
       return centers;
     }
 
-    // one loop only (performance)
+    // one loop only
     let last = performance.now();
 
     function wrap(o, w, h) {
@@ -1035,7 +1010,9 @@
       const bhCenters = getBHCentersHeroSpace();
 
       for (const o of objects) {
-        // If captured: ease into BH center, then respawn (no extra spawn, same 12 objects)
+        if (o.dead) continue;
+
+        // being sucked: fade out then DIE (no respawn)
         if (o.captured) {
           o.captureT += dt;
 
@@ -1045,7 +1022,7 @@
           o.x = o.startX + (o.targetX - o.startX) * ease;
           o.y = o.startY + (o.targetY - o.startY) * ease;
 
-          o.rot += 140 * dt; // small spin while being sucked
+          o.rot += 140 * dt;
           o.scale = 1 - 0.85 * ease;
           o.opacity = 1 - 1.0 * ease;
 
@@ -1055,8 +1032,8 @@
           o.el.style.transform = `rotate(${o.rot}deg) scale(${Math.max(0.05, o.scale)})`;
 
           if (t >= 1) {
-            // respawn same object after a tiny delay (still 6+6, no spam)
-            setTimeout(() => spawnObject(o), 220);
+            o.dead = true;
+            o.el.remove();
           }
           continue;
         }
@@ -1073,13 +1050,12 @@
 
         o.rot += o.rotSpeed * dt * 60;
 
-        // position update
         o.el.style.left = (o.x + ox) + 'px';
         o.el.style.top  = (o.y + oy) + 'px';
         o.el.style.transform = `rotate(${o.rot}deg)`;
 
-        // check capture (cursor BH + static BHs)
-        const cx = o.x + 28; // approx center
+        // capture check
+        const cx = o.x + 28;
         const cy = o.y + 28;
 
         for (const bh of bhCenters) {
@@ -1087,19 +1063,13 @@
           const dy = cy - bh.y;
           const dist = Math.sqrt(dx*dx + dy*dy);
 
-          // capture radius
-          const captureRadius = bh.radius * 1.05;
-
-          if (dist < captureRadius) {
+          if (dist < bh.radius * 1.05) {
             o.captured = true;
             o.captureT = 0;
-
             o.startX = o.x;
             o.startY = o.y;
             o.targetX = bh.x;
             o.targetY = bh.y;
-
-            // make sure it stays visible ON TOP while getting sucked
             o.el.style.zIndex = 9;
             break;
           }
@@ -1110,18 +1080,9 @@
     }
     requestAnimationFrame(animate);
 
-    // ====== Smooth scrolling ======
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = document.querySelector(a.getAttribute('href'));
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
-
-    // Header scroll effect
+    // ====== Header scroll effect ======
     addEventListener('scroll', () => {
-      const header = document.querySelector('header');
+      const header = document.getElementById('site-header');
       if (scrollY > 100) {
         header.style.background = 'rgba(10, 10, 10, 0.95)';
         header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.5)';
@@ -1129,6 +1090,15 @@
         header.style.background = 'rgba(10, 10, 10, 0.7)';
         header.style.boxShadow = 'none';
       }
+    });
+
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     });
 
     // Reveal

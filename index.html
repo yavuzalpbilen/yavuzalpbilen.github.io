@@ -23,7 +23,7 @@
       pointer-events: none;
     }
 
-    /* Fixed space layer: only planets + bg blackhole follow scroll (fixed) */
+    /* Fixed space layer: only planets + bg blackhole remain across scroll */
     .space-layer {
       position: fixed;
       inset: 0;
@@ -174,18 +174,21 @@
     }
 
     /* ===========================================================
-       HERO PLAYFIELD (WIDE): objects stay in HERO, but roam wider
+       HERO PLAYFIELD (WIDE + RESPONSIVE + ZOOM SAFE)
+       - width is set by JS to a px value via CSS var --pfw
+       - so zoom/resize always recomputes correctly
        =========================================================== */
     .playfield {
       position: absolute;
       top: 0;
       left: 50%;
-      width: 200vw;              /* <<< SAĞ/SOL GENİŞLEME (istersen 160-260vw) */
+      width: var(--pfw, 200vw);
       height: 100%;
       transform: translateX(-50%);
       z-index: 15;
       pointer-events: none;
       overflow: visible;
+      contain: layout paint; /* perf */
     }
 
     /* ---- CURSOR BLACK HOLE (pull only this) ---- */
@@ -416,7 +419,6 @@
       nav { display: none; }
       .projects-grid, .skills-grid { grid-template-columns: 1fr; }
       .hero { cursor: auto; padding-top: 120px; }
-      .playfield { width: 140vw; } /* mobilde daha az */
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -576,6 +578,34 @@
 
   <script>
     // ======================
+    // RESPONSIVE WIDE PLAYFIELD (ZOOM SAFE)
+    // ======================
+    const root = document.documentElement;
+    const playfield = document.getElementById('playfield');
+    const hero = document.getElementById('hero');
+
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+    function updatePlayfieldWidth() {
+      // viewport values react to zoom
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      // aspect-based factor (wider screens -> bigger factor)
+      // mobile: ~1.35-1.6, desktop: ~1.8-2.4
+      const aspect = vw / Math.max(1, vh);
+      const factor = clamp(1.35 + (aspect - 0.6) * 0.55, 1.35, 2.35);
+
+      // ensure minimum width so it still feels wide even on narrow zoom states
+      const pfw = Math.round(vw * factor);
+
+      root.style.setProperty('--pfw', pfw + 'px');
+    }
+
+    window.addEventListener('resize', updatePlayfieldWidth, { passive: true });
+    updatePlayfieldWidth();
+
+    // ======================
     // PERF STARFIELD CANVAS
     // ======================
     const canvas = document.getElementById('starfield');
@@ -638,15 +668,14 @@
       }
     }
 
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', () => { resizeCanvas(); updatePlayfieldWidth(); }, { passive: true });
     resizeCanvas();
 
     // ======================
-    // FIXED SPACE ELEMENTS
+    // FIXED SPACE ELEMENTS (PLANETS + BG BH)
     // ======================
     const planetsHost = document.getElementById('planets-host');
     const bgBHHost = document.getElementById('bg-blackhole-host');
-    const playfield = document.getElementById('playfield');
 
     function makePlanet({ top, left, right, bottom, size, gradient, drift, opacity }) {
       const p = document.createElement('div');
@@ -671,7 +700,6 @@
       planetsHost.appendChild(p);
     }
 
-    // PLANETS (same vibe, 3 visible)
     makePlanet({
       top: '-90px', right: '-120px',
       size: 360, opacity: 0.40, drift: 'drift-b',
@@ -705,7 +733,6 @@
         rgba(6,7,12,1) 100%)`
     });
 
-    // Background BH (visual only)
     function createBlackHole({ top, left, right, bottom, size }) {
       const container = document.createElement('div');
       container.className = 'black-hole-container';
@@ -731,9 +758,7 @@
     // ======================
     // CURSOR BLACK HOLE (pulls objects)
     // ======================
-    const hero = document.getElementById('hero');
     const cursorBH = document.getElementById('cursor-bh');
-
     let mouseInHero = false;
     let mouseX = 0, mouseY = 0;
 
@@ -821,8 +846,8 @@
     function rand(min, max) { return min + Math.random() * (max - min); }
 
     function getPlayBounds() {
-      const w = playfield.clientWidth;     // 200vw => gerçek px
-      const h = playfield.clientHeight;    // hero height
+      const w = playfield.clientWidth;      // px (zoom safe)
+      const h = playfield.clientHeight;
       return { minX: 0, maxX: w, minY: 0, maxY: h };
     }
 
@@ -930,7 +955,7 @@
       const step = acc;
       acc = 0;
 
-      // cursor target in PLAYFIELD coordinates (IMPORTANT for wide area)
+      // cursor target in PLAYFIELD coordinates (wide area + zoom safe)
       const heroRect = hero.getBoundingClientRect();
       const playRect = playfield.getBoundingClientRect();
 
@@ -1002,6 +1027,15 @@
     }
 
     requestAnimationFrame(loop);
+
+    // keep objects sane after zoom/resize changes (no respawn, just rewrap)
+    function rewrapAll() {
+      updatePlayfieldWidth();
+      for (const o of objects) {
+        if (!o.dead && !o.captured) wrapWide(o);
+      }
+    }
+    window.addEventListener('resize', rewrapAll, { passive: true });
 
     // ======================
     // Header scroll effect + reveal

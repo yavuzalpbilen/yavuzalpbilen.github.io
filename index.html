@@ -786,7 +786,7 @@
     });
 
     // ======================
-    // SHIPS & ASTEROIDS (NO SPAWN) - CENTER CLUSTER (1.5x)
+    // SHIPS & ASTEROIDS (NO SPAWN) - CENTER CLUSTER (NOW 2.25x TOTAL)
     // ======================
     const spaceshipSVG = `
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -852,19 +852,19 @@
       return { minX: 0, maxX: w, minY: 0, maxY: h };
     }
 
-    // ✅ 1.5x daha geniş cluster
+    // ✅ Bir önceki 1.5x'in ÜSTÜNE bir 1.5x daha => toplam 2.25x
     function getClusterBounds() {
       const b = getPlayBounds();
       const cx = b.maxX * 0.50;
       const cy = b.maxY * 0.52;
 
-      // base cluster
       const baseW = Math.min(520, Math.max(260, window.innerWidth * 0.40));
       const baseH = Math.min(360, Math.max(200, window.innerHeight * 0.34));
 
-      // 1.5x (ama aşırı büyümesin diye ekranın belli oranında clamp)
-      const cw = Math.min(b.maxX * 0.70, baseW * 1.5);
-      const ch = Math.min(b.maxY * 0.65, baseH * 1.5);
+      const mul = 2.25; // <-- burada artırdım (1.5 * 1.5)
+
+      const cw = Math.min(b.maxX * 0.82, baseW * mul);
+      const ch = Math.min(b.maxY * 0.75, baseH * mul);
 
       return {
         minX: cx - cw / 2,

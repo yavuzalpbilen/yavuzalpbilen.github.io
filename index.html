@@ -105,6 +105,42 @@
       padding-top: 90px;
     }
 
+    /* ✅ SCORE HUD (top of site/hero) */
+    .score-hud{
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 40;
+      pointer-events: none;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(10px);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .score-dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.75);
+      box-shadow: 0 0 10px rgba(255,255,255,0.25);
+      flex: 0 0 auto;
+    }
+    .score-text{
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.9);
+      text-shadow: 0 0 12px rgba(255,255,255,0.12);
+      white-space: nowrap;
+    }
+    .score-text strong{ color: #fff; }
+
     .hero-content { z-index: 30; padding: 2rem; }
 
     .hero h1 {
@@ -174,7 +210,7 @@
       box-shadow: 0 14px 40px rgba(255, 255, 255, 0.18);
     }
 
-    /* ✅ FIX: playfield (ships+asteroids) must be ABOVE cursor black hole */
+    /* ✅ playfield (ships+asteroids) ABOVE cursor black hole */
     .playfield {
       position: absolute;
       top: 0;
@@ -182,20 +218,20 @@
       width: var(--pfw, 200vw);
       height: 100%;
       transform: translateX(-50%);
-      z-index: 25; /* was 15 */
+      z-index: 25;
       pointer-events: none;
       overflow: visible;
       contain: layout paint;
     }
 
-    /* ✅ cursor BH stays behind objects */
+    /* ✅ cursor BH behind objects */
     .cursor-bh {
       position: absolute;
       width: 86px;
       height: 86px;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 18; /* stays below playfield */
+      z-index: 18;
       opacity: 0;
       transform: translate(-50%, -50%);
       transition: opacity 0.15s ease;
@@ -430,6 +466,12 @@
       .hero { cursor: auto; padding-top: 120px; }
       .projects-grid { grid-template-columns: 1fr; }
       .skills-grid { grid-template-columns: 1fr; }
+
+      .score-hud{
+        top: 10px;
+        padding: 9px 14px;
+      }
+      .score-text{ font-size: 0.9rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -459,6 +501,12 @@
   </header>
 
   <section class="hero" id="hero">
+    <!-- ✅ Score HUD -->
+    <div class="score-hud" id="score-hud">
+      <span class="score-dot"></span>
+      <div class="score-text" id="score-text"><strong>Score:</strong> 0 / 12</div>
+    </div>
+
     <div class="playfield" id="playfield"></div>
 
     <div class="cursor-bh" id="cursor-bh">
@@ -607,6 +655,18 @@
 
     window.addEventListener('resize', updatePlayfieldWidth, { passive: true });
     updatePlayfieldWidth();
+
+    // ======================
+    // SCORE (0..12)
+    // ======================
+    const TOTAL_SCORE = 12;
+    let score = 0;
+
+    const scoreTextEl = document.getElementById('score-text');
+    function updateScoreUI() {
+      scoreTextEl.innerHTML = `<strong>Score:</strong> ${score} / ${TOTAL_SCORE}`;
+    }
+    updateScoreUI();
 
     // ======================
     // STARFIELD CANVAS
@@ -863,7 +923,6 @@
       const baseH = Math.min(360, Math.max(200, window.innerHeight * 0.34));
 
       const mul = 2.25;
-
       const cw = Math.min(b.maxX * 0.82, baseW * mul);
       const ch = Math.min(b.maxY * 0.75, baseH * mul);
 
@@ -879,6 +938,7 @@
       obj.dead = false;
       obj.captured = false;
       obj.captureT = 0;
+      obj.scored = false; // ✅ so we count score once
 
       const c = getClusterBounds();
 
@@ -1004,13 +1064,21 @@
           o.scale = 1 - 0.86 * ease;
           o.opacity = 1 - 1.0 * ease;
 
-          o.el.style.zIndex = 60;
+          o.el.style.zIndex = 60; // ✅ always on top while being eaten
           o.el.style.opacity = Math.max(0, o.opacity);
           o.el.style.left = o.x + 'px';
           o.el.style.top = o.y + 'px';
           o.el.style.transform = `rotate(${o.rot}deg) scale(${Math.max(0.05, o.scale)})`;
 
-          if (t >= 1) { o.dead = true; o.el.remove(); }
+          if (t >= 1) {
+            if (!o.scored && score < TOTAL_SCORE) {
+              o.scored = true;
+              score++;
+              updateScoreUI();
+            }
+            o.dead = true;
+            o.el.remove();
+          }
           continue;
         }
 
@@ -1026,7 +1094,8 @@
         o.el.style.top  = (o.y + wobble * 0.5) + 'px';
         o.el.style.transform = `rotate(${o.rot}deg)`;
 
-        if (mouseInHero) {
+        // ✅ Stop capturing after reaching 12
+        if (mouseInHero && score < TOTAL_SCORE) {
           const cx = o.x + 28;
           const cy = o.y + 28;
 

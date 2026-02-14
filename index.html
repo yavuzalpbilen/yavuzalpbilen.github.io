@@ -92,7 +92,7 @@
       position: relative;
       overflow: hidden;
       z-index: 10;
-      cursor: none;                 /* mouse BH için (elleme) */
+      cursor: none;                 /* mouse BH için */
       padding-top: 90px;            /* header çakışmasın */
     }
 
@@ -165,7 +165,7 @@
       box-shadow: 0 14px 40px rgba(255, 255, 255, 0.18);
     }
 
-    /* ---- PLANETS (azaltıldı + koyu gri/mavi) ---- */
+    /* ---- PLANETS ---- */
     .planet {
       position: absolute;
       border-radius: 50%;
@@ -644,7 +644,8 @@
       planetsHost.appendChild(p);
     }
 
-    // Az gezegen, koyu gri/mavi
+    // ===== PLANETS: toplam 3 tane + daha dağınık yerleşim (RENKLER AYNI) =====
+    // 1) Büyük sağ üst (aynı)
     makePlanet({
       top: '-90px', right: '-120px',
       size: 360, opacity: 0.40, drift: 'drift-b',
@@ -656,9 +657,10 @@
         rgba(6,7,12,1) 100%)`
     });
 
+    // 2) Büyük sol taraf (eski bottom-left'ten daha yukarı + daha dağınık)
     makePlanet({
-      bottom: '-170px', left: '-180px',
-      size: 460, opacity: 0.55, drift: 'drift-a',
+      top: '28%', left: '-210px',
+      size: 430, opacity: 0.52, drift: 'drift-a',
       gradient: `radial-gradient(circle at 30% 25%,
         rgba(255,255,255,0.10) 0%,
         rgba(160,175,200,0.08) 18%,
@@ -667,9 +669,10 @@
         rgba(6,7,10,1) 100%)`
     });
 
+    // 3) Orta boy alt-sağ (sol alttan çıkarttım, daha dengeli dağıttım)
     makePlanet({
-      top: '58%', left: '7%',
-      size: 240, opacity: 0.35, drift: 'drift-c',
+      bottom: '-120px', right: '10%',
+      size: 260, opacity: 0.38, drift: 'drift-c',
       gradient: `radial-gradient(circle at 35% 30%,
         rgba(255,255,255,0.08) 0%,
         rgba(120,140,175,0.08) 22%,
@@ -860,8 +863,8 @@
     for (let i = 0; i < 6; i++) createAsteroid();
 
     function getBHCenters() {
-      // background BH centers (viewport coords)
       const centers = [];
+
       for (const bh of blackHoles) {
         const r = bh.el.getBoundingClientRect();
         centers.push({
@@ -871,7 +874,6 @@
         });
       }
 
-      // cursor BH only while in hero (elleme)
       if (mouseInHero) {
         const heroRect = hero.getBoundingClientRect();
         centers.push({
@@ -939,7 +941,7 @@
           o.scale = 1 - 0.86 * ease;
           o.opacity = 1 - 1.0 * ease;
 
-          o.el.style.zIndex = 60; // içine girerken önde kalsın
+          o.el.style.zIndex = 60;
           o.el.style.opacity = Math.max(0, o.opacity);
           o.el.style.left = o.x + 'px';
           o.el.style.top = o.y + 'px';
@@ -997,7 +999,6 @@
       }
     });
 
-    // Smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', (e) => {
         e.preventDefault();

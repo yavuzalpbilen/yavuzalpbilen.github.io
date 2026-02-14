@@ -105,42 +105,6 @@
       padding-top: 90px;
     }
 
-    /* SCORE HUD */
-    .score-hud{
-      position: absolute;
-      top: 90px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 40;
-      pointer-events: none;
-      padding: 10px 16px;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.35);
-      border: 1px solid rgba(255,255,255,0.10);
-      backdrop-filter: blur(10px);
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
-    .score-dot{
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.75);
-      box-shadow: 0 0 10px rgba(255,255,255,0.25);
-      flex: 0 0 auto;
-    }
-    .score-text{
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.9);
-      text-shadow: 0 0 12px rgba(255,255,255,0.12);
-      white-space: nowrap;
-    }
-    .score-text strong{ color: #fff; }
-
     .hero-content { z-index: 30; padding: 2rem; }
 
     .hero h1 {
@@ -217,7 +181,7 @@
       width: var(--pfw, 200vw);
       height: 100%;
       transform: translateX(-50%);
-      z-index: 25; /* objects above cursor BH */
+      z-index: 15;
       pointer-events: none;
       overflow: visible;
       contain: layout paint;
@@ -229,7 +193,7 @@
       height: 86px;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 18; /* BH behind objects */
+      z-index: 25;
       opacity: 0;
       transform: translate(-50%, -50%);
       transition: opacity 0.15s ease;
@@ -336,7 +300,7 @@
       position: absolute;
       pointer-events: none;
       will-change: transform, left, top, opacity;
-      z-index: 30;
+      z-index: 20;
       opacity: 0.92;
     }
 
@@ -368,6 +332,26 @@
       height: 46px;
       filter: drop-shadow(0 0 10px rgba(255,255,255,0.08));
       opacity: 0.86;
+    }
+
+    /* SCORE */
+    .score {
+      position: absolute;
+      top: 140px;              /* biraz aşağı */
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 80;
+      pointer-events: none;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      color: rgba(255,255,255,0.92);
+      text-shadow: 0 0 14px rgba(255,255,255,0.14);
     }
 
     section, footer { position: relative; z-index: 10; }
@@ -462,9 +446,9 @@
       .hero h1 { font-size: 2.5rem; }
       nav { display: none; }
       .hero { cursor: auto; padding-top: 120px; }
-
-      .score-hud{ top: 71px; padding: 9px 14px; }
-      .score-text{ font-size: 0.9rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .score { top: 150px; } /* mobilde biraz daha aşağı */
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -494,12 +478,10 @@
   </header>
 
   <section class="hero" id="hero">
-    <div class="score-hud" id="score-hud">
-      <span class="score-dot"></span>
-      <div class="score-text" id="score-text"><strong>Score:</strong> 0 / 12</div>
-    </div>
-
     <div class="playfield" id="playfield"></div>
+
+    <!-- SCORE (hero içinde, aşağıda) -->
+    <div class="score" id="score">Score: 0 / 12</div>
 
     <div class="cursor-bh" id="cursor-bh">
       <div class="black-hole">
@@ -628,555 +610,528 @@
   </footer>
 
   <script>
-    (function () {
-      if (window.__SPACE_CLEANUP__) {
-        try { window.__SPACE_CLEANUP__(); } catch (e) {}
+    const root = document.documentElement;
+    const playfield = document.getElementById('playfield');
+    const hero = document.getElementById('hero');
+
+    const scoreEl = document.getElementById('score');
+    let score = 0;
+    const SCORE_MAX = 12;
+    function setScore(v){
+      score = Math.max(0, Math.min(SCORE_MAX, v));
+      scoreEl.textContent = `Score: ${score} / ${SCORE_MAX}`;
+    }
+    setScore(0);
+
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+    function updatePlayfieldWidth() {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      const aspect = vw / Math.max(1, vh);
+      const factor = clamp(1.65 + (aspect - 0.7) * 0.75, 1.65, 2.85);
+
+      const pfw = Math.round(vw * factor);
+      root.style.setProperty('--pfw', pfw + 'px');
+    }
+
+    window.addEventListener('resize', updatePlayfieldWidth, { passive: true });
+    updatePlayfieldWidth();
+
+    // ======================
+    // STARFIELD CANVAS
+    // ======================
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d', { alpha: true });
+
+    let W = 0, H = 0, DPR = 1;
+    let stars = [];
+    let twinklePhase = 0;
+
+    function resizeCanvas() {
+      DPR = Math.min(2, window.devicePixelRatio || 1);
+      W = Math.floor(window.innerWidth);
+      H = Math.floor(window.innerHeight);
+
+      canvas.width = Math.floor(W * DPR);
+      canvas.height = Math.floor(H * DPR);
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+      // ✅ YILDIZ SAYISI ARTTIRILDI (daha yoğun): 12000 -> 8000
+      const count = Math.floor((W * H) / 8000);
+
+      stars = new Array(count).fill(0).map(() => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() < 0.10 ? 1.7 : (Math.random() < 0.35 ? 1.15 : 0.9),
+        a: Math.random() * 0.55 + 0.18,
+        t: Math.random() * Math.PI * 2
+      }));
+
+      drawStars(0);
+    }
+
+    function drawStars(dt) {
+      ctx.clearRect(0, 0, W, H);
+
+      const g1 = ctx.createRadialGradient(W*0.28, H*0.30, 0, W*0.28, H*0.30, Math.max(W,H)*0.75);
+      g1.addColorStop(0, 'rgba(120,150,210,0.05)');
+      g1.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g1;
+      ctx.fillRect(0,0,W,H);
+
+      const g2 = ctx.createRadialGradient(W*0.75, H*0.62, 0, W*0.75, H*0.62, Math.max(W,H)*0.75);
+      g2.addColorStop(0, 'rgba(80,100,140,0.04)');
+      g2.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g2;
+      ctx.fillRect(0,0,W,H);
+
+      twinklePhase += dt * 0.8;
+
+      for (let i = 0; i < stars.length; i++) {
+        const s = stars[i];
+        const tw = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(twinklePhase + s.t));
+        const alpha = s.a * tw;
+
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
       }
-
-      const root = document.documentElement;
-      const playfield = document.getElementById('playfield');
-      const hero = document.getElementById('hero');
-      const planetsHost = document.getElementById('planets-host');
-      const bgBHHost = document.getElementById('bg-blackhole-host');
-
-      if (planetsHost) planetsHost.innerHTML = '';
-      if (bgBHHost) bgBHHost.innerHTML = '';
-      if (playfield) playfield.innerHTML = '';
-
-      function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
-      function updatePlayfieldWidth() {
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        const aspect = vw / Math.max(1, vh);
-        const factor = clamp(1.65 + (aspect - 0.7) * 0.75, 1.65, 2.85);
-        const pfw = Math.round(vw * factor);
-        root.style.setProperty('--pfw', pfw + 'px');
-      }
-      updatePlayfieldWidth();
-
-      // SCORE
-      const TOTAL_SCORE = 12;
-      let score = 0;
-      const scoreTextEl = document.getElementById('score-text');
-      function updateScoreUI() {
-        if (!scoreTextEl) return;
-        scoreTextEl.innerHTML = `<strong>Score:</strong> ${score} / ${TOTAL_SCORE}`;
-      }
-      updateScoreUI();
-
-      // STARFIELD (less allocations)
-      let canvas = document.getElementById('starfield');
-      let ctx = canvas.getContext('2d', { alpha: true });
-
-      let W = 0, H = 0, DPR = 1;
-      let stars = [];
-      let twinklePhase = 0;
-      let g1 = null, g2 = null;
-
-      function resizeCanvas() {
-        DPR = Math.min(1.75, window.devicePixelRatio || 1);
-        W = Math.floor(window.innerWidth);
-        H = Math.floor(window.innerHeight);
-
-        canvas.width = Math.floor(W * DPR);
-        canvas.height = Math.floor(H * DPR);
-        canvas.style.width = W + 'px';
-        canvas.style.height = H + 'px';
-
-        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-
-        const count = Math.floor((W * H) / 16000);
-        stars = new Array(count).fill(0).map(() => ({
-          x: Math.random() * W,
-          y: Math.random() * H,
-          r: Math.random() < 0.10 ? 1.7 : (Math.random() < 0.35 ? 1.15 : 0.9),
-          a: Math.random() * 0.55 + 0.18,
-          t: Math.random() * Math.PI * 2
-        }));
-
-        g1 = ctx.createRadialGradient(W*0.28, H*0.30, 0, W*0.28, H*0.30, Math.max(W,H)*0.75);
-        g1.addColorStop(0, 'rgba(120,150,210,0.05)');
-        g1.addColorStop(1, 'rgba(0,0,0,0)');
-
-        g2 = ctx.createRadialGradient(W*0.75, H*0.62, 0, W*0.75, H*0.62, Math.max(W,H)*0.75);
-        g2.addColorStop(0, 'rgba(80,100,140,0.04)');
-        g2.addColorStop(1, 'rgba(0,0,0,0)');
-
-        drawStars(0);
-      }
-
-      function drawStars(dt) {
-        ctx.clearRect(0, 0, W, H);
-
-        if (g1) { ctx.globalAlpha = 1; ctx.fillStyle = g1; ctx.fillRect(0,0,W,H); }
-        if (g2) { ctx.globalAlpha = 1; ctx.fillStyle = g2; ctx.fillRect(0,0,W,H); }
-
-        twinklePhase += dt * 0.8;
-
-        // ✅ no per-star string allocations
-        ctx.fillStyle = '#ffffff';
-        for (let i = 0; i < stars.length; i++) {
-          const s = stars[i];
-          const tw = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(twinklePhase + s.t));
-          ctx.globalAlpha = s.a * tw;
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.globalAlpha = 1;
-      }
-
-      resizeCanvas();
-
-      // PLANETS + BG BH
-      function makePlanet({ top, left, right, bottom, size, gradient, drift, opacity }) {
-        const p = document.createElement('div');
-        p.className = `planet ${drift || 'drift-a'}`;
-        p.style.width = size + 'px';
-        p.style.height = size + 'px';
-        p.style.background = gradient;
-        p.style.opacity = opacity ?? 0.75;
-
-        if (top != null) p.style.top = top;
-        if (left != null) p.style.left = left;
-        if (right != null) p.style.right = right;
-        if (bottom != null) p.style.bottom = bottom;
-
-        const atm = document.createElement('div');
-        atm.className = 'atm';
-        const shade = document.createElement('div');
-        shade.className = 'shade';
-
-        p.appendChild(atm);
-        p.appendChild(shade);
-        planetsHost.appendChild(p);
-      }
-
-      makePlanet({
-        top: '-90px', right: '-120px',
-        size: 360, opacity: 0.40, drift: 'drift-b',
-        gradient: `radial-gradient(circle at 35% 30%,
-          rgba(255,255,255,0.10) 0%,
-          rgba(120,150,210,0.10) 18%,
-          rgba(55,75,115,0.30) 52%,
-          rgba(14,18,34,0.92) 82%,
-          rgba(6,7,12,1) 100%)`
-      });
-
-      makePlanet({
-        top: '28%', left: '-210px',
-        size: 430, opacity: 0.52, drift: 'drift-a',
-        gradient: `radial-gradient(circle at 30% 25%,
-          rgba(255,255,255,0.10) 0%,
-          rgba(160,175,200,0.08) 18%,
-          rgba(70,80,95,0.28) 52%,
-          rgba(14,16,22,0.95) 82%,
-          rgba(6,7,10,1) 100%)`
-      });
-
-      makePlanet({
-        top: '62%', right: '9%',
-        size: 260, opacity: 0.38, drift: 'drift-c',
-        gradient: `radial-gradient(circle at 35% 30%,
-          rgba(255,255,255,0.08) 0%,
-          rgba(120,140,175,0.08) 22%,
-          rgba(45,60,85,0.22) 58%,
-          rgba(12,14,22,0.95) 84%,
-          rgba(6,7,12,1) 100%)`
-      });
-
-      function createBlackHole({ top, left, right, bottom, size }) {
-        const container = document.createElement('div');
-        container.className = 'black-hole-container';
-        if (top != null) container.style.top = top;
-        if (left != null) container.style.left = left;
-        if (right != null) container.style.right = right;
-        if (bottom != null) container.style.bottom = bottom;
-
-        const bh = document.createElement('div');
-        bh.className = 'black-hole';
-        bh.style.width = size + 'px';
-        bh.style.height = size + 'px';
-
-        const flow = document.createElement('div');
-        flow.className = 'bh-flow';
-        bh.appendChild(flow);
-
-        container.appendChild(bh);
-        bgBHHost.appendChild(container);
-      }
-      createBlackHole({ top: '36%', right: '12%', size: 165 });
-
-      // CURSOR BH
-      const cursorBH = document.getElementById('cursor-bh');
-      let mouseInHero = false;
-      let mouseX = 0, mouseY = 0;
-
-      function setCursorBH(x, y) {
-        cursorBH.style.left = x + 'px';
-        cursorBH.style.top = y + 'px';
-      }
-      function onHeroEnter() { mouseInHero = true; cursorBH.classList.add('active'); }
-      function onHeroLeave() { mouseInHero = false; cursorBH.classList.remove('active'); }
-      function onHeroMove(e) {
-        const rect = hero.getBoundingClientRect();
-        mouseX = e.clientX - rect.left;
-        mouseY = e.clientY - rect.top;
-        setCursorBH(mouseX, mouseY);
-      }
-      hero.addEventListener('mouseenter', onHeroEnter);
-      hero.addEventListener('mouseleave', onHeroLeave);
-      hero.addEventListener('mousemove', onHeroMove);
-
-      // SHIPS & ASTEROIDS
-      const spaceshipSVG = `
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
-                fill="url(#centerBody)" stroke="#0a0a0a" stroke-width="1.5"/>
-          <path d="M 50 38 L 35 26 L 23 21 L 20 24 L 25 31 L 37 36 L 50 41 Z"
-                fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
-          <path d="M 50 62 L 35 74 L 23 79 L 20 76 L 25 69 L 37 64 L 50 59 Z"
-                fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
-          <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
-          <ellipse cx="68" cy="52" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
-          <rect x="18" y="46" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
-          <rect x="18" y="51.5" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
-          <ellipse cx="22" cy="47" rx="6" ry="2" fill="#3070a0" opacity="0.75">
-            <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
-          </ellipse>
-          <ellipse cx="22" cy="53" rx="6" ry="2" fill="#3070a0" opacity="0.75">
-            <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
-          </ellipse>
-          <defs>
-            <radialGradient id="centerBody" cx="60%" cy="50%">
-              <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
-              <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
-            </radialGradient>
-            <linearGradient id="wingGradient" x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
-              <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
-            </linearGradient>
-          </defs>
-        </svg>
-      `;
-
-      const asteroidSVG = `
-        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="rock" cx="35%" cy="30%">
-              <stop offset="0%" stop-color="#6a6a6a" stop-opacity="1"/>
-              <stop offset="55%" stop-color="#3f3f3f" stop-opacity="1"/>
-              <stop offset="100%" stop-color="#1a1a1a" stop-opacity="1"/>
-            </radialGradient>
-          </defs>
-          <path d="M30,18 C48,7 78,10 95,30
-                   C110,48 108,78 92,95
-                   C74,112 45,112 25,95
-                   C7,78 10,45 30,18 Z"
-                fill="url(#rock)" stroke="#0e0e0e" stroke-width="3"/>
-          <path d="M42,35 C55,24 78,28 86,42
-                   C95,55 92,72 80,82
-                   C66,94 48,90 38,78
-                   C28,66 30,46 42,35 Z"
-                fill="rgba(0,0,0,0.18)"/>
-        </svg>
-      `;
-
-      const objects = [];
-      function rand(min, max) { return min + Math.random() * (max - min); }
-
-      function getPlayBounds() {
-        const w = playfield.clientWidth;
-        const h = playfield.clientHeight;
-        return { minX: 0, maxX: w, minY: 0, maxY: h };
-      }
-
-      function getClusterBounds() {
-        const b = getPlayBounds();
-        const cx = b.maxX * 0.50;
-        const cy = b.maxY * 0.52;
-
-        const baseW = Math.min(520, Math.max(260, window.innerWidth * 0.40));
-        const baseH = Math.min(360, Math.max(200, window.innerHeight * 0.34));
-
-        const mul = 2.25;
-        const cw = Math.min(b.maxX * 0.82, baseW * mul);
-        const ch = Math.min(b.maxY * 0.75, baseH * mul);
-
-        return {
-          minX: cx - cw / 2,
-          maxX: cx + cw / 2,
-          minY: cy - ch / 2,
-          maxY: cy + ch / 2
-        };
-      }
-
-      function initObject(obj) {
-        obj.dead = false;
-        obj.captured = false;
-        obj.captureT = 0;
-        obj.scored = false;
-
-        const c = getClusterBounds();
-
-        obj.x = rand(c.minX, c.maxX);
-        obj.y = rand(c.minY, c.maxY);
-
-        const speed = obj.type === 'ship' ? rand(0.35, 0.70) : rand(0.30, 0.65);
-        const ang = rand(0, Math.PI * 2);
-        obj.vx = Math.cos(ang) * speed;
-        obj.vy = Math.sin(ang) * speed;
-
-        obj.rot = rand(0, 360);
-        obj.rotSpeed = obj.type === 'ship' ? rand(-0.08, 0.08) : rand(-0.10, 0.10);
-
-        obj.drift = rand(0.5, 1.2);
-        obj.wobbleSpeed = rand(0.10, 0.16);
-        obj.wobblePhase = rand(0, Math.PI * 2);
-
-        obj.opacity = obj.type === 'ship' ? 0.92 : 0.86;
-        obj.scale = 1;
-
-        obj.el.style.opacity = obj.opacity;
-        obj.el.style.left = obj.x + 'px';
-        obj.el.style.top = obj.y + 'px';
-        obj.el.style.transform = `rotate(${obj.rot}deg)`;
-      }
-
-      function createShip() {
-        const el = document.createElement('div');
-        el.className = 'spaceship';
-        el.innerHTML = spaceshipSVG;
-
-        const trail = document.createElement('div');
-        trail.className = 'trail';
-        el.appendChild(trail);
-
-        playfield.appendChild(el);
-        const obj = { type: 'ship', el };
-        objects.push(obj);
-        initObject(obj);
-      }
-
-      function createAsteroid() {
-        const el = document.createElement('div');
-        el.className = 'asteroid';
-        el.innerHTML = asteroidSVG;
-
-        const size = rand(28, 54);
-        el.style.width = size + 'px';
-        el.style.height = size + 'px';
-
-        playfield.appendChild(el);
-        const obj = { type: 'asteroid', el };
-        objects.push(obj);
-        initObject(obj);
-      }
-
-      for (let i = 0; i < 6; i++) createShip();
-      for (let i = 0; i < 6; i++) createAsteroid();
-
-      function wrapCluster(o) {
-        const c = getClusterBounds();
-        const m = 50;
-
-        if (o.x < c.minX - m) o.x = c.maxX + m;
-        if (o.x > c.maxX + m) o.x = c.minX - m;
-
-        if (o.y < c.minY - m) o.y = c.maxY + m;
-        if (o.y > c.maxY + m) o.y = c.minY - m;
-      }
-
-      // LOOP (30fps) + star 20fps
-      let running = true;
-      let rafId = 0;
-
-      document.addEventListener('visibilitychange', () => {
-        running = !document.hidden;
-        last = performance.now();
-        lastStar = performance.now();
-        acc = 0;
-        starAcc = 0;
-      });
-
-      let last = performance.now();
-      let acc = 0;
-
-      let lastStar = performance.now();
-      let starAcc = 0;
-      const STAR_STEP = 1 / 20;
-
-      function loop(now) {
-        rafId = requestAnimationFrame(loop);
-        if (!running) return;
-
-        const dtStar = Math.min(0.05, (now - lastStar) / 1000);
-        lastStar = now;
-        starAcc += dtStar;
-        if (starAcc >= STAR_STEP) {
-          const steps = Math.floor(starAcc / STAR_STEP);
-          const d = steps * STAR_STEP;
-          starAcc -= d;
-          drawStars(d);
-        }
-
-        const dt = Math.min(0.05, (now - last) / 1000);
-        last = now;
-        acc += dt;
-        if (acc < (1 / 30)) return;
-        const step = acc;
-        acc = 0;
-
-        const heroRect = hero.getBoundingClientRect();
-        const playRect = playfield.getBoundingClientRect();
-
-        const cursorWorldX = heroRect.left + mouseX;
-        const cursorWorldY = heroRect.top + mouseY;
-
-        const cursorInPlayX = cursorWorldX - playRect.left;
-        const cursorInPlayY = cursorWorldY - playRect.top;
-
-        const cursorRadius = 43;
-        const tNow = now * 0.001;
-
-        for (const o of objects) {
-          if (o.dead) continue;
-
-          if (o.captured) {
-            o.captureT += step;
-            const t = Math.min(1, o.captureT / 1.2);
-            const ease = 1 - Math.pow(1 - t, 3);
-
-            o.x = o.startX + (o.targetX - o.startX) * ease;
-            o.y = o.startY + (o.targetY - o.startY) * ease;
-
-            o.rot += 130 * step;
-            o.scale = 1 - 0.86 * ease;
-            o.opacity = 1 - 1.0 * ease;
-
-            o.el.style.zIndex = 60;
-            o.el.style.opacity = Math.max(0, o.opacity);
-            o.el.style.left = o.x + 'px';
-            o.el.style.top = o.y + 'px';
-            o.el.style.transform = `rotate(${o.rot}deg) scale(${Math.max(0.05, o.scale)})`;
-
-            if (t >= 1) { o.dead = true; o.el.remove(); }
-            continue;
-          }
-
-          o.x += o.vx * step;
-          o.y += o.vy * step;
-
-          const wobble = Math.sin(tNow * (o.wobbleSpeed * 2 * Math.PI) + o.wobblePhase) * o.drift;
-          wrapCluster(o);
-
-          o.rot += o.rotSpeed * step * 60;
-
-          o.el.style.left = (o.x + wobble * 0.7) + 'px';
-          o.el.style.top  = (o.y + wobble * 0.5) + 'px';
-          o.el.style.transform = `rotate(${o.rot}deg)`;
-
-          if (mouseInHero && score < TOTAL_SCORE) {
-            const cx = o.x + 28;
-            const cy = o.y + 28;
-
-            if (Math.hypot(cx - cursorInPlayX, cy - cursorInPlayY) < cursorRadius * 1.05) {
-              if (!o.scored && score < TOTAL_SCORE) {
-                o.scored = true;
-                score++;
-                updateScoreUI();
-              }
-
-              o.captured = true;
-              o.captureT = 0;
-              o.startX = o.x;
-              o.startY = o.y;
-              o.targetX = cursorInPlayX - 28;
-              o.targetY = cursorInPlayY - 28;
-            }
-          }
-        }
-      }
-      rafId = requestAnimationFrame(loop);
-
-      function onResize() { resizeCanvas(); updatePlayfieldWidth(); }
-      window.addEventListener('resize', onResize, { passive: true });
-
-      window.addEventListener('scroll', () => {
-        const header = document.getElementById('site-header');
-        if (window.scrollY > 100) {
-          header.style.background = 'rgba(10, 10, 10, 0.92)';
-          header.style.boxShadow = '0 5px 18px rgba(0, 0, 0, 0.55)';
-        } else {
-          header.style.background = 'rgba(10, 10, 10, 0.65)';
-          header.style.boxShadow = 'none';
-        }
-      }, { passive: true });
-
-      const reveals = document.querySelectorAll('.reveal');
-      const revealOnScroll = () => {
-        reveals.forEach(el => {
-          const top = el.getBoundingClientRect().top;
-          if (top < innerHeight - 100) el.classList.add('active');
-        });
+    }
+
+    window.addEventListener('resize', () => { resizeCanvas(); updatePlayfieldWidth(); }, { passive: true });
+    resizeCanvas();
+
+    // ======================
+    // FIXED SPACE ELEMENTS (PLANETS + BG BH)
+    // ======================
+    const planetsHost = document.getElementById('planets-host');
+    const bgBHHost = document.getElementById('bg-blackhole-host');
+
+    function makePlanet({ top, left, right, bottom, size, gradient, drift, opacity }) {
+      const p = document.createElement('div');
+      p.className = `planet ${drift || 'drift-a'}`;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.background = gradient;
+      p.style.opacity = opacity ?? 0.75;
+
+      if (top != null) p.style.top = top;
+      if (left != null) p.style.left = left;
+      if (right != null) p.style.right = right;
+      if (bottom != null) p.style.bottom = bottom;
+
+      const atm = document.createElement('div');
+      atm.className = 'atm';
+      const shade = document.createElement('div');
+      shade.className = 'shade';
+
+      p.appendChild(atm);
+      p.appendChild(shade);
+      planetsHost.appendChild(p);
+    }
+
+    makePlanet({
+      top: '-90px', right: '-120px',
+      size: 360, opacity: 0.40, drift: 'drift-b',
+      gradient: `radial-gradient(circle at 35% 30%,
+        rgba(255,255,255,0.10) 0%,
+        rgba(120,150,210,0.10) 18%,
+        rgba(55,75,115,0.30) 52%,
+        rgba(14,18,34,0.92) 82%,
+        rgba(6,7,12,1) 100%)`
+    });
+
+    makePlanet({
+      top: '28%', left: '-210px',
+      size: 430, opacity: 0.52, drift: 'drift-a',
+      gradient: `radial-gradient(circle at 30% 25%,
+        rgba(255,255,255,0.10) 0%,
+        rgba(160,175,200,0.08) 18%,
+        rgba(70,80,95,0.28) 52%,
+        rgba(14,16,22,0.95) 82%,
+        rgba(6,7,10,1) 100%)`
+    });
+
+    makePlanet({
+      top: '62%', right: '9%',
+      size: 260, opacity: 0.38, drift: 'drift-c',
+      gradient: `radial-gradient(circle at 35% 30%,
+        rgba(255,255,255,0.08) 0%,
+        rgba(120,140,175,0.08) 22%,
+        rgba(45,60,85,0.22) 58%,
+        rgba(12,14,22,0.95) 84%,
+        rgba(6,7,12,1) 100%)`
+    });
+
+    function createBlackHole({ top, left, right, bottom, size }) {
+      const container = document.createElement('div');
+      container.className = 'black-hole-container';
+      if (top != null) container.style.top = top;
+      if (left != null) container.style.left = left;
+      if (right != null) container.style.right = right;
+      if (bottom != null) container.style.bottom = bottom;
+
+      const bh = document.createElement('div');
+      bh.className = 'black-hole';
+      bh.style.width = size + 'px';
+      bh.style.height = size + 'px';
+
+      const flow = document.createElement('div');
+      flow.className = 'bh-flow';
+      bh.appendChild(flow);
+
+      container.appendChild(bh);
+      bgBHHost.appendChild(container);
+    }
+    createBlackHole({ top: '36%', right: '12%', size: 165 });
+
+    // ======================
+    // CURSOR BLACK HOLE
+    // ======================
+    const cursorBH = document.getElementById('cursor-bh');
+    let mouseInHero = false;
+    let mouseX = 0, mouseY = 0;
+
+    function setCursorBH(x, y) {
+      cursorBH.style.left = x + 'px';
+      cursorBH.style.top = y + 'px';
+    }
+
+    hero.addEventListener('mouseenter', () => {
+      mouseInHero = true;
+      cursorBH.classList.add('active');
+    });
+
+    hero.addEventListener('mouseleave', () => {
+      mouseInHero = false;
+      cursorBH.classList.remove('active');
+    });
+
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+      setCursorBH(mouseX, mouseY);
+    });
+
+    // ======================
+    // SHIPS & ASTEROIDS (NO SPAWN) - CENTER CLUSTER
+    // + ALWAYS FRONT WHEN CAPTURED + SCORE INSTANT
+    // ======================
+    const spaceshipSVG = `
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
+              fill="url(#centerBody)" stroke="#0a0a0a" stroke-width="1.5"/>
+        <path d="M 50 38 L 35 26 L 23 21 L 20 24 L 25 31 L 37 36 L 50 41 Z"
+              fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
+        <path d="M 50 62 L 35 74 L 23 79 L 20 76 L 25 69 L 37 64 L 50 59 Z"
+              fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
+        <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
+        <ellipse cx="68" cy="52" rx="4" ry="2.5" fill="rgba(40, 80, 120, 0.7)" stroke="#1a1a1a" stroke-width="0.8"/>
+        <rect x="18" y="46" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
+        <rect x="18" y="51.5" width="10" height="2.5" rx="1" fill="#0a0a0a" opacity="0.7"/>
+        <ellipse cx="22" cy="47" rx="6" ry="2" fill="#3070a0" opacity="0.75">
+          <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
+        </ellipse>
+        <ellipse cx="22" cy="53" rx="6" ry="2" fill="#3070a0" opacity="0.75">
+          <animate attributeName="opacity" values="0.5;0.85;0.5" dur="0.25s" repeatCount="indefinite"/>
+        </ellipse>
+        <defs>
+          <radialGradient id="centerBody" cx="60%" cy="50%">
+            <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+          </radialGradient>
+          <linearGradient id="wingGradient" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+      </svg>
+    `;
+
+    const asteroidSVG = `
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="rock" cx="35%" cy="30%">
+            <stop offset="0%" stop-color="#6a6a6a" stop-opacity="1"/>
+            <stop offset="55%" stop-color="#3f3f3f" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#1a1a1a" stop-opacity="1"/>
+          </radialGradient>
+        </defs>
+        <path d="M30,18 C48,7 78,10 95,30
+                 C110,48 108,78 92,95
+                 C74,112 45,112 25,95
+                 C7,78 10,45 30,18 Z"
+              fill="url(#rock)" stroke="#0e0e0e" stroke-width="3"/>
+        <path d="M42,35 C55,24 78,28 86,42
+                 C95,55 92,72 80,82
+                 C66,94 48,90 38,78
+                 C28,66 30,46 42,35 Z"
+              fill="rgba(0,0,0,0.18)"/>
+      </svg>
+    `;
+
+    const objects = [];
+    function rand(min, max) { return min + Math.random() * (max - min); }
+
+    function getPlayBounds() {
+      const w = playfield.clientWidth;
+      const h = playfield.clientHeight;
+      return { minX: 0, maxX: w, minY: 0, maxY: h };
+    }
+
+    function getClusterBounds() {
+      const b = getPlayBounds();
+      const cx = b.maxX * 0.50;
+      const cy = b.maxY * 0.52;
+
+      const baseW = Math.min(520, Math.max(260, window.innerWidth * 0.40));
+      const baseH = Math.min(360, Math.max(200, window.innerHeight * 0.34));
+
+      const mul = 2.25;
+
+      const cw = Math.min(b.maxX * 0.82, baseW * mul);
+      const ch = Math.min(b.maxY * 0.75, baseH * mul);
+
+      return {
+        minX: cx - cw / 2,
+        maxX: cx + cw / 2,
+        minY: cy - ch / 2,
+        maxY: cy + ch / 2
       };
-      window.addEventListener('scroll', revealOnScroll, { passive: true });
-      revealOnScroll();
+    }
 
-      // ✅ HARD CLEANUP (reload’da da çalışsın)
-      let cleaned = false;
-      function cleanup() {
-        if (cleaned) return;
-        cleaned = true;
+    function initObject(obj) {
+      obj.dead = false;
+      obj.captured = false;
+      obj.captureT = 0;
+      obj.scored = false; // ✅ score bir kere artsın
 
-        try { cancelAnimationFrame(rafId); } catch (e) {}
+      const c = getClusterBounds();
 
-        try {
-          hero.removeEventListener('mouseenter', onHeroEnter);
-          hero.removeEventListener('mouseleave', onHeroLeave);
-          hero.removeEventListener('mousemove', onHeroMove);
-        } catch (e) {}
+      obj.x = rand(c.minX, c.maxX);
+      obj.y = rand(c.minY, c.maxY);
 
-        try { window.removeEventListener('resize', onResize); } catch (e) {}
-        try { window.removeEventListener('scroll', revealOnScroll); } catch (e) {}
+      const speed = obj.type === 'ship' ? rand(0.35, 0.70) : rand(0.30, 0.65);
+      const ang = rand(0, Math.PI * 2);
+      obj.vx = Math.cos(ang) * speed;
+      obj.vy = Math.sin(ang) * speed;
 
-        try { if (playfield) playfield.innerHTML = ''; } catch (e) {}
+      obj.rot = rand(0, 360);
+      obj.rotSpeed = obj.type === 'ship' ? rand(-0.08, 0.08) : rand(-0.10, 0.10);
 
-        // ✅ Canvas release: detach + zero size
-        try {
-          stars = [];
-          g1 = null; g2 = null;
-          if (ctx) { ctx.setTransform(1,0,0,1,0,0); }
-          if (canvas) {
-            canvas.width = 0; canvas.height = 0;
-            canvas.remove(); // detach
+      obj.drift = rand(0.5, 1.2);
+      obj.wobbleSpeed = rand(0.10, 0.16);
+      obj.wobblePhase = rand(0, Math.PI * 2);
+
+      obj.opacity = obj.type === 'ship' ? 0.92 : 0.86;
+      obj.scale = 1;
+
+      obj.el.style.opacity = obj.opacity;
+      obj.el.style.left = obj.x + 'px';
+      obj.el.style.top = obj.y + 'px';
+      obj.el.style.transform = `rotate(${obj.rot}deg)`;
+    }
+
+    function createShip() {
+      const el = document.createElement('div');
+      el.className = 'spaceship';
+      el.innerHTML = spaceshipSVG;
+
+      const trail = document.createElement('div');
+      trail.className = 'trail';
+      el.appendChild(trail);
+
+      playfield.appendChild(el);
+      const obj = { type: 'ship', el };
+      objects.push(obj);
+      initObject(obj);
+    }
+
+    function createAsteroid() {
+      const el = document.createElement('div');
+      el.className = 'asteroid';
+      el.innerHTML = asteroidSVG;
+
+      const size = rand(28, 54);
+      el.style.width = size + 'px';
+      el.style.height = size + 'px';
+
+      playfield.appendChild(el);
+      const obj = { type: 'asteroid', el };
+      objects.push(obj);
+      initObject(obj);
+    }
+
+    for (let i = 0; i < 6; i++) createShip();
+    for (let i = 0; i < 6; i++) createAsteroid();
+
+    function wrapCluster(o) {
+      const c = getClusterBounds();
+      const m = 50;
+
+      if (o.x < c.minX - m) o.x = c.maxX + m;
+      if (o.x > c.maxX + m) o.x = c.minX - m;
+
+      if (o.y < c.minY - m) o.y = c.maxY + m;
+      if (o.y > c.maxY + m) o.y = c.minY - m;
+    }
+
+    // ======================
+    // PERF: 30 FPS throttle + pause on hidden tab
+    // ======================
+    let running = true;
+    document.addEventListener('visibilitychange', () => {
+      running = !document.hidden;
+      lastStar = performance.now();
+    });
+
+    let last = performance.now();
+    let acc = 0;
+    let lastStar = performance.now();
+
+    function loop(now) {
+      requestAnimationFrame(loop);
+      if (!running) return;
+
+      const dtStar = Math.min(0.05, (now - lastStar) / 1000);
+      lastStar = now;
+      drawStars(dtStar);
+
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      acc += dt;
+      if (acc < (1 / 30)) return;
+      const step = acc;
+      acc = 0;
+
+      const heroRect = hero.getBoundingClientRect();
+      const playRect = playfield.getBoundingClientRect();
+
+      const cursorWorldX = heroRect.left + mouseX;
+      const cursorWorldY = heroRect.top + mouseY;
+
+      const cursorInPlayX = cursorWorldX - playRect.left;
+      const cursorInPlayY = cursorWorldY - playRect.top;
+
+      const cursorRadius = 43;
+
+      for (const o of objects) {
+        if (o.dead) continue;
+
+        if (o.captured) {
+          o.captureT += step;
+
+          // ✅ score HEMEN artsın (capture başladığı frame’de)
+          if (!o.scored) {
+            o.scored = true;
+            setScore(score + 1);
           }
-          ctx = null;
-          canvas = null;
-        } catch (e) {}
 
-        try { objects.length = 0; } catch (e) {}
+          const t = Math.min(1, o.captureT / 1.0);
+          const ease = 1 - Math.pow(1 - t, 3);
 
-        try { delete window.__SPACE_CLEANUP__; } catch (e) {}
+          o.x = o.startX + (o.targetX - o.startX) * ease;
+          o.y = o.startY + (o.targetY - o.startY) * ease;
+
+          o.rot += 160 * step;
+          o.scale = 1 - 0.86 * ease;
+          o.opacity = 1 - 1.0 * ease;
+
+          // ✅ EN ÖN: cursor BH’nin üstünde gözüksün
+          o.el.style.zIndex = 999;
+
+          o.el.style.opacity = Math.max(0, o.opacity);
+          o.el.style.left = o.x + 'px';
+          o.el.style.top = o.y + 'px';
+          o.el.style.transform = `rotate(${o.rot}deg) scale(${Math.max(0.05, o.scale)})`;
+
+          if (t >= 1) { o.dead = true; o.el.remove(); }
+          continue;
+        }
+
+        o.x += o.vx * step;
+        o.y += o.vy * step;
+
+        const wobble = Math.sin(now * 0.001 * (o.wobbleSpeed * 2 * Math.PI) + o.wobblePhase) * o.drift;
+        wrapCluster(o);
+
+        o.rot += o.rotSpeed * step * 60;
+
+        o.el.style.left = (o.x + wobble * 0.7) + 'px';
+        o.el.style.top  = (o.y + wobble * 0.5) + 'px';
+        o.el.style.transform = `rotate(${o.rot}deg)`;
+
+        if (mouseInHero && score < SCORE_MAX) {
+          // object center
+          const cx = o.x + 28;
+          const cy = o.y + 28;
+
+          const dx = cx - cursorInPlayX;
+          const dy = cy - cursorInPlayY;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+
+          // ✅ daha “anında” yakalasın diye eşiği biraz genişlettim
+          if (dist < cursorRadius * 1.18) {
+            o.captured = true;
+            o.captureT = 0;
+            o.startX = o.x;
+            o.startY = o.y;
+            o.targetX = cursorInPlayX - 28;
+            o.targetY = cursorInPlayY - 28;
+
+            // ✅ yakalanır yakalanmaz öne al
+            o.el.style.zIndex = 999;
+          }
+        }
       }
+    }
+    requestAnimationFrame(loop);
 
-      window.addEventListener('pagehide', cleanup, { passive: true });
-      window.addEventListener('beforeunload', cleanup, { passive: true });
-      window.addEventListener('unload', cleanup, { passive: true });
+    function rewrapAll() {
+      updatePlayfieldWidth();
+      for (const o of objects) {
+        if (!o.dead && !o.captured) wrapCluster(o);
+      }
+    }
+    window.addEventListener('resize', rewrapAll, { passive: true });
 
-      window.__SPACE_CLEANUP__ = cleanup;
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('site-header');
+      if (window.scrollY > 100) {
+        header.style.background = 'rgba(10, 10, 10, 0.92)';
+        header.style.boxShadow = '0 5px 18px rgba(0, 0, 0, 0.55)';
+      } else {
+        header.style.background = 'rgba(10, 10, 10, 0.65)';
+        header.style.boxShadow = 'none';
+      }
+    });
 
-      // anchors (same)
-      document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', (e) => {
-          e.preventDefault();
-          const target = document.querySelector(a.getAttribute('href'));
-          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
-    })();
+    });
+
+    const reveals = document.querySelectorAll('.reveal');
+    const revealOnScroll = () => {
+      reveals.forEach(el => {
+        const top = el.getBoundingClientRect().top;
+        if (top < innerHeight - 100) el.classList.add('active');
+      });
+    };
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
   </script>
 </body>
 </html>

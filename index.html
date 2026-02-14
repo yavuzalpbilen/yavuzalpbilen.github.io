@@ -23,7 +23,7 @@
       pointer-events: none;
     }
 
-    /* FIXED SPACE LAYER: tüm sayfa boyunca bizimle gelir */
+    /* FIXED SPACE LAYER: gezegen + bg karadelik tüm sayfada */
     .space-layer {
       position: fixed;
       inset: 0;
@@ -32,10 +32,18 @@
       overflow: hidden;
     }
 
-    /* IMPORTANT: hosts full-page so "oynama alanı" sayfa kadar olsun */
+    /* HERO-ONLY PLAYFIELD: gemiler/asteroid sadece HERO’da kalsın */
+    .playfield {
+      position: absolute;
+      inset: 0;
+      z-index: 15;
+      pointer-events: none;
+      overflow: visible; /* alanı genişleteceğiz, taşabilsin */
+    }
+
+    /* host full-page */
     #planets-host,
-    #bg-blackhole-host,
-    #objects-host {
+    #bg-blackhole-host {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -65,7 +73,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      position: relative;
     }
 
     nav a {
@@ -104,7 +111,7 @@
       overflow: hidden;
       z-index: 10;
       cursor: none;                 /* mouse BH için */
-      padding-top: 90px;            /* header çakışmasın */
+      padding-top: 90px;
     }
 
     .hero-content { z-index: 30; padding: 2rem; }
@@ -216,7 +223,7 @@
     @keyframes driftB { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(12px, -9px, 0); } }
     @keyframes driftC { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(-10px, -10px, 0); } }
 
-    /* ---- BACKGROUND BLACK HOLE (1 tane) ---- */
+    /* ---- BACKGROUND BLACK HOLE (1 tane, SADECE GÖRSEL) ---- */
     .black-hole-container { position: absolute; z-index: 3; pointer-events: none; }
     .black-hole {
       position: absolute;
@@ -270,7 +277,7 @@
     @keyframes rotateDisk { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
     @keyframes rotateFlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-    /* ---- CURSOR BLACK HOLE (ELLEME) ---- */
+    /* ---- CURSOR BLACK HOLE (çekim burada) ---- */
     .cursor-bh {
       position: absolute;
       width: 86px;
@@ -287,7 +294,7 @@
     .cursor-bh .black-hole::after { animation: rotateDisk 36s linear infinite; }
     .cursor-bh .bh-flow { animation: rotateFlow 34s linear infinite; opacity: 0.16; }
 
-    /* ---- SHIPS + ASTEROIDS (no spawn) ---- */
+    /* ---- SHIPS + ASTEROIDS (hero-only) ---- */
     .spaceship, .asteroid {
       position: absolute;
       pointer-events: none;
@@ -416,11 +423,10 @@
 <body>
   <canvas id="starfield"></canvas>
 
-  <!-- Fixed, whole-page space layer -->
+  <!-- Fixed, whole-page space layer (only planets + bg blackhole stay on scroll) -->
   <div class="space-layer" id="space-layer">
     <div id="planets-host"></div>
     <div id="bg-blackhole-host"></div>
-    <div id="objects-host"></div>
   </div>
 
   <header id="site-header">
@@ -433,6 +439,9 @@
   </header>
 
   <section class="hero" id="hero">
+    <!-- HERO-ONLY PLAYFIELD (ships + asteroids) -->
+    <div class="playfield" id="playfield"></div>
+
     <!-- Mouse blackhole (ELLEME) -->
     <div class="cursor-bh" id="cursor-bh">
       <div class="black-hole">
@@ -629,7 +638,7 @@
     // ======================
     const planetsHost = document.getElementById('planets-host');
     const bgBHHost = document.getElementById('bg-blackhole-host');
-    const objectsHost = document.getElementById('objects-host');
+    const playfield = document.getElementById('playfield');
 
     function makePlanet({ top, left, right, bottom, size, gradient, drift, opacity }) {
       const p = document.createElement('div');
@@ -654,8 +663,7 @@
       planetsHost.appendChild(p);
     }
 
-    // ===== PLANETS: 2'si aynı, 3.'sü görünür olacak şekilde ayarlandı (RENKLER DOKUNMADIM) =====
-    // 1) Büyük sağ üst (AYNI)
+    // ===== PLANETS: 2 aynı, 3. kesin görünsün diye daha yukarı & daha içeri =====
     makePlanet({
       top: '-90px', right: '-120px',
       size: 360, opacity: 0.40, drift: 'drift-b',
@@ -667,7 +675,6 @@
         rgba(6,7,12,1) 100%)`
     });
 
-    // 2) Büyük sol (AYNI / çok iyi dediğin)
     makePlanet({
       top: '28%', left: '-210px',
       size: 430, opacity: 0.52, drift: 'drift-a',
@@ -679,9 +686,9 @@
         rgba(6,7,10,1) 100%)`
     });
 
-    // 3) Alt-sağ: “görünmüyor” diye daha içeri aldım (RENK AYNI)
+    // 3. gezegen: HERO içinde de görünmesi için biraz yukarı aldım
     makePlanet({
-      bottom: '-60px', right: '8%',
+      top: '62%', right: '9%',
       size: 260, opacity: 0.38, drift: 'drift-c',
       gradient: `radial-gradient(circle at 35% 30%,
         rgba(255,255,255,0.08) 0%,
@@ -691,8 +698,7 @@
         rgba(6,7,12,1) 100%)`
     });
 
-    // Background black hole (1 tane)
-    const blackHoles = [];
+    // Background black hole (1 tane) - SADECE GÖRSEL
     function createBlackHole({ top, left, right, bottom, size }) {
       const container = document.createElement('div');
       container.className = 'black-hole-container';
@@ -712,14 +718,11 @@
 
       container.appendChild(bh);
       bgBHHost.appendChild(container);
-
-      blackHoles.push({ el: bh });
     }
-
     createBlackHole({ top: '36%', right: '12%', size: 165 });
 
     // ======================
-    // CURSOR BLACK HOLE (ELLEME)
+    // CURSOR BLACK HOLE (çekim sadece burada)
     // ======================
     const hero = document.getElementById('hero');
     const cursorBH = document.getElementById('cursor-bh');
@@ -750,7 +753,7 @@
     });
 
     // ======================
-    // SHIPS & ASTEROIDS (NO SPAWN)
+    // SHIPS & ASTEROIDS (NO SPAWN) - HERO ONLY
     // ======================
     const spaceshipSVG = `
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -810,14 +813,28 @@
     const objects = [];
     function rand(min, max) { return min + Math.random() * (max - min); }
 
+    // OYUN ALANI: HERO’nun “tam sayfa” gibi hissettirmesi için yatayda WIDER sanal alan
+    // => objeleri -0.25W .. 1.25W aralığında da dolaştırıyoruz
+    function getPlayBounds() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      return {
+        minX: -0.25 * w,
+        maxX:  1.25 * w,
+        minY:  0,
+        maxY:  h
+      };
+    }
+
     function initObject(obj) {
       obj.dead = false;
       obj.captured = false;
       obj.captureT = 0;
 
-      // OYNAMA ALANI: artık daha geniş, kenarlara daha yakın başlasın
-      obj.x = rand(0.02, 0.98) * window.innerWidth;
-      obj.y = rand(0.08, 0.92) * window.innerHeight;
+      const b = getPlayBounds();
+
+      obj.x = rand(b.minX, b.maxX);
+      obj.y = rand(b.minY + 40, b.maxY - 40);
 
       const speed = obj.type === 'ship' ? rand(0.55, 1.05) : rand(0.50, 1.00);
       const ang = rand(0, Math.PI * 2);
@@ -849,7 +866,7 @@
       trail.className = 'trail';
       el.appendChild(trail);
 
-      objectsHost.appendChild(el);
+      playfield.appendChild(el);
       const obj = { type: 'ship', el };
       objects.push(obj);
       initObject(obj);
@@ -864,7 +881,7 @@
       el.style.width = size + 'px';
       el.style.height = size + 'px';
 
-      objectsHost.appendChild(el);
+      playfield.appendChild(el);
       const obj = { type: 'asteroid', el };
       objects.push(obj);
       initObject(obj);
@@ -873,38 +890,15 @@
     for (let i = 0; i < 6; i++) createShip();
     for (let i = 0; i < 6; i++) createAsteroid();
 
-    function getBHCenters() {
-      const centers = [];
-
-      for (const bh of blackHoles) {
-        const r = bh.el.getBoundingClientRect();
-        centers.push({
-          x: r.left + r.width / 2,
-          y: r.top + r.height / 2,
-          radius: r.width / 2
-        });
-      }
-
-      if (mouseInHero) {
-        const heroRect = hero.getBoundingClientRect();
-        centers.push({
-          x: heroRect.left + mouseX,
-          y: heroRect.top + mouseY,
-          radius: 43
-        });
-      }
-
-      return centers;
-    }
-
-    function wrap(o) {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
+    function wrapWide(o) {
+      const b = getPlayBounds();
       const m = 120;
-      if (o.x < -m) o.x = w + m;
-      if (o.x > w + m) o.x = -m;
-      if (o.y < -m) o.y = h + m;
-      if (o.y > h + m) o.y = -m;
+
+      if (o.x < b.minX - m) o.x = b.maxX + m;
+      if (o.x > b.maxX + m) o.x = b.minX - m;
+
+      if (o.y < b.minY - m) o.y = b.maxY + m;
+      if (o.y > b.maxY + m) o.y = b.minY - m;
     }
 
     // ======================
@@ -935,7 +929,13 @@
       const step = acc;
       acc = 0;
 
-      const bhs = getBHCenters();
+      // çekim: SADECE mouse BH (background BH yok)
+      const heroRect = hero.getBoundingClientRect();
+      const cursorCenter = {
+        x: heroRect.left + mouseX,
+        y: heroRect.top + mouseY,
+        radius: 43
+      };
 
       for (const o of objects) {
         if (o.dead) continue;
@@ -966,7 +966,7 @@
         o.y += o.vy * step;
 
         const wobble = Math.sin(now * 0.001 * (o.wobbleSpeed * 2 * Math.PI) + o.wobblePhase) * o.drift;
-        wrap(o);
+        wrapWide(o);
 
         o.rot += o.rotSpeed * step * 60;
 
@@ -974,21 +974,24 @@
         o.el.style.top  = (o.y + wobble * 0.5) + 'px';
         o.el.style.transform = `rotate(${o.rot}deg)`;
 
-        const cx = o.x + 28;
-        const cy = o.y + 28;
+        // mouse BH çekimi sadece hero içindeyken aktif
+        if (mouseInHero) {
+          const cx = o.x + 28;
+          const cy = o.y + 28;
 
-        for (const bh of bhs) {
-          const dx = cx - bh.x;
-          const dy = cy - bh.y;
+          const dx = (heroRect.left + cx) - cursorCenter.x;
+          const dy = (heroRect.top + cy) - cursorCenter.y;
           const dist = Math.sqrt(dx*dx + dy*dy);
-          if (dist < bh.radius * 1.05) {
+
+          if (dist < cursorCenter.radius * 1.05) {
             o.captured = true;
             o.captureT = 0;
             o.startX = o.x;
             o.startY = o.y;
-            o.targetX = bh.x;
-            o.targetY = bh.y;
-            break;
+
+            // hedef: cursor BH (hero local koordinata çevir)
+            o.targetX = mouseX - 28;
+            o.targetY = mouseY - 28;
           }
         }
       }

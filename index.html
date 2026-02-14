@@ -108,7 +108,7 @@
     /* ✅ SCORE HUD */
     .score-hud{
       position: absolute;
-      top: 72px; /* ✅ bir bu kadar daha indirdim (36px -> 72px) */
+      top: 90px; /* ✅ 72px'ten "yarısı kadar" daha indirdim ( +18px ) */
       left: 50%;
       transform: translateX(-50%);
       z-index: 40;
@@ -468,7 +468,7 @@
       .skills-grid { grid-template-columns: 1fr; }
 
       .score-hud{
-        top: 62px; /* mobilde de daha aşağı */
+        top: 71px; /* ✅ 62 -> +9px (yarısı kadar mobil) */
         padding: 9px 14px;
       }
       .score-text{ font-size: 0.9rem; }
@@ -1069,15 +1069,7 @@
           o.el.style.top = o.y + 'px';
           o.el.style.transform = `rotate(${o.rot}deg) scale(${Math.max(0.05, o.scale)})`;
 
-          if (t >= 1) {
-            if (!o.scored && score < TOTAL_SCORE) {
-              o.scored = true;
-              score++;
-              updateScoreUI();
-            }
-            o.dead = true;
-            o.el.remove();
-          }
+          if (t >= 1) { o.dead = true; o.el.remove(); }
           continue;
         }
 
@@ -1102,6 +1094,13 @@
           const dist = Math.sqrt(dx*dx + dy*dy);
 
           if (dist < cursorRadius * 1.05) {
+            // ✅ score "değdiği anda" artsın
+            if (!o.scored && score < TOTAL_SCORE) {
+              o.scored = true;
+              score++;
+              updateScoreUI();
+            }
+
             o.captured = true;
             o.captureT = 0;
             o.startX = o.x;

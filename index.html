@@ -346,14 +346,13 @@
 
     /* ===========================================================
        IMPORTANT: SAĞ-SOL BOŞLUK YOK (FULL WIDTH SECTIONS)
-       - eski max-width:1400px kaldırıldı
        =========================================================== */
     section, footer { position: relative; z-index: 10; }
     section {
       width: 100%;
       margin: 0;
       padding: 5rem var(--side-pad);
-      max-width: none;      /* <<< boşluk yok */
+      max-width: none;
     }
 
     h2 {
@@ -601,9 +600,7 @@
 
   <script>
     // ======================
-    // RESPONSIVE WIDE PLAYFIELD (ZOOM SAFE) + NO SIDE EMPTY FEEL
-    // - pfw is px, recalculated on resize/zoom
-    // - we also "scatter" objects more to edges at init
+    // RESPONSIVE WIDE PLAYFIELD (ZOOM SAFE)
     // ======================
     const root = document.documentElement;
     const playfield = document.getElementById('playfield');
@@ -615,7 +612,6 @@
       const vw = window.innerWidth;
       const vh = window.innerHeight;
 
-      // more aggressive widen for big monitors, still stable on zoom
       const aspect = vw / Math.max(1, vh);
       const factor = clamp(1.65 + (aspect - 0.7) * 0.75, 1.65, 2.85);
 
@@ -806,7 +802,7 @@
     });
 
     // ======================
-    // SHIPS & ASTEROIDS (NO SPAWN)
+    // SHIPS & ASTEROIDS (NO SPAWN) - NOW CENTER CLUSTER
     // ======================
     const spaceshipSVG = `
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -872,33 +868,44 @@
       return { minX: 0, maxX: w, minY: 0, maxY: h };
     }
 
-    function initObject(obj, edgeBias = false) {
+    // CENTER CLUSTER SETTINGS (small area around center)
+    function getClusterBounds() {
+      const b = getPlayBounds();
+      const cx = b.maxX * 0.50;
+      const cy = b.maxY * 0.52;
+
+      // small cluster box (responsive): ~ min(520px, 40vw) by min(360px, 34vh)
+      const cw = Math.min(520, Math.max(260, window.innerWidth * 0.40));
+      const ch = Math.min(360, Math.max(200, window.innerHeight * 0.34));
+
+      return {
+        minX: cx - cw / 2,
+        maxX: cx + cw / 2,
+        minY: cy - ch / 2,
+        maxY: cy + ch / 2
+      };
+    }
+
+    function initObject(obj) {
       obj.dead = false;
       obj.captured = false;
       obj.captureT = 0;
 
-      const b = getPlayBounds();
+      const c = getClusterBounds();
 
-      // EDGE BIAS: boşluk hissi olmasın diye bazılarını kenarlara yakın yerleştir
-      if (edgeBias) {
-        const side = Math.floor(Math.random() * 2); // 0 left, 1 right
-        const pad = 80;
-        obj.x = side === 0 ? rand(b.minX + pad, b.minX + b.maxX * 0.18)
-                           : rand(b.maxX * 0.82, b.maxX - pad);
-      } else {
-        obj.x = rand(b.minX, b.maxX);
-      }
-      obj.y = rand(b.minY + 60, b.maxY - 60);
+      obj.x = rand(c.minX, c.maxX);
+      obj.y = rand(c.minY, c.maxY);
 
-      const speed = obj.type === 'ship' ? rand(0.55, 1.05) : rand(0.50, 1.00);
+      // super slow drift
+      const speed = obj.type === 'ship' ? rand(0.35, 0.70) : rand(0.30, 0.65);
       const ang = rand(0, Math.PI * 2);
       obj.vx = Math.cos(ang) * speed;
       obj.vy = Math.sin(ang) * speed;
 
       obj.rot = rand(0, 360);
-      obj.rotSpeed = obj.type === 'ship' ? rand(-0.10, 0.10) : rand(-0.12, 0.12);
+      obj.rotSpeed = obj.type === 'ship' ? rand(-0.08, 0.08) : rand(-0.10, 0.10);
 
-      obj.drift = rand(0.7, 1.7);
+      obj.drift = rand(0.5, 1.2);
       obj.wobbleSpeed = rand(0.10, 0.16);
       obj.wobblePhase = rand(0, Math.PI * 2);
 
@@ -911,7 +918,7 @@
       obj.el.style.transform = `rotate(${obj.rot}deg)`;
     }
 
-    function createShip(edgeBias) {
+    function createShip() {
       const el = document.createElement('div');
       el.className = 'spaceship';
       el.innerHTML = spaceshipSVG;
@@ -923,10 +930,10 @@
       playfield.appendChild(el);
       const obj = { type: 'ship', el };
       objects.push(obj);
-      initObject(obj, edgeBias);
+      initObject(obj);
     }
 
-    function createAsteroid(edgeBias) {
+    function createAsteroid() {
       const el = document.createElement('div');
       el.className = 'asteroid';
       el.innerHTML = asteroidSVG;
@@ -938,22 +945,23 @@
       playfield.appendChild(el);
       const obj = { type: 'asteroid', el };
       objects.push(obj);
-      initObject(obj, edgeBias);
+      initObject(obj);
     }
 
-    // 12 obje: yarısı kenarlara yakın (boşluk hissi azalt)
-    for (let i = 0; i < 6; i++) createShip(i < 3);
-    for (let i = 0; i < 6; i++) createAsteroid(i < 3);
+    // 12 obje: tam ortada küçük alanda
+    for (let i = 0; i < 6; i++) createShip();
+    for (let i = 0; i < 6; i++) createAsteroid();
 
-    function wrapWide(o) {
-      const b = getPlayBounds();
-      const m = 140;
+    // keep them inside the cluster box (wrap inside cluster)
+    function wrapCluster(o) {
+      const c = getClusterBounds();
+      const m = 50;
 
-      if (o.x < b.minX - m) o.x = b.maxX + m;
-      if (o.x > b.maxX + m) o.x = b.minX - m;
+      if (o.x < c.minX - m) o.x = c.maxX + m;
+      if (o.x > c.maxX + m) o.x = c.minX - m;
 
-      if (o.y < b.minY - m) o.y = b.maxY + m;
-      if (o.y > b.maxY + m) o.y = b.minY - m;
+      if (o.y < c.minY - m) o.y = c.maxY + m;
+      if (o.y > c.maxY + m) o.y = c.minY - m;
     }
 
     // ======================
@@ -1026,7 +1034,7 @@
         o.y += o.vy * step;
 
         const wobble = Math.sin(now * 0.001 * (o.wobbleSpeed * 2 * Math.PI) + o.wobblePhase) * o.drift;
-        wrapWide(o);
+        wrapCluster(o);
 
         o.rot += o.rotSpeed * step * 60;
 
@@ -1059,7 +1067,7 @@
     function rewrapAll() {
       updatePlayfieldWidth();
       for (const o of objects) {
-        if (!o.dead && !o.captured) wrapWide(o);
+        if (!o.dead && !o.captured) wrapCluster(o);
       }
     }
     window.addEventListener('resize', rewrapAll, { passive: true });

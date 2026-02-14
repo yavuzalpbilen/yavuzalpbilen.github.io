@@ -187,6 +187,10 @@
       contain: layout paint;
     }
 
+    /* ✅ cursor BH aynı, ama "siyah çekirdek" üstte kalmasın diye:
+       - çekirdeği (before) biraz geri alıyoruz
+       - objeler capture anında daha yüksek z-index alıyor
+       - disk/flow yine görünür kalıyor (bozulmuyor) */
     .cursor-bh {
       position: absolute;
       width: 86px;
@@ -197,6 +201,7 @@
       opacity: 0;
       transform: translate(-50%, -50%);
       transition: opacity 0.15s ease;
+      isolation: isolate; /* stacking context */
     }
     .cursor-bh.active { opacity: 1; }
 
@@ -210,6 +215,22 @@
         inset 0 0 34px rgba(0,0,0,1),
         0 0 20px rgba(0,0,0,0.60);
       animation: rotateBH 80s linear infinite;
+    }
+
+    /* Event horizon (siyah çekirdek) */
+    .black-hole::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #000;
+      box-shadow: 0 0 18px rgba(0,0,0,0.8), inset 0 0 22px rgba(0,0,0,1);
+      /* ✅ çekirdek katmanını geriye al */
+      z-index: -2;
     }
 
     .black-hole::after {
@@ -229,6 +250,7 @@
         transparent 72%);
       animation: rotateDisk 72s linear infinite;
       opacity: 0.85;
+      z-index: 2;
     }
 
     .bh-flow {
@@ -247,6 +269,7 @@
       animation: rotateFlow 68s linear infinite;
       -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 72%);
       mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 72%);
+      z-index: 1;
     }
 
     @keyframes rotateBH { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -786,7 +809,7 @@
     });
 
     // ======================
-    // SHIPS & ASTEROIDS (NO SPAWN) - CENTER CLUSTER (NOW 2.25x TOTAL)
+    // SHIPS & ASTEROIDS (NO SPAWN) - CENTER CLUSTER
     // ======================
     const spaceshipSVG = `
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -852,7 +875,6 @@
       return { minX: 0, maxX: w, minY: 0, maxY: h };
     }
 
-    // ✅ Bir önceki 1.5x'in ÜSTÜNE bir 1.5x daha => toplam 2.25x
     function getClusterBounds() {
       const b = getPlayBounds();
       const cx = b.maxX * 0.50;
@@ -861,7 +883,7 @@
       const baseW = Math.min(520, Math.max(260, window.innerWidth * 0.40));
       const baseH = Math.min(360, Math.max(200, window.innerHeight * 0.34));
 
-      const mul = 2.25; // <-- burada artırdım (1.5 * 1.5)
+      const mul = 2.25;
 
       const cw = Math.min(b.maxX * 0.82, baseW * mul);
       const ch = Math.min(b.maxY * 0.75, baseH * mul);
@@ -1003,7 +1025,9 @@
           o.scale = 1 - 0.86 * ease;
           o.opacity = 1 - 1.0 * ease;
 
-          o.el.style.zIndex = 60;
+          // ✅ capture anında EN ÜSTE alıyoruz (cursorBH üstünde görünsün)
+          o.el.style.zIndex = 9999;
+
           o.el.style.opacity = Math.max(0, o.opacity);
           o.el.style.left = o.x + 'px';
           o.el.style.top = o.y + 'px';

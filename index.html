@@ -32,6 +32,16 @@
       overflow: hidden;
     }
 
+    /* IMPORTANT: hosts full-page so "oynama alanı" sayfa kadar olsun */
+    #planets-host,
+    #bg-blackhole-host,
+    #objects-host {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
     /* Header */
     header {
       padding: 1.2rem 5%;
@@ -85,6 +95,7 @@
     .hero {
       height: 100vh;
       min-height: 100vh;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -584,7 +595,6 @@
     function drawStars(dt) {
       ctx.clearRect(0, 0, W, H);
 
-      // subtle nebula tint
       const g1 = ctx.createRadialGradient(W*0.28, H*0.30, 0, W*0.28, H*0.30, Math.max(W,H)*0.75);
       g1.addColorStop(0, 'rgba(120,150,210,0.05)');
       g1.addColorStop(1, 'rgba(0,0,0,0)');
@@ -644,8 +654,8 @@
       planetsHost.appendChild(p);
     }
 
-    // ===== PLANETS: toplam 3 tane + daha dağınık yerleşim (RENKLER AYNI) =====
-    // 1) Büyük sağ üst (aynı)
+    // ===== PLANETS: 2'si aynı, 3.'sü görünür olacak şekilde ayarlandı (RENKLER DOKUNMADIM) =====
+    // 1) Büyük sağ üst (AYNI)
     makePlanet({
       top: '-90px', right: '-120px',
       size: 360, opacity: 0.40, drift: 'drift-b',
@@ -657,7 +667,7 @@
         rgba(6,7,12,1) 100%)`
     });
 
-    // 2) Büyük sol taraf (eski bottom-left'ten daha yukarı + daha dağınık)
+    // 2) Büyük sol (AYNI / çok iyi dediğin)
     makePlanet({
       top: '28%', left: '-210px',
       size: 430, opacity: 0.52, drift: 'drift-a',
@@ -669,9 +679,9 @@
         rgba(6,7,10,1) 100%)`
     });
 
-    // 3) Orta boy alt-sağ (sol alttan çıkarttım, daha dengeli dağıttım)
+    // 3) Alt-sağ: “görünmüyor” diye daha içeri aldım (RENK AYNI)
     makePlanet({
-      bottom: '-120px', right: '10%',
+      bottom: '-60px', right: '8%',
       size: 260, opacity: 0.38, drift: 'drift-c',
       gradient: `radial-gradient(circle at 35% 30%,
         rgba(255,255,255,0.08) 0%,
@@ -805,8 +815,9 @@
       obj.captured = false;
       obj.captureT = 0;
 
-      obj.x = rand(0.12, 0.88) * window.innerWidth;
-      obj.y = rand(0.18, 0.82) * window.innerHeight;
+      // OYNAMA ALANI: artık daha geniş, kenarlara daha yakın başlasın
+      obj.x = rand(0.02, 0.98) * window.innerWidth;
+      obj.y = rand(0.08, 0.92) * window.innerHeight;
 
       const speed = obj.type === 'ship' ? rand(0.55, 1.05) : rand(0.50, 1.00);
       const ang = rand(0, Math.PI * 2);

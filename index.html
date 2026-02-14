@@ -13,10 +13,9 @@
       background: linear-gradient(135deg, #0a0a0a 0%, #141420 50%, #1f1f2a 100%);
       color: #fff;
       overflow-x: hidden;
-      cursor: none; /* cursoru gizleyip karadelik cursor kullanacağız */
+      cursor: none;
     }
 
-    /* Animated gradient background */
     body::before {
       content: '';
       position: fixed;
@@ -253,7 +252,7 @@
       50% { box-shadow: 0 5px 30px rgba(255, 255, 255, 0.2); }
     }
 
-    /* ===== SPACE LAYERS ===== */
+    /* Space layers */
     .stars-background,
     .space-dust,
     .particles,
@@ -353,7 +352,7 @@
       mask-image: radial-gradient(circle, rgba(0,0,0,1) 25%, rgba(0,0,0,0) 70%);
     }
 
-    /* ===== PLANETS ===== */
+    /* Planets */
     .planet {
       position: absolute;
       border-radius: 50%;
@@ -749,7 +748,7 @@
     }
     @keyframes fillBar { from { width: 0; } }
 
-    /* ===== Black Holes ===== */
+    /* Black Holes */
     .black-hole {
       position: absolute;
       border-radius: 50%;
@@ -834,7 +833,6 @@
     }
 
     .black-hole-container { position: absolute; }
-
     .gravitational-lens {
       position: absolute;
       top: 50%;
@@ -862,7 +860,7 @@
     @keyframes rotateBlackHole { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     @keyframes accretionDisk { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 
-    /* ===== Cursor Black Hole (YENİ) ===== */
+    /* Cursor BH */
     .cursor-black-hole {
       position: fixed;
       left: var(--cx, 50vw);
@@ -872,7 +870,10 @@
       transform: translate(-50%, -50%);
       border-radius: 50%;
       pointer-events: none;
-      z-index: 9999;
+
+      /* ✅ cursor BH'i biraz daha alta aldık ki headerla savaşmasın */
+      z-index: 9990;
+
       opacity: 0;
       transition: opacity 0.12s ease;
       filter: drop-shadow(0 0 20px rgba(0,0,0,0.7));
@@ -893,12 +894,15 @@
     .cursor-black-hole .gravitational-lens { opacity: 0.45; animation-duration: 10s; }
     .cursor-black-hole .black-hole::after { opacity: 0.55; filter: blur(2.5px); }
 
-    /* ===== Spaceships ===== */
+    /* Spaceships */
     .spaceship {
       position: absolute;
       width: 55px;
       height: 55px;
-      z-index: 1;
+
+      /* ✅ gemileri cursor BH'in ÜSTÜNE aldık */
+      z-index: 9995;
+
       filter: drop-shadow(0 0 8px rgba(60, 100, 140, 0.5));
       pointer-events: none;
     }
@@ -921,7 +925,7 @@
       box-shadow:
         0 0 12px rgba(80, 130, 180, 0.6),
         0 0 20px rgba(60, 110, 160, 0.3);
-      z-index: 0;
+      z-index: 9994;
     }
 
     .trail::before {
@@ -955,8 +959,8 @@
       .hero h1 { font-size: 2.5rem; }
       nav { display: none; }
       .projects-grid, .skills-grid { grid-template-columns: 1fr; }
-      body { cursor: auto; } /* mobilde cursor kapatma */
-      .cursor-black-hole { display: none; } /* mobilde gizle */
+      body { cursor: auto; }
+      .cursor-black-hole { display: none; }
     }
   </style>
 </head>
@@ -967,7 +971,6 @@
   <div class="particles" id="particles"></div>
   <div class="floating-shapes" id="space-objects"></div>
 
-  <!-- Cursor Black Hole -->
   <div class="cursor-black-hole" id="cursorBH" aria-hidden="true">
     <div class="black-hole">
       <div class="bh-swirl"></div>
@@ -1145,7 +1148,6 @@
   </footer>
 
   <script>
-    // ===== Stars =====
     const starsContainer = document.getElementById('stars');
     for (let i = 0; i < 260; i++) {
       const star = document.createElement('div');
@@ -1163,7 +1165,6 @@
       starsContainer.appendChild(star);
     }
 
-    // ===== Particles =====
     const particlesContainer = document.getElementById('particles');
     for (let i = 0; i < 55; i++) {
       const particle = document.createElement('div');
@@ -1194,7 +1195,6 @@
       el.style.animationDelay = delay;
     }
 
-    // ===== Nebulas =====
     const nebulas = [
       { top: '8%', left: '10%', color: 'rgba(70, 80, 140, 0.32)', size: 560 },
       { top: '55%', right: '6%', color: 'rgba(120, 90, 150, 0.26)', size: 520 },
@@ -1216,7 +1216,6 @@
       spaceContainer.appendChild(neb);
     });
 
-    // ===== Galaxies =====
     const galaxies = [
       { top: '18%', left: '52%', size: 620, rotate: 18 },
       { top: '70%', left: '6%', size: 700, rotate: -12 }
@@ -1234,7 +1233,6 @@
       spaceContainer.appendChild(gal);
     });
 
-    // ===== PLANETS =====
     function addPlanet(opts) {
       const p = document.createElement('div');
       p.className = 'planet';
@@ -1304,7 +1302,6 @@
       driftMin: 38, driftMax: 80
     });
 
-    // ===== Black holes =====
     const blackHolePositions = [
       { top: '16%', left: '18%', size: 120 },
       { top: '52%', right: '14%', size: 150 },
@@ -1343,13 +1340,13 @@
       blackHoles.push({ element: blackHole });
     });
 
-    // ===== Cursor Black Hole logic (YENİ) =====
+    // Cursor BH
     const cursorBH = document.getElementById('cursorBH');
     const cursorState = {
       x: window.innerWidth / 2,
       y: window.innerHeight / 2,
       active: false,
-      radius: 32, // px (64/2)
+      radius: 32,
       captureMultiplier: 1.55
     };
 
@@ -1376,7 +1373,7 @@
       cursorBH.classList.remove('active');
     });
 
-    // ===== Spaceship SVG =====
+    // Spaceship SVG
     const spaceshipSVG = `
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
@@ -1409,15 +1406,6 @@
         </defs>
       </svg>
     `;
-
-    // Helper: set capture towards a point (x,y)
-    function captureShip(spaceship, trail, targetX, targetY, shipX, shipY) {
-      spaceship.classList.add('captured');
-      trail.style.opacity = '0';
-      spaceship.style.setProperty('--bh-x', (targetX - shipX - 27.5) + 'px');
-      spaceship.style.setProperty('--bh-y', (targetY - shipY - 27.5) + 'px');
-      setTimeout(() => spaceship.remove(), 2000);
-    }
 
     function createSpaceship() {
       const spaceship = document.createElement('div');
@@ -1472,7 +1460,6 @@
           const x = startX + (endX - startX) * t;
           const y = startY + (endY - startY) * t;
 
-          // slight perpendicular drift
           const dirX = endX - startX;
           const dirY = endY - startY;
           const len = Math.hypot(dirX, dirY) || 1;
@@ -1490,7 +1477,6 @@
           const shipCenterX = wx + 27.5;
           const shipCenterY = wy + 27.5;
 
-          // 1) Fixed black holes
           for (const bh of blackHoles) {
             const r = bh.element.getBoundingClientRect();
             const bhX = r.left + r.width / 2;
@@ -1509,7 +1495,6 @@
             }
           }
 
-          // 2) Cursor black hole (YENİ)
           if (cursorState.active) {
             const distC = Math.hypot(shipCenterX - cursorState.x, shipCenterY - cursorState.y);
             const captureR = cursorState.radius * cursorState.captureMultiplier;
@@ -1537,7 +1522,6 @@
     setInterval(createSpaceship, 1500);
     for (let i = 0; i < 5; i++) setTimeout(createSpaceship, i * 400);
 
-    // Smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -1546,7 +1530,6 @@
       });
     });
 
-    // Header scroll effect
     window.addEventListener('scroll', () => {
       const header = document.querySelector('header');
       if (window.scrollY > 100) {
@@ -1558,7 +1541,6 @@
       }
     });
 
-    // Reveal
     const reveals = document.querySelectorAll('.reveal');
     const revealOnScroll = () => {
       reveals.forEach(el => {
@@ -1569,7 +1551,6 @@
     window.addEventListener('scroll', revealOnScroll);
     revealOnScroll();
 
-    // Magnetic cards
     document.querySelectorAll('.project-card, .skill-category').forEach(card => {
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
@@ -1594,7 +1575,6 @@
       });
     });
 
-    // Particle parallax
     document.addEventListener('mousemove', (e) => {
       const particles = document.querySelectorAll('.particle');
       const x = e.clientX / window.innerWidth;

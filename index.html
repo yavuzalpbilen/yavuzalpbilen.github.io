@@ -19,8 +19,7 @@
     body::before {
       content: '';
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      inset: 0;
       background:
         radial-gradient(circle at 20% 50%, rgba(80, 80, 120, 0.14) 0%, transparent 55%),
         radial-gradient(circle at 80% 80%, rgba(120, 90, 150, 0.12) 0%, transparent 55%),
@@ -60,7 +59,6 @@
       background-clip: text;
       position: relative;
     }
-
     .logo::after {
       content: '';
       position: absolute;
@@ -82,7 +80,6 @@
       position: relative;
       padding: 0.5rem 0;
     }
-
     nav a::before {
       content: '';
       position: absolute;
@@ -106,7 +103,7 @@
       overflow: hidden;
     }
 
-    .hero-content { z-index: 2; padding: 2rem; }
+    .hero-content { z-index: 20; padding: 2rem; }
 
     .hero h1 {
       font-size: 4rem;
@@ -116,30 +113,19 @@
       position: relative;
       display: inline-block;
     }
-
     .hero h1::before {
       content: attr(data-text);
       position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
       color: transparent;
       background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
       -webkit-background-clip: text;
       background-clip: text;
       animation: shine 3s infinite;
     }
-
-    @keyframes shine {
-      0% { background-position: -500%; }
-      100% { background-position: 500%; }
-    }
-
-    @keyframes glow {
-      0%, 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
-      50% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.4); }
-    }
+    @keyframes shine { 0% { background-position: -500%; } 100% { background-position: 500%; } }
+    @keyframes glow { 0%,100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); } 50% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.4); } }
 
     .hero .subtitle {
       font-size: 1.5rem;
@@ -161,7 +147,6 @@
       backdrop-filter: blur(10px);
       transition: all 0.3s;
     }
-
     .hero .specialization:hover {
       background: rgba(255, 255, 255, 0.1);
       transform: scale(1.05);
@@ -176,7 +161,6 @@
       flex-wrap: wrap;
       animation: fadeInUp 1s ease 0.4s backwards;
     }
-
     .tool-badge {
       display: flex;
       align-items: center;
@@ -191,7 +175,6 @@
       cursor: pointer;
       backdrop-filter: blur(10px);
     }
-
     .tool-badge:hover {
       background: rgba(255, 255, 255, 0.15);
       transform: translateY(-5px) scale(1.05);
@@ -213,20 +196,16 @@
       position: relative;
       overflow: hidden;
     }
-
     .cta-button::before {
       content: '';
       position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
+      top: 50%; left: 50%;
+      width: 0; height: 0;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.3);
       transform: translate(-50%, -50%);
       transition: width 0.6s, height 0.6s;
     }
-
     .cta-button::after {
       content: '';
       position: absolute;
@@ -238,32 +217,31 @@
       transform: rotate(45deg);
       animation: buttonShine 3s infinite;
     }
-
     @keyframes buttonShine {
       0% { transform: translateX(-100%) rotate(45deg); }
       100% { transform: translateX(100%) rotate(45deg); }
     }
-
     .cta-button:hover::before { width: 300px; height: 300px; }
     .cta-button:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3); }
-
     @keyframes pulse {
       0%, 100% { box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1); }
       50% { box-shadow: 0 5px 30px rgba(255, 255, 255, 0.2); }
     }
 
-    /* Space layers */
+    /* ===== SPACE LAYERS (PERFORMANCE + Z-INDEX FIX) =====
+       0: stars/dust/particles
+       1: cursor black hole
+       2: space objects (ships + static black holes + planets)
+       10+: site content
+    */
     .stars-background,
     .space-dust,
-    .particles,
-    .floating-shapes {
+    .particles {
       position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0; left: 0;
+      inset: 0;
       pointer-events: none;
-      z-index: 0;
       overflow: hidden;
+      z-index: 0;
     }
 
     .space-dust::before {
@@ -280,11 +258,20 @@
       animation: dustMove 30s ease-in-out infinite;
       transform: translate3d(0,0,0);
     }
-
     @keyframes dustMove {
       0%,100% { transform: translate3d(0,0,0) scale(1); opacity: 0.50; }
       50% { transform: translate3d(-1.5%, 1.2%, 0) scale(1.05); opacity: 0.65; }
     }
+
+    .floating-shapes {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 2; /* ✅ ships ve static BH cursor BH'in üstünde */
+    }
+
+    section, footer { position: relative; z-index: 10; }
 
     .particle {
       position: absolute;
@@ -314,7 +301,6 @@
       animation-timing-function: ease-in-out;
       animation-iteration-count: infinite;
     }
-
     @keyframes driftMove {
       0%, 100% { transform: translate3d(0,0,0) rotate(0deg); }
       50% { transform: translate3d(var(--dx, 20px), var(--dy, 12px), 0) rotate(var(--dr, 2deg)); }
@@ -327,7 +313,6 @@
       border-radius: 50%;
       filter: blur(70px);
       opacity: 0.16;
-      z-index: 0;
       mix-blend-mode: screen;
     }
 
@@ -346,7 +331,6 @@
       );
       filter: blur(18px);
       opacity: 0.12;
-      z-index: 0;
       mix-blend-mode: screen;
       -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 25%, rgba(0,0,0,0) 70%);
       mask-image: radial-gradient(circle, rgba(0,0,0,1) 25%, rgba(0,0,0,0) 70%);
@@ -356,8 +340,6 @@
     .planet {
       position: absolute;
       border-radius: 50%;
-      z-index: 0;
-      pointer-events: none;
       opacity: 0.32;
       filter: saturate(1.15);
       box-shadow:
@@ -365,7 +347,6 @@
         inset -20px -30px 60px rgba(0,0,0,0.55);
       transform: translateZ(0);
     }
-
     .planet::before {
       content: '';
       position: absolute;
@@ -375,7 +356,6 @@
       filter: blur(10px);
       opacity: 0.9;
     }
-
     .planet::after {
       content: '';
       position: absolute;
@@ -385,7 +365,6 @@
       opacity: 0.6;
       mix-blend-mode: screen;
     }
-
     .planet .texture {
       position: absolute;
       inset: 0;
@@ -397,7 +376,6 @@
       opacity: 0.7;
       filter: blur(0.5px);
     }
-
     .planet-ring {
       position: absolute;
       left: 50%;
@@ -416,337 +394,16 @@
       opacity: 0.55;
       mix-blend-mode: screen;
     }
-
     .planet-ring.behind {
       -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 0 46%, rgba(0,0,0,1) 52%);
       mask-image: radial-gradient(circle at 50% 50%, transparent 0 46%, rgba(0,0,0,1) 52%);
       opacity: 0.45;
     }
-
     .planet-ring.front {
       -webkit-mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0 46%, transparent 52%);
       mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0 46%, transparent 52%);
       opacity: 0.65;
     }
-
-    section {
-      padding: 5rem 5%;
-      max-width: 1400px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    h2 {
-      font-size: 2.5rem;
-      margin-bottom: 3rem;
-      text-align: center;
-      background: linear-gradient(45deg, #ffffff, #aaaaaa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-
-    h2::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #888888, transparent);
-      animation: expandLine 2s ease-in-out infinite;
-    }
-
-    @keyframes expandLine {
-      0%, 100% { width: 100px; }
-      50% { width: 200px; }
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 2rem;
-    }
-
-    .project-card {
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 20px;
-      overflow: hidden;
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      position: relative;
-      cursor: pointer;
-    }
-
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-      transition: left 0.5s;
-    }
-
-    .project-card::after {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      background: linear-gradient(45deg,
-        transparent,
-        rgba(255, 255, 255, 0.1),
-        transparent,
-        rgba(255, 255, 255, 0.1),
-        transparent
-      );
-      background-size: 200% 200%;
-      border-radius: 20px;
-      opacity: 0;
-      transition: opacity 0.5s;
-      animation: borderGlow 3s linear infinite;
-      z-index: -1;
-    }
-
-    @keyframes borderGlow {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 200% 200%; }
-    }
-
-    .project-card:hover::after { opacity: 1; }
-    .project-card:hover::before { left: 100%; }
-
-    .project-card:hover {
-      transform: translateY(-15px) scale(1.02);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .project-image {
-      width: 100%;
-      height: 250px;
-      background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s;
-    }
-
-    .project-card:hover .project-image {
-      transform: scale(1.1);
-      filter: brightness(1.2);
-    }
-
-    .project-image::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transition: left 0.5s;
-    }
-
-    .project-card:hover .project-image::after { left: 100%; }
-
-    .project-info { padding: 1.5rem; transition: all 0.3s; }
-    .project-card:hover .project-info { background: rgba(255, 255, 255, 0.02); }
-
-    .project-info h3 { margin-bottom: 0.5rem; font-size: 1.5rem; transition: all 0.3s; }
-    .project-card:hover .project-info h3 { color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
-
-    .project-role { color: #999; font-size: 0.9rem; margin-bottom: 0.8rem; font-style: italic; }
-    .project-info p { color: #b0b0b0; line-height: 1.6; margin-bottom: 1rem; }
-
-    .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .tag {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.3s;
-    }
-
-    .project-card:hover .tag {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.4);
-      transform: translateY(-2px);
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-
-    .skill-category {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 2rem;
-      border-radius: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.4s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .skill-category::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-
-    .skill-category:hover::before { opacity: 1; animation: rotate 10s linear infinite; }
-    @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-    .skill-category:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .skill-category h3 { margin-bottom: 1.5rem; color: #cccccc; position: relative; z-index: 1; }
-    .skill-item { margin-bottom: 1rem; position: relative; z-index: 1; }
-    .skill-name { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
-
-    .skill-bar {
-      height: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .skill-bar::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      animation: shimmer 2s infinite;
-    }
-
-    @keyframes shimmer {
-      0% { left: -100%; }
-      100% { left: 100%; }
-    }
-
-    .skill-progress {
-      height: 100%;
-      background: linear-gradient(90deg, #888888, #aaaaaa, #888888);
-      background-size: 200% 100%;
-      border-radius: 10px;
-      animation: fillBar 1.5s ease, gradientMove 3s ease infinite;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    }
-
-    @keyframes gradientMove {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    .contact {
-      text-align: center;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 4rem 2rem;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .contact::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-      animation: rotate 15s linear infinite;
-    }
-
-    .contact h2, .contact p, .contact-links { position: relative; z-index: 1; }
-
-    .contact-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .contact-link {
-      padding: 1rem 2rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 2px solid #888888;
-      color: #cccccc;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: all 0.3s;
-      font-weight: bold;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .contact-link::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: width 0.5s, height 0.5s;
-    }
-
-    .contact-link:hover::before { width: 300px; height: 300px; }
-    .contact-link:hover {
-      background: #888888;
-      color: #0a0a0a;
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem;
-      margin-top: 3rem;
-      color: #666;
-      position: relative;
-      z-index: 1;
-    }
-
-    .reveal { opacity: 0; transform: translateY(50px); transition: all 0.6s ease; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
-
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes float {
-      0%, 100% { transform: translateY(0) translateX(0); }
-      25% { transform: translateY(-20px) translateX(10px); }
-      50% { transform: translateY(-10px) translateX(-10px); }
-      75% { transform: translateY(-15px) translateX(5px); }
-    }
-    @keyframes fillBar { from { width: 0; } }
 
     /* Black Holes */
     .black-hole {
@@ -763,7 +420,6 @@
         0 0 30px rgba(0, 0, 0, 0.8);
       animation: rotateBlackHole 30s linear infinite;
     }
-
     .black-hole::before {
       content: '';
       position: absolute;
@@ -778,7 +434,6 @@
         0 0 20px rgba(0, 0, 0, 0.9),
         inset 0 0 20px rgba(0, 0, 0, 1);
     }
-
     .black-hole::after {
       content: '';
       position: absolute;
@@ -826,13 +481,13 @@
       mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%);
       pointer-events: none;
     }
-
     @keyframes swirlSpin {
       from { transform: translate(-50%, -50%) rotate(0deg); }
       to { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
     .black-hole-container { position: absolute; }
+
     .gravitational-lens {
       position: absolute;
       top: 50%;
@@ -860,7 +515,7 @@
     @keyframes rotateBlackHole { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     @keyframes accretionDisk { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 
-    /* Cursor BH */
+    /* Cursor BH (UNDER ships layer, above stars) */
     .cursor-black-hole {
       position: fixed;
       left: var(--cx, 50vw);
@@ -870,26 +525,13 @@
       transform: translate(-50%, -50%);
       border-radius: 50%;
       pointer-events: none;
-
-      /* ✅ cursor BH'i biraz daha alta aldık ki headerla savaşmasın */
-      z-index: 9990;
-
+      z-index: 1; /* ✅ cursor BH ships'ten altta, content'ten altta */
       opacity: 0;
       transition: opacity 0.12s ease;
       filter: drop-shadow(0 0 20px rgba(0,0,0,0.7));
     }
-
     .cursor-black-hole.active { opacity: 1; }
-
-    .cursor-black-hole .black-hole {
-      width: 100%;
-      height: 100%;
-      animation-duration: 10s;
-      box-shadow:
-        inset 0 0 45px rgba(0,0,0,1),
-        0 0 22px rgba(0,0,0,0.85);
-    }
-
+    .cursor-black-hole .black-hole { width: 100%; height: 100%; animation-duration: 10s; }
     .cursor-black-hole .bh-swirl { opacity: 0.38; filter: blur(8px); }
     .cursor-black-hole .gravitational-lens { opacity: 0.45; animation-duration: 10s; }
     .cursor-black-hole .black-hole::after { opacity: 0.55; filter: blur(2.5px); }
@@ -899,12 +541,10 @@
       position: absolute;
       width: 55px;
       height: 55px;
-
-      /* ✅ gemileri cursor BH'in ÜSTÜNE aldık */
-      z-index: 9995;
-
+      z-index: 5; /* ✅ ships layer içinde üstte */
       filter: drop-shadow(0 0 8px rgba(60, 100, 140, 0.5));
       pointer-events: none;
+      will-change: transform, left, top;
     }
     .spaceship svg { width: 100%; height: 100%; }
 
@@ -925,35 +565,104 @@
       box-shadow:
         0 0 12px rgba(80, 130, 180, 0.6),
         0 0 20px rgba(60, 110, 160, 0.3);
-      z-index: 9994;
     }
-
-    .trail::before {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg,
-        rgba(180, 200, 220, 0.5),
-        rgba(150, 180, 210, 0.3),
-        transparent
-      );
-      border-radius: 50%;
-      filter: blur(2px);
-    }
-
     @keyframes trailPulse {
       0%, 100% { opacity: 0.85; transform: scaleX(1) scaleY(1); }
       50% { opacity: 1; transform: scaleX(1.25) scaleY(1.15); }
     }
 
     .spaceship.captured { animation: capturedByBlackHole 2s ease-in forwards !important; }
-
     @keyframes capturedByBlackHole {
       0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
       50% { transform: translate(var(--bh-x), var(--bh-y)) rotate(360deg) scale(0.5); opacity: 0.8; }
       100% { transform: translate(var(--bh-x), var(--bh-y)) rotate(720deg) scale(0); opacity: 0; }
     }
+
+    .reveal { opacity: 0; transform: translateY(50px); transition: all 0.6s ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      25% { transform: translateY(-20px) translateX(10px); }
+      50% { transform: translateY(-10px) translateX(-10px); }
+      75% { transform: translateY(-15px) translateX(5px); }
+    }
+
+    /* Cards */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+    .project-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      cursor: pointer;
+    }
+    .project-card:hover { transform: translateY(-15px) scale(1.02); }
+    .project-image { width: 100%; height: 250px; display:flex; align-items:center; justify-content:center; font-size:3rem; }
+    .project-info { padding: 1.5rem; }
+    .project-role { color: #999; font-size: 0.9rem; margin-bottom: 0.8rem; font-style: italic; }
+    .project-info p { color: #b0b0b0; line-height: 1.6; margin-bottom: 1rem; }
+    .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tag {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    .skill-category {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 4rem 2rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-links {
+      display:flex;
+      justify-content:center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .contact-link {
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #888888;
+      color: #cccccc;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.3s;
+      font-weight: bold;
+    }
+    .contact-link:hover { background: #888888; color:#0a0a0a; transform: translateY(-3px); }
+
+    footer { text-align: center; padding: 2rem; margin-top: 3rem; color: #666; }
 
     @media (max-width: 768px) {
       .hero h1 { font-size: 2.5rem; }
@@ -969,7 +678,6 @@
   <div class="stars-background" id="stars"></div>
   <div class="space-dust" id="dust"></div>
   <div class="particles" id="particles"></div>
-  <div class="floating-shapes" id="space-objects"></div>
 
   <div class="cursor-black-hole" id="cursorBH" aria-hidden="true">
     <div class="black-hole">
@@ -977,6 +685,8 @@
     </div>
     <div class="gravitational-lens"></div>
   </div>
+
+  <div class="floating-shapes" id="space-objects"></div>
 
   <header>
     <div class="logo">GameDev</div>
@@ -1066,66 +776,29 @@
     <div class="skills-grid">
       <div class="skill-category reveal">
         <h3>Education</h3>
-        <div class="skill-item">
-          <div class="skill-name"><span>Game Design Certification</span></div>
-          <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">
-            Game Design Academy - Comprehensive program covering systems design, level design, and game mechanics with specialization in level and environment design.
-          </p>
-        </div>
-        <div class="skill-item" style="margin-top: 1.5rem;">
-          <div class="skill-name"><span>Unity Certification</span></div>
-          <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">
-            Unity Technologies - Certified in level design tools, lighting systems, and environment optimization.
-          </p>
-        </div>
+        <p style="color: #999; font-size: 0.95rem; margin-top: 0.5rem;">
+          Game Design Academy - Comprehensive program covering systems design, level design, and game mechanics with specialization in level and environment design.
+        </p>
+        <p style="color: #999; font-size: 0.95rem; margin-top: 1.0rem;">
+          Unity Technologies - Certified in level design tools, lighting systems, and environment optimization.
+        </p>
       </div>
 
       <div class="skill-category reveal">
         <h3>Level Design Skills</h3>
-        <div class="skill-item">
-          <div class="skill-name"><span>Level Design</span><span>95%</span></div>
-          <div class="skill-bar"><div class="skill-progress" style="width: 95%;"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Environment Design</span><span>92%</span></div>
-          <div class="skill-bar"><div class="skill-progress" style="width: 92%;"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Player Flow Design</span><span>90%</span></div>
-          <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
-        </div>
+        <p style="color:#999; font-size:0.95rem;">Level Design • Environment Design • Player Flow</p>
       </div>
 
       <div class="skill-category reveal">
         <h3>Engine Experience</h3>
-        <div class="skill-item">
-          <div class="skill-name"><span>Unity</span><span>92%</span></div>
-          <div class="skill-bar"><div class="skill-progress" style="width: 92%;"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Unreal Engine</span><span>85%</span></div>
-          <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Lighting & VFX</span><span>88%</span></div>
-          <div class="skill-bar"><div class="skill-progress" style="width: 88%;"></div></div>
-        </div>
+        <p style="color:#999; font-size:0.95rem;">Unity • Unreal Engine • Lighting & VFX</p>
       </div>
 
       <div class="skill-category reveal">
         <h3>Professional Experience</h3>
-        <div class="skill-item">
-          <div class="skill-name"><span>Level Designer</span></div>
-          <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">
-            Independent Studio (2022 - Present) - Design and implement game levels, create environment layouts, collaborate with teams.
-          </p>
-        </div>
-        <div class="skill-item" style="margin-top: 1.5rem;">
-          <div class="skill-name"><span>Environment Designer</span></div>
-          <p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">
-            Freelance (2020 - 2022) - Designed atmospheric environments, specialized in environmental storytelling.
-          </p>
-        </div>
+        <p style="color: #999; font-size: 0.95rem;">
+          Independent Studio (2022 - Present) • Freelance (2020 - 2022)
+        </p>
       </div>
     </div>
   </section>
@@ -1148,8 +821,9 @@
   </footer>
 
   <script>
+    // ====== STARS (slightly reduced for perf) ======
     const starsContainer = document.getElementById('stars');
-    for (let i = 0; i < 260; i++) {
+    for (let i = 0; i < 180; i++) {
       const star = document.createElement('div');
       star.className = 'star';
       const size = Math.random() < 0.85 ? 2 : 3;
@@ -1165,43 +839,40 @@
       starsContainer.appendChild(star);
     }
 
+    // ====== PARTICLES (reduced) ======
     const particlesContainer = document.getElementById('particles');
-    for (let i = 0; i < 55; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
       const size = Math.random() * 5 + 2;
-      particle.style.width = size + 'px';
-      particle.style.height = size + 'px';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.top = Math.random() * 100 + '%';
-      particle.style.animationDelay = Math.random() * 6 + 's';
-      particle.style.animationDuration = (Math.random() * 5 + 4) + 's';
-      particlesContainer.appendChild(particle);
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.top = Math.random() * 100 + '%';
+      p.style.animationDelay = Math.random() * 6 + 's';
+      p.style.animationDuration = (Math.random() * 5 + 4) + 's';
+      particlesContainer.appendChild(p);
     }
 
+    // ====== SPACE OBJECTS ======
     const spaceContainer = document.getElementById('space-objects');
 
     function applyDrift(el, minDur = 22, maxDur = 55) {
       el.classList.add('drift');
-      const dx = (Math.random() * 60 - 30).toFixed(1) + 'px';
-      const dy = (Math.random() * 50 - 25).toFixed(1) + 'px';
-      const dr = (Math.random() * 6 - 3).toFixed(2) + 'deg';
-      const dur = (minDur + Math.random() * (maxDur - minDur)).toFixed(1) + 's';
-      const delay = (-Math.random() * 12).toFixed(1) + 's';
-      el.style.setProperty('--dx', dx);
-      el.style.setProperty('--dy', dy);
-      el.style.setProperty('--dr', dr);
-      el.style.animationDuration = dur;
-      el.style.animationDelay = delay;
+      el.style.setProperty('--dx', (Math.random() * 60 - 30).toFixed(1) + 'px');
+      el.style.setProperty('--dy', (Math.random() * 50 - 25).toFixed(1) + 'px');
+      el.style.setProperty('--dr', (Math.random() * 6 - 3).toFixed(2) + 'deg');
+      el.style.animationDuration = (minDur + Math.random() * (maxDur - minDur)).toFixed(1) + 's';
+      el.style.animationDelay = (-Math.random() * 12).toFixed(1) + 's';
     }
 
+    // Nebulas
     const nebulas = [
       { top: '8%', left: '10%', color: 'rgba(70, 80, 140, 0.32)', size: 560 },
       { top: '55%', right: '6%', color: 'rgba(120, 90, 150, 0.26)', size: 520 },
       { bottom: '16%', left: '18%', color: 'rgba(70, 120, 130, 0.26)', size: 580 },
       { bottom: '5%', right: '28%', color: 'rgba(100, 110, 160, 0.22)', size: 620 }
     ];
-
     nebulas.forEach(n => {
       const neb = document.createElement('div');
       neb.className = 'nebula';
@@ -1216,11 +887,11 @@
       spaceContainer.appendChild(neb);
     });
 
+    // Galaxies
     const galaxies = [
       { top: '18%', left: '52%', size: 620, rotate: 18 },
       { top: '70%', left: '6%', size: 700, rotate: -12 }
     ];
-
     galaxies.forEach(g => {
       const gal = document.createElement('div');
       gal.className = 'galaxy';
@@ -1233,6 +904,7 @@
       spaceContainer.appendChild(gal);
     });
 
+    // Planets
     function addPlanet(opts) {
       const p = document.createElement('div');
       p.className = 'planet';
@@ -1280,14 +952,12 @@
       ring: { rotate: -22, behindOpacity: 0.40, frontOpacity: 0.70 },
       driftMin: 45, driftMax: 95
     });
-
     addPlanet({
       bottom: '8%', right: '9%', size: 310, opacity: 0.30,
       colors: ['rgba(255,230,190,0.40)','rgba(200,140,90,0.28)','rgba(90,60,40,0.18)','rgba(10,8,8,0.10)'],
       ring: null,
       driftMin: 40, driftMax: 90
     });
-
     addPlanet({
       top: '62%', left: '3%', size: 220, opacity: 0.28,
       colors: ['rgba(200,255,240,0.35)','rgba(90,190,160,0.26)','rgba(40,95,85,0.18)','rgba(10,15,12,0.10)'],
@@ -1295,13 +965,7 @@
       driftMin: 42, driftMax: 90
     });
 
-    addPlanet({
-      top: '40%', left: '44%', size: 160, opacity: 0.22,
-      colors: ['rgba(240,250,255,0.35)','rgba(140,200,240,0.22)','rgba(60,120,170,0.16)','rgba(10,12,20,0.10)'],
-      ring: null,
-      driftMin: 38, driftMax: 80
-    });
-
+    // Black holes
     const blackHolePositions = [
       { top: '16%', left: '18%', size: 120 },
       { top: '52%', right: '14%', size: 150 },
@@ -1319,56 +983,49 @@
       if (pos.left) container.style.left = pos.left;
       if (pos.right) container.style.right = pos.right;
 
-      const blackHole = document.createElement('div');
-      blackHole.className = 'black-hole';
-      blackHole.style.width = pos.size + 'px';
-      blackHole.style.height = pos.size + 'px';
-      blackHole.style.animationDuration = (20 + Math.random() * 15) + 's';
+      const bh = document.createElement('div');
+      bh.className = 'black-hole';
+      bh.style.width = pos.size + 'px';
+      bh.style.height = pos.size + 'px';
+      bh.style.animationDuration = (20 + Math.random() * 15) + 's';
 
       const swirl = document.createElement('div');
       swirl.className = 'bh-swirl';
       swirl.style.animationDuration = (8 + Math.random() * 8) + 's';
-      blackHole.appendChild(swirl);
+      bh.appendChild(swirl);
 
       const lens = document.createElement('div');
       lens.className = 'gravitational-lens';
 
-      container.appendChild(blackHole);
+      container.appendChild(bh);
       container.appendChild(lens);
       spaceContainer.appendChild(container);
 
-      blackHoles.push({ element: blackHole });
+      blackHoles.push({ element: bh });
     });
 
     // Cursor BH
     const cursorBH = document.getElementById('cursorBH');
-    const cursorState = {
-      x: window.innerWidth / 2,
-      y: window.innerHeight / 2,
-      active: false,
-      radius: 32,
-      captureMultiplier: 1.55
-    };
+    const cursorState = { x: innerWidth/2, y: innerHeight/2, active: false, radius: 32, captureMultiplier: 1.55 };
 
     function setCursorPos(x, y) {
-      cursorState.x = x;
-      cursorState.y = y;
+      cursorState.x = x; cursorState.y = y;
       document.documentElement.style.setProperty('--cx', x + 'px');
       document.documentElement.style.setProperty('--cy', y + 'px');
     }
 
-    window.addEventListener('mousemove', (e) => {
+    addEventListener('mousemove', (e) => {
       cursorState.active = true;
       cursorBH.classList.add('active');
       setCursorPos(e.clientX, e.clientY);
     });
 
-    window.addEventListener('mouseleave', () => {
+    addEventListener('mouseleave', () => {
       cursorState.active = false;
       cursorBH.classList.remove('active');
     });
 
-    window.addEventListener('blur', () => {
+    addEventListener('blur', () => {
       cursorState.active = false;
       cursorBH.classList.remove('active');
     });
@@ -1407,132 +1064,181 @@
       </svg>
     `;
 
-    function createSpaceship() {
-      const spaceship = document.createElement('div');
-      spaceship.className = 'spaceship';
-      spaceship.innerHTML = spaceshipSVG;
+    // ====== PERF: Single global loop for all ships ======
+    const ships = [];
+    const MAX_SHIPS = 10;
+    const SPAWN_MS = 1500;
+    let spawnTimer = null;
+    let animRunning = true;
+    let rafId = null;
+
+    function spawnShip() {
+      if (!animRunning) return;
+      if (ships.length >= MAX_SHIPS) return;
+
+      const ship = document.createElement('div');
+      ship.className = 'spaceship';
+      ship.innerHTML = spaceshipSVG;
 
       const trail = document.createElement('div');
       trail.className = 'trail';
-      spaceship.appendChild(trail);
-
-      const edge = Math.floor(Math.random() * 4);
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-
-      let startX, startY, endX, endY;
-
-      if (edge === 0) {
-        startX = -100; endX = vw + 100;
-        startY = Math.random() * vh; endY = startY;
-      } else if (edge === 1) {
-        startY = -100; endY = vh + 100;
-        startX = Math.random() * vw; endX = startX;
-      } else if (edge === 2) {
-        startX = vw + 100; endX = -100;
-        startY = Math.random() * vh; endY = startY;
-      } else {
-        startY = vh + 100; endY = -100;
-        startX = Math.random() * vw; endX = startX;
-      }
-
-      const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
-
-      spaceship.style.left = startX + 'px';
-      spaceship.style.top = startY + 'px';
-
       trail.style.right = '100%';
       trail.style.top = '50%';
       trail.style.transform = 'translateY(-50%)';
+      ship.appendChild(trail);
 
+      const vw = innerWidth;
+      const vh = innerHeight;
+      const edge = (Math.random() * 4) | 0;
+
+      let startX, startY, endX, endY;
+      if (edge === 0) { startX = -100; endX = vw + 100; startY = Math.random() * vh; endY = startY; }
+      else if (edge === 1) { startY = -100; endY = vh + 100; startX = Math.random() * vw; endX = startX; }
+      else if (edge === 2) { startX = vw + 100; endX = -100; startY = Math.random() * vh; endY = startY; }
+      else { startY = vh + 100; endY = -100; startX = Math.random() * vw; endX = startX; }
+
+      const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
       const duration = 10 + Math.random() * 5;
       const driftAmp = 10;
       const phase = Math.random() * Math.PI * 2;
 
-      let startTime = null;
-      let rafId;
+      ship.style.left = startX + 'px';
+      ship.style.top = startY + 'px';
 
-      function animate(ts) {
-        if (!startTime) startTime = ts;
-        const t = (ts - startTime) / (duration * 1000);
+      spaceContainer.appendChild(ship);
 
-        if (t < 1 && !spaceship.classList.contains('captured')) {
-          const x = startX + (endX - startX) * t;
-          const y = startY + (endY - startY) * t;
+      ships.push({
+        el: ship,
+        trail,
+        startX, startY, endX, endY,
+        angle,
+        durationMs: duration * 1000,
+        startTime: performance.now(),
+        driftAmp, phase,
+        captured: false
+      });
+    }
 
-          const dirX = endX - startX;
-          const dirY = endY - startY;
-          const len = Math.hypot(dirX, dirY) || 1;
-          const nx = -dirY / len;
-          const ny = dirX / len;
-          const wobble = Math.sin(t * Math.PI * 2 + phase) * driftAmp;
+    function captureShip(s, targetX, targetY, currentX, currentY) {
+      if (s.captured) return;
+      s.captured = true;
+      s.el.classList.add('captured');
+      s.trail.style.opacity = '0';
+      s.el.style.setProperty('--bh-x', (targetX - currentX - 27.5) + 'px');
+      s.el.style.setProperty('--bh-y', (targetY - currentY - 27.5) + 'px');
+      setTimeout(() => {
+        s.el.remove();
+        const idx = ships.indexOf(s);
+        if (idx !== -1) ships.splice(idx, 1);
+      }, 2000);
+    }
 
-          const wx = x + nx * wobble;
-          const wy = y + ny * wobble;
+    function loop(now) {
+      if (!animRunning) return;
 
-          spaceship.style.left = wx + 'px';
-          spaceship.style.top = wy + 'px';
-          spaceship.style.transform = `rotate(${angle}deg)`;
+      // Cache BH rects once per frame (cheap, only 4 BH)
+      const bhRects = blackHoles.map(bh => {
+        const r = bh.element.getBoundingClientRect();
+        return { x: r.left + r.width/2, y: r.top + r.height/2, rad: r.width/2 };
+      });
 
-          const shipCenterX = wx + 27.5;
-          const shipCenterY = wy + 27.5;
+      for (let i = ships.length - 1; i >= 0; i--) {
+        const s = ships[i];
+        if (s.captured) continue;
 
-          for (const bh of blackHoles) {
-            const r = bh.element.getBoundingClientRect();
-            const bhX = r.left + r.width / 2;
-            const bhY = r.top + r.height / 2;
-            const bhRadius = r.width / 2;
+        const t = (now - s.startTime) / s.durationMs;
+        if (t >= 1) {
+          s.el.remove();
+          ships.splice(i, 1);
+          continue;
+        }
 
-            const dist = Math.hypot(shipCenterX - bhX, shipCenterY - bhY);
-            if (dist < bhRadius * 1.5) {
-              spaceship.classList.add('captured');
-              trail.style.opacity = '0';
-              spaceship.style.setProperty('--bh-x', (bhX - wx - 27.5) + 'px');
-              spaceship.style.setProperty('--bh-y', (bhY - wy - 27.5) + 'px');
-              cancelAnimationFrame(rafId);
-              setTimeout(() => spaceship.remove(), 2000);
-              return;
-            }
+        const x = s.startX + (s.endX - s.startX) * t;
+        const y = s.startY + (s.endY - s.startY) * t;
+
+        const dirX = s.endX - s.startX;
+        const dirY = s.endY - s.startY;
+        const len = Math.hypot(dirX, dirY) || 1;
+        const nx = -dirY / len;
+        const ny = dirX / len;
+        const wobble = Math.sin(t * Math.PI * 2 + s.phase) * s.driftAmp;
+
+        const wx = x + nx * wobble;
+        const wy = y + ny * wobble;
+
+        s.el.style.left = wx + 'px';
+        s.el.style.top = wy + 'px';
+        s.el.style.transform = `rotate(${s.angle}deg)`;
+
+        const shipCX = wx + 27.5;
+        const shipCY = wy + 27.5;
+
+        // Static BH capture
+        for (const b of bhRects) {
+          const d = Math.hypot(shipCX - b.x, shipCY - b.y);
+          if (d < b.rad * 1.5) {
+            captureShip(s, b.x, b.y, wx, wy);
+            break;
           }
+        }
 
-          if (cursorState.active) {
-            const distC = Math.hypot(shipCenterX - cursorState.x, shipCenterY - cursorState.y);
-            const captureR = cursorState.radius * cursorState.captureMultiplier;
-            if (distC < captureR) {
-              spaceship.classList.add('captured');
-              trail.style.opacity = '0';
-              spaceship.style.setProperty('--bh-x', (cursorState.x - wx - 27.5) + 'px');
-              spaceship.style.setProperty('--bh-y', (cursorState.y - wy - 27.5) + 'px');
-              cancelAnimationFrame(rafId);
-              setTimeout(() => spaceship.remove(), 2000);
-              return;
-            }
+        // Cursor BH capture
+        if (!s.captured && cursorState.active) {
+          const dC = Math.hypot(shipCX - cursorState.x, shipCY - cursorState.y);
+          const captureR = cursorState.radius * cursorState.captureMultiplier;
+          if (dC < captureR) {
+            captureShip(s, cursorState.x, cursorState.y, wx, wy);
           }
-
-          rafId = requestAnimationFrame(animate);
-        } else {
-          if (!spaceship.classList.contains('captured')) spaceship.remove();
         }
       }
 
-      spaceContainer.appendChild(spaceship);
-      rafId = requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(loop);
     }
 
-    setInterval(createSpaceship, 1500);
-    for (let i = 0; i < 5; i++) setTimeout(createSpaceship, i * 400);
+    function startSystems() {
+      if (spawnTimer) return;
+      animRunning = true;
+      spawnTimer = setInterval(spawnShip, SPAWN_MS);
+      // initial few
+      for (let i = 0; i < 4; i++) setTimeout(spawnShip, i * 350);
+      if (!rafId) rafId = requestAnimationFrame(loop);
+    }
 
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
+    function stopSystems(cleanupShips = false) {
+      animRunning = false;
+      if (spawnTimer) { clearInterval(spawnTimer); spawnTimer = null; }
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      if (cleanupShips) {
+        ships.forEach(s => s.el.remove());
+        ships.length = 0;
+      }
+    }
+
+    // ✅ Fix: tab değişince spawn birikmesin
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopSystems(false); // istersen true yap: gizleyince gemileri de siler
+      } else {
+        startSystems();
+      }
+    });
+
+    // Start
+    startSystems();
+
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const target = document.querySelector(a.getAttribute('href'));
         if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
 
-    window.addEventListener('scroll', () => {
+    // Header scroll effect
+    addEventListener('scroll', () => {
       const header = document.querySelector('header');
-      if (window.scrollY > 100) {
+      if (scrollY > 100) {
         header.style.background = 'rgba(10, 10, 10, 0.95)';
         header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.5)';
       } else {
@@ -1541,52 +1247,16 @@
       }
     });
 
+    // Reveal
     const reveals = document.querySelectorAll('.reveal');
     const revealOnScroll = () => {
       reveals.forEach(el => {
         const top = el.getBoundingClientRect().top;
-        if (top < window.innerHeight - 100) el.classList.add('active');
+        if (top < innerHeight - 100) el.classList.add('active');
       });
     };
-    window.addEventListener('scroll', revealOnScroll);
+    addEventListener('scroll', revealOnScroll);
     revealOnScroll();
-
-    document.querySelectorAll('.project-card, .skill-category').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const dx = (x - centerX) / centerX;
-        const dy = (y - centerY) / centerY;
-
-        card.style.transform = `
-          perspective(1000px)
-          rotateY(${dx * 5}deg)
-          rotateX(${-dy * 5}deg)
-          translateY(-15px)
-          scale(1.02)
-        `;
-      });
-
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
-      });
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      const particles = document.querySelectorAll('.particle');
-      const x = e.clientX / window.innerWidth;
-      const y = e.clientY / window.innerHeight;
-
-      particles.forEach((p, i) => {
-        const speed = (i % 3 + 1) * 0.5;
-        const xMove = (x - 0.5) * 20 * speed;
-        const yMove = (y - 0.5) * 20 * speed;
-        p.style.transform = `translate(${xMove}px, ${yMove}px)`;
-      });
-    });
   </script>
 </body>
 </html>

@@ -108,7 +108,7 @@
     /* ✅ SCORE HUD (top of site/hero) */
     .score-hud{
       position: absolute;
-      top: 18px;
+      top: 36px; /* ✅ biraz aşağı aldım (18px -> 36px) */
       left: 50%;
       transform: translateX(-50%);
       z-index: 40;
@@ -468,7 +468,7 @@
       .skills-grid { grid-template-columns: 1fr; }
 
       .score-hud{
-        top: 10px;
+        top: 26px; /* mobilde de az aşağı */
         padding: 9px 14px;
       }
       .score-text{ font-size: 0.9rem; }
@@ -501,7 +501,6 @@
   </header>
 
   <section class="hero" id="hero">
-    <!-- ✅ Score HUD -->
     <div class="score-hud" id="score-hud">
       <span class="score-dot"></span>
       <div class="score-text" id="score-text"><strong>Score:</strong> 0 / 12</div>
@@ -938,7 +937,7 @@
       obj.dead = false;
       obj.captured = false;
       obj.captureT = 0;
-      obj.scored = false; // ✅ so we count score once
+      obj.scored = false;
 
       const c = getClusterBounds();
 
@@ -1064,7 +1063,7 @@
           o.scale = 1 - 0.86 * ease;
           o.opacity = 1 - 1.0 * ease;
 
-          o.el.style.zIndex = 60; // ✅ always on top while being eaten
+          o.el.style.zIndex = 60;
           o.el.style.opacity = Math.max(0, o.opacity);
           o.el.style.left = o.x + 'px';
           o.el.style.top = o.y + 'px';
@@ -1094,7 +1093,6 @@
         o.el.style.top  = (o.y + wobble * 0.5) + 'px';
         o.el.style.transform = `rotate(${o.rot}deg)`;
 
-        // ✅ Stop capturing after reaching 12
         if (mouseInHero && score < TOTAL_SCORE) {
           const cx = o.x + 28;
           const cy = o.y + 28;

@@ -7,7 +7,6 @@
 
   <style>
     :root{
-      /* SAĞ-SOL BOŞLUK KALMASIN DİYE: her yerde bu padding */
       --side-pad: clamp(14px, 4vw, 64px);
       --pfw: 200vw;
     }
@@ -21,7 +20,6 @@
       overflow-x: hidden;
     }
 
-    /* PERF: fixed canvas starfield (whole page) */
     #starfield {
       position: fixed;
       inset: 0;
@@ -29,7 +27,6 @@
       pointer-events: none;
     }
 
-    /* Fixed space layer: only planets + bg blackhole remain across scroll */
     .space-layer {
       position: fixed;
       inset: 0;
@@ -46,7 +43,6 @@
       height: 100%;
     }
 
-    /* Header */
     header {
       padding: 1.2rem var(--side-pad);
       display: flex;
@@ -94,7 +90,6 @@
     nav a:hover::before { width: 100%; }
     nav a:hover { text-shadow: 0 0 10px rgba(255,255,255,0.45); }
 
-    /* HERO */
     .hero {
       height: 100vh;
       min-height: 100vh;
@@ -106,8 +101,8 @@
       position: relative;
       overflow: hidden;
       z-index: 10;
-      cursor: none;                 /* mouse BH */
-      padding-top: 90px;            /* header */
+      cursor: none;
+      padding-top: 90px;
     }
 
     .hero-content { z-index: 30; padding: 2rem; }
@@ -179,7 +174,6 @@
       box-shadow: 0 14px 40px rgba(255, 255, 255, 0.18);
     }
 
-    /* HERO PLAYFIELD (WIDE + ZOOM SAFE) */
     .playfield {
       position: absolute;
       top: 0;
@@ -193,7 +187,6 @@
       contain: layout paint;
     }
 
-    /* ---- CURSOR BLACK HOLE ---- */
     .cursor-bh {
       position: absolute;
       width: 86px;
@@ -207,7 +200,6 @@
     }
     .cursor-bh.active { opacity: 1; }
 
-    /* ---- black-hole visual ---- */
     .black-hole-container { position: absolute; z-index: 3; pointer-events: none; }
     .black-hole {
       position: absolute;
@@ -265,7 +257,6 @@
     .cursor-bh .black-hole::after { animation: rotateDisk 36s linear infinite; }
     .cursor-bh .bh-flow { animation: rotateFlow 34s linear infinite; opacity: 0.16; }
 
-    /* ---- PLANETS ---- */
     .planet {
       position: absolute;
       border-radius: 50%;
@@ -305,7 +296,6 @@
     @keyframes driftB { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(12px, -9px, 0); } }
     @keyframes driftC { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(-10px, -10px, 0); } }
 
-    /* ---- SHIPS + ASTEROIDS (hero-only) ---- */
     .spaceship, .asteroid {
       position: absolute;
       pointer-events: none;
@@ -344,9 +334,6 @@
       opacity: 0.86;
     }
 
-    /* ===========================================================
-       IMPORTANT: SAĞ-SOL BOŞLUK YOK (FULL WIDTH SECTIONS)
-       =========================================================== */
     section, footer { position: relative; z-index: 10; }
     section {
       width: 100%;
@@ -599,9 +586,6 @@
   </footer>
 
   <script>
-    // ======================
-    // RESPONSIVE WIDE PLAYFIELD (ZOOM SAFE)
-    // ======================
     const root = document.documentElement;
     const playfield = document.getElementById('playfield');
     const hero = document.getElementById('hero');
@@ -623,7 +607,7 @@
     updatePlayfieldWidth();
 
     // ======================
-    // PERF STARFIELD CANVAS
+    // STARFIELD CANVAS
     // ======================
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d', { alpha: true });
@@ -773,7 +757,7 @@
     createBlackHole({ top: '36%', right: '12%', size: 165 });
 
     // ======================
-    // CURSOR BLACK HOLE (pulls objects)
+    // CURSOR BLACK HOLE
     // ======================
     const cursorBH = document.getElementById('cursor-bh');
     let mouseInHero = false;
@@ -802,7 +786,7 @@
     });
 
     // ======================
-    // SHIPS & ASTEROIDS (NO SPAWN) - NOW CENTER CLUSTER
+    // SHIPS & ASTEROIDS (NO SPAWN) - CENTER CLUSTER (1.5x)
     // ======================
     const spaceshipSVG = `
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -868,15 +852,19 @@
       return { minX: 0, maxX: w, minY: 0, maxY: h };
     }
 
-    // CENTER CLUSTER SETTINGS (small area around center)
+    // ✅ 1.5x daha geniş cluster
     function getClusterBounds() {
       const b = getPlayBounds();
       const cx = b.maxX * 0.50;
       const cy = b.maxY * 0.52;
 
-      // small cluster box (responsive): ~ min(520px, 40vw) by min(360px, 34vh)
-      const cw = Math.min(520, Math.max(260, window.innerWidth * 0.40));
-      const ch = Math.min(360, Math.max(200, window.innerHeight * 0.34));
+      // base cluster
+      const baseW = Math.min(520, Math.max(260, window.innerWidth * 0.40));
+      const baseH = Math.min(360, Math.max(200, window.innerHeight * 0.34));
+
+      // 1.5x (ama aşırı büyümesin diye ekranın belli oranında clamp)
+      const cw = Math.min(b.maxX * 0.70, baseW * 1.5);
+      const ch = Math.min(b.maxY * 0.65, baseH * 1.5);
 
       return {
         minX: cx - cw / 2,
@@ -896,7 +884,6 @@
       obj.x = rand(c.minX, c.maxX);
       obj.y = rand(c.minY, c.maxY);
 
-      // super slow drift
       const speed = obj.type === 'ship' ? rand(0.35, 0.70) : rand(0.30, 0.65);
       const ang = rand(0, Math.PI * 2);
       obj.vx = Math.cos(ang) * speed;
@@ -948,11 +935,9 @@
       initObject(obj);
     }
 
-    // 12 obje: tam ortada küçük alanda
     for (let i = 0; i < 6; i++) createShip();
     for (let i = 0; i < 6; i++) createAsteroid();
 
-    // keep them inside the cluster box (wrap inside cluster)
     function wrapCluster(o) {
       const c = getClusterBounds();
       const m = 50;
@@ -981,12 +966,10 @@
       requestAnimationFrame(loop);
       if (!running) return;
 
-      // starfield
       const dtStar = Math.min(0.05, (now - lastStar) / 1000);
       lastStar = now;
       drawStars(dtStar);
 
-      // physics/render at ~30fps
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       acc += dt;
@@ -1063,7 +1046,6 @@
     }
     requestAnimationFrame(loop);
 
-    // keep objects sane after zoom/resize changes (no respawn)
     function rewrapAll() {
       updatePlayfieldWidth();
       for (const o of objects) {
@@ -1072,7 +1054,6 @@
     }
     window.addEventListener('resize', rewrapAll, { passive: true });
 
-    // Header scroll effect + reveal
     window.addEventListener('scroll', () => {
       const header = document.getElementById('site-header');
       if (window.scrollY > 100) {

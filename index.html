@@ -13,26 +13,46 @@
       background: linear-gradient(135deg, #0a0a0a 0%, #141420 50%, #1f1f2a 100%);
       color: #fff;
       overflow-x: hidden;
-      cursor: none;
+      cursor: auto; /* normal sayfada cursor normal */
     }
 
+    /* Stars: entire page */
+    .stars-background {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 50%;
+      animation: twinkle 3.2s infinite;
+    }
+    @keyframes twinkle {
+      0%,100% { opacity: 0.25; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.35); }
+    }
+
+    /* Subtle space haze (still global but super light) */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(circle at 20% 50%, rgba(80, 80, 120, 0.14) 0%, transparent 55%),
-        radial-gradient(circle at 80% 80%, rgba(120, 90, 150, 0.12) 0%, transparent 55%),
-        radial-gradient(circle at 50% 20%, rgba(90, 120, 130, 0.10) 0%, transparent 55%);
-      animation: gradientShift 20s ease infinite;
+        radial-gradient(circle at 20% 50%, rgba(80, 80, 120, 0.12) 0%, transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(120, 90, 150, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 50% 20%, rgba(90, 120, 130, 0.08) 0%, transparent 55%);
+      animation: gradientShift 24s ease infinite;
       pointer-events: none;
       z-index: 0;
     }
-
     @keyframes gradientShift {
-      0%, 100% { opacity: 0.45; transform: scale(1) rotate(0deg); }
-      33% { opacity: 0.65; transform: scale(1.07) rotate(2deg); }
-      66% { opacity: 0.55; transform: scale(0.99) rotate(-2deg); }
+      0%, 100% { opacity: 0.42; transform: scale(1) rotate(0deg); }
+      50% { opacity: 0.60; transform: scale(1.03) rotate(1.2deg); }
     }
 
     header {
@@ -49,7 +69,6 @@
       transition: all 0.3s ease;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
-
     .logo {
       font-size: 1.8rem;
       font-weight: bold;
@@ -59,18 +78,6 @@
       background-clip: text;
       position: relative;
     }
-    .logo::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #ffffff, transparent);
-      transition: width 0.3s;
-    }
-    .logo:hover::after { width: 100%; }
-
     nav a {
       color: #fff;
       text-decoration: none;
@@ -83,18 +90,16 @@
     nav a::before {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
+      bottom: 0; left: 0;
       width: 0;
       height: 2px;
       background: #ffffff;
       transition: width 0.3s;
     }
     nav a:hover::before { width: 100%; }
-    nav a:hover { color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+    nav a:hover { text-shadow: 0 0 10px rgba(255,255,255,0.45); }
 
-    section, footer { position: relative; z-index: 10; }
-
+    /* HERO */
     .hero {
       height: 100vh;
       display: flex;
@@ -103,7 +108,19 @@
       text-align: center;
       position: relative;
       overflow: hidden;
+      cursor: none; /* sadece hero'da cursor yok */
+      z-index: 5;
     }
+
+    /* Hero-only space layer (does NOT follow scroll; it scrolls away with hero) */
+    .hero-space {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
     .hero-content { z-index: 20; padding: 2rem; }
 
     .hero h1 {
@@ -117,8 +134,7 @@
     .hero h1::before {
       content: attr(data-text);
       position: absolute;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
+      inset: 0;
       color: transparent;
       background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
       -webkit-background-clip: text;
@@ -126,7 +142,10 @@
       animation: shine 3s infinite;
     }
     @keyframes shine { 0% { background-position: -500%; } 100% { background-position: 500%; } }
-    @keyframes glow { 0%,100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); } 50% { text-shadow: 0 0 28px rgba(255, 255, 255, 0.35); } }
+    @keyframes glow {
+      0%,100% { text-shadow: 0 0 20px rgba(255,255,255,0.2); }
+      50% { text-shadow: 0 0 28px rgba(255,255,255,0.35); }
+    }
 
     .hero .subtitle {
       font-size: 1.5rem;
@@ -194,61 +213,24 @@
       transition: all 0.3s;
       animation: fadeInUp 1s ease 0.5s backwards, pulse 2s ease-in-out infinite;
       box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
-      position: relative;
-      overflow: hidden;
     }
-    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3); }
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(255, 255, 255, 0.25);
+    }
     @keyframes pulse {
-      0%, 100% { box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1); }
-      50% { box-shadow: 0 5px 30px rgba(255, 255, 255, 0.2); }
+      0%,100% { box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1); }
+      50% { box-shadow: 0 5px 30px rgba(255, 255, 255, 0.18); }
     }
 
-    /* ===== SPACE LAYERS ===== */
-    .stars-background, .space-dust, .particles {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
-    }
-
-    .space-dust::before {
-      content: '';
-      position: absolute;
-      inset: -20%;
-      background:
-        radial-gradient(circle at 18% 32%, rgba(255,255,255,0.05) 0%, transparent 35%),
-        radial-gradient(circle at 72% 62%, rgba(180,220,255,0.045) 0%, transparent 42%),
-        radial-gradient(circle at 45% 82%, rgba(220,180,255,0.035) 0%, transparent 45%),
-        radial-gradient(circle at 88% 22%, rgba(255,255,255,0.035) 0%, transparent 40%);
-      filter: blur(18px);
-      opacity: 0.55;
-      animation: dustMove 38s ease-in-out infinite;
-      transform: translate3d(0,0,0);
-    }
-    @keyframes dustMove {
-      0%,100% { transform: translate3d(0,0,0) scale(1); opacity: 0.50; }
-      50% { transform: translate3d(-1.1%, 0.9%, 0) scale(1.03); opacity: 0.62; }
-    }
-
-    /* PLANETS layer */
-    .planets-layer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 1;
-    }
-
+    /* ===== HERO PLANETS ===== */
     .planet {
       position: absolute;
       border-radius: 50%;
-      filter: blur(0px);
-      opacity: 0.95;
-      transform: translate3d(0,0,0);
+      opacity: 0.9;
       will-change: transform, left, top;
+      z-index: 1;
     }
-
     .planet::before {
       content: '';
       position: absolute;
@@ -258,17 +240,15 @@
       mix-blend-mode: screen;
       opacity: 0.6;
     }
-
     .planet::after {
       content: '';
       position: absolute;
       inset: -8%;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(120,170,255,0.12), rgba(0,0,0,0) 60%);
+      background: radial-gradient(circle, rgba(120,170,255,0.10), rgba(0,0,0,0) 60%);
       filter: blur(10px);
-      opacity: 0.7;
+      opacity: 0.65;
     }
-
     .planet .shadow {
       position: absolute;
       inset: 0;
@@ -277,7 +257,6 @@
       opacity: 0.95;
       pointer-events: none;
     }
-
     .planet .ring {
       position: absolute;
       left: 50%;
@@ -295,60 +274,20 @@
       filter: blur(1px);
       opacity: 0.55;
     }
+    .planet.drift-a { animation: planetDriftA 80s ease-in-out infinite; }
+    .planet.drift-b { animation: planetDriftB 95s ease-in-out infinite; }
+    .planet.drift-c { animation: planetDriftC 70s ease-in-out infinite; }
+    @keyframes planetDriftA { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(-18px, 14px, 0); } }
+    @keyframes planetDriftB { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(14px, -12px, 0); } }
+    @keyframes planetDriftC { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(-10px, -8px, 0); } }
 
-    .planet.drift-slow { animation: planetDrift 70s ease-in-out infinite; }
-    .planet.drift-mid  { animation: planetDrift 55s ease-in-out infinite; }
-    .planet.drift-slow2 { animation: planetDrift2 85s ease-in-out infinite; }
-
-    @keyframes planetDrift {
-      0%,100% { transform: translate3d(0,0,0); }
-      50% { transform: translate3d(-22px, 16px, 0); }
-    }
-    @keyframes planetDrift2 {
-      0%,100% { transform: translate3d(0,0,0); }
-      50% { transform: translate3d(18px, -14px, 0); }
-    }
-
-    /* Floating objects container (BH + ships + asteroids) */
-    .floating-shapes {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
+    /* ===== BLACK HOLES ===== */
+    .black-hole-container {
+      position: absolute;
       z-index: 2;
+      pointer-events: none;
     }
 
-    /* Stars & particles */
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      animation: twinkle 3s infinite;
-    }
-    @keyframes twinkle {
-      0%,100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.35); }
-    }
-
-    .particle {
-      position: absolute;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.5), transparent);
-      border-radius: 50%;
-      animation: float 9s infinite;
-      filter: blur(1px);
-      opacity: 0.5;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0) translateX(0); }
-      25% { transform: translateY(-10px) translateX(7px); }
-      50% { transform: translateY(-6px) translateX(-7px); }
-      75% { transform: translateY(-8px) translateX(4px); }
-    }
-
-    /* ===== Black Holes (2) ===== */
-    .black-hole-container { position: absolute; }
     .black-hole {
       position: absolute;
       border-radius: 50%;
@@ -358,8 +297,10 @@
         #0a0a0a 30%,
         transparent 40%
       );
-      box-shadow: inset 0 0 50px rgba(0, 0, 0, 1), 0 0 30px rgba(0, 0, 0, 0.8);
-      animation: rotateBlackHole 50s linear infinite; /* yavaş */
+      box-shadow:
+        inset 0 0 50px rgba(0, 0, 0, 1),
+        0 0 30px rgba(0, 0, 0, 0.8);
+      animation: rotateBlackHole 60s linear infinite;
     }
     .black-hole::before {
       content: '';
@@ -367,7 +308,9 @@
       inset: 0;
       border-radius: 50%;
       background: #000000;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 0, 0, 1);
+      box-shadow:
+        0 0 20px rgba(0, 0, 0, 0.9),
+        inset 0 0 20px rgba(0, 0, 0, 1);
     }
     .black-hole::after {
       content: '';
@@ -379,14 +322,14 @@
       border-radius: 50%;
       background: radial-gradient(ellipse at center,
         transparent 35%,
-        rgba(255, 150, 50, 0.20) 40%,
-        rgba(255, 180, 80, 0.35) 45%,
-        rgba(255, 200, 100, 0.28) 50%,
-        rgba(200, 150, 80, 0.18) 55%,
-        rgba(150, 100, 50, 0.12) 60%,
+        rgba(255, 150, 50, 0.18) 40%,
+        rgba(255, 180, 80, 0.30) 45%,
+        rgba(255, 200, 100, 0.22) 50%,
+        rgba(200, 150, 80, 0.16) 55%,
+        rgba(150, 100, 50, 0.10) 60%,
         transparent 70%
       );
-      animation: accretionDisk 38s linear infinite; /* yavaş */
+      animation: accretionDisk 55s linear infinite;
       filter: blur(3px);
       opacity: 0.85;
     }
@@ -401,14 +344,14 @@
       background: conic-gradient(
         from 0deg,
         rgba(255,255,255,0.00) 0deg,
-        rgba(255,255,255,0.06) 70deg,
-        rgba(255,255,255,0.00) 150deg,
-        rgba(255,255,255,0.05) 230deg,
+        rgba(255,255,255,0.06) 80deg,
+        rgba(255,255,255,0.00) 160deg,
+        rgba(255,255,255,0.05) 245deg,
         rgba(255,255,255,0.00) 360deg
       );
       filter: blur(10px);
-      opacity: 0.30;
-      animation: swirlSpin 28s linear infinite; /* yavaş */
+      opacity: 0.28;
+      animation: swirlSpin 42s linear infinite;
       mix-blend-mode: soft-light;
       -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%);
       mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%);
@@ -430,24 +373,49 @@
         transparent 72%
       );
       pointer-events: none;
-      animation: lensDistortion 34s ease-in-out infinite; /* yavaş */
+      animation: lensDistortion 48s ease-in-out infinite;
       opacity: 0.75;
     }
 
     @keyframes lensDistortion {
       0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.55; }
-      50% { transform: translate(-50%, -50%) scale(1.03); opacity: 0.8; }
+      50% { transform: translate(-50%, -50%) scale(1.02); opacity: 0.8; }
     }
     @keyframes rotateBlackHole { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes accretionDisk { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
     @keyframes swirlSpin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-    /* ===== Fixed drifting ships / asteroids ===== */
+    /* ===== CURSOR BLACK HOLE (hero-only) ===== */
+    .cursor-bh {
+      position: absolute;
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 7; /* ships should be above to see them go in */
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.18s ease;
+    }
+    .cursor-bh.active { opacity: 1; }
+
+    .cursor-bh .black-hole {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      animation: rotateBlackHole 35s linear infinite;
+    }
+    .cursor-bh .black-hole::after { animation: accretionDisk 30s linear infinite; }
+    .cursor-bh .bh-swirl { animation: swirlSpin 25s linear infinite; opacity: 0.22; }
+    .cursor-bh .gravitational-lens { width: 210%; height: 210%; opacity: 0.55; animation: lensDistortion 30s ease-in-out infinite; }
+
+    /* ===== SHIPS / ASTEROIDS (hero-only) ===== */
     .spaceship, .asteroid {
       position: absolute;
       pointer-events: none;
-      will-change: transform, left, top;
-      z-index: 5;
+      will-change: transform, left, top, opacity;
+      z-index: 8; /* above cursor BH */
     }
 
     .spaceship {
@@ -470,22 +438,21 @@
       border-radius: 50%;
       filter: blur(3px);
       opacity: 0.7;
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     .asteroid {
       width: 40px;
       height: 40px;
       filter: drop-shadow(0 0 10px rgba(255,255,255,0.10));
-      opacity: 0.85;
+      opacity: 0.88;
     }
 
-    /* Reveal */
-    .reveal { opacity: 0; transform: translateY(50px); transition: all 0.6s ease; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
-
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Layout blocks */
+    /* Content sections */
+    section, footer { position: relative; z-index: 10; }
+    section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
     h2 {
       font-size: 2.5rem;
       margin-bottom: 3rem;
@@ -494,8 +461,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      position: relative;
-      display: inline-block;
       width: 100%;
     }
 
@@ -504,14 +469,12 @@
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
       gap: 2rem;
     }
-
     .project-card {
       background: rgba(255, 255, 255, 0.03);
       border-radius: 20px;
       overflow: hidden;
       transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      position: relative;
       cursor: pointer;
     }
     .project-card:hover {
@@ -519,40 +482,15 @@
       box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.1);
       border-color: rgba(255, 255, 255, 0.3);
     }
-    .project-image {
-      width: 100%;
-      height: 250px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:3rem;
-    }
+    .project-image { width: 100%; height: 250px; display:flex; align-items:center; justify-content:center; font-size:3rem; }
     .project-info { padding: 1.5rem; }
     .project-role { color: #999; font-size: 0.9rem; margin-bottom: 0.8rem; font-style: italic; }
     .project-info p { color: #b0b0b0; line-height: 1.6; margin-bottom: 1rem; }
     .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .tag {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
+    .tag { background: rgba(255, 255, 255, 0.05); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; border: 1px solid rgba(255, 255, 255, 0.2); }
 
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-    .skill-category {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 2rem;
-      border-radius: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.4s;
-      position: relative;
-      overflow: hidden;
-    }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+    .skill-category { background: rgba(255, 255, 255, 0.03); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); }
 
     .contact {
       text-align: center;
@@ -560,16 +498,8 @@
       padding: 4rem 2rem;
       border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      position: relative;
-      overflow: hidden;
     }
-    .contact-links {
-      display:flex;
-      justify-content:center;
-      gap: 2rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
+    .contact-links { display:flex; justify-content:center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; }
     .contact-link {
       padding: 1rem 2rem;
       background: rgba(255, 255, 255, 0.05);
@@ -581,31 +511,25 @@
       font-weight: bold;
     }
     .contact-link:hover { background: #888888; color:#0a0a0a; transform: translateY(-3px); }
-
-    section { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
     footer { text-align: center; padding: 2rem; margin-top: 3rem; color: #666; }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(50px); transition: all 0.6s ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
     @media (max-width: 768px) {
       .hero h1 { font-size: 2.5rem; }
       nav { display: none; }
       .projects-grid, .skills-grid { grid-template-columns: 1fr; }
-      body { cursor: auto; }
+      .hero { cursor: auto; } /* mobilde cursor gizlemeyelim */
     }
   </style>
 </head>
 
 <body>
+  <!-- GLOBAL stars (entire page) -->
   <div class="stars-background" id="stars"></div>
-  <div class="space-dust"></div>
-
-  <!-- PLANETS BACK -->
-  <div class="planets-layer" id="planets"></div>
-
-  <div class="particles" id="particles"></div>
-
-  <div class="floating-shapes" id="space-objects">
-    <!-- black holes + fixed ships + asteroids go here -->
-  </div>
 
   <header>
     <div class="logo">GameDev</div>
@@ -616,7 +540,25 @@
     </nav>
   </header>
 
-  <section class="hero">
+  <section class="hero" id="hero">
+    <!-- HERO-only space layer -->
+    <div class="hero-space" id="hero-space">
+      <!-- planets -->
+      <div id="hero-planets"></div>
+
+      <!-- blackholes -->
+      <div id="hero-blackholes"></div>
+
+      <!-- ships + asteroids -->
+      <div id="hero-objects"></div>
+
+      <!-- cursor black hole -->
+      <div class="cursor-bh" id="cursor-bh">
+        <div class="black-hole"></div>
+        <div class="gravitational-lens"></div>
+      </div>
+    </div>
+
     <div class="hero-content">
       <h1 data-text="Game Designer">Game Designer</h1>
       <p class="subtitle">Certified Game Designer</p>
@@ -735,75 +677,83 @@
   </footer>
 
   <script>
-    // ====== STARS ======
+    // ====== GLOBAL STARS (entire page) ======
     const starsContainer = document.getElementById('stars');
-    for (let i = 0; i < 170; i++) {
+    const STAR_COUNT = 190;
+
+    for (let i = 0; i < STAR_COUNT; i++) {
       const star = document.createElement('div');
       star.className = 'star';
-      const size = Math.random() < 0.85 ? 2 : 3;
+
+      const isBig = Math.random() > 0.86;
+      const size = isBig ? 3 : 2;
       star.style.width = size + 'px';
       star.style.height = size + 'px';
+
       star.style.left = Math.random() * 100 + '%';
       star.style.top = Math.random() * 100 + '%';
-      star.style.animationDelay = Math.random() * 3 + 's';
-      star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      star.style.animationDelay = Math.random() * 3.2 + 's';
+      star.style.animationDuration = (Math.random() * 2.0 + 2.4) + 's';
+
       const tint = Math.random();
       if (tint > 0.92) star.style.background = 'rgba(180,220,255,0.95)';
       if (tint < 0.06) star.style.background = 'rgba(255,210,180,0.95)';
+
       starsContainer.appendChild(star);
     }
 
-    // ====== PARTICLES (light) ======
-    const particlesContainer = document.getElementById('particles');
-    for (let i = 0; i < 22; i++) {
+    // ====== HERO SPACE SETUP ======
+    const hero = document.getElementById('hero');
+    const heroSpace = document.getElementById('hero-space');
+    const planetsHost = document.getElementById('hero-planets');
+    const blackholesHost = document.getElementById('hero-blackholes');
+    const objectsHost = document.getElementById('hero-objects');
+
+    // Cursor BH
+    const cursorBH = document.getElementById('cursor-bh');
+    const cursorBHCore = cursorBH.querySelector('.black-hole');
+    const cursorBHLens = cursorBH.querySelector('.gravitational-lens');
+
+    // Build cursor BH internal swirl & lens (same visuals as BH)
+    const swirl = document.createElement('div');
+    swirl.className = 'bh-swirl';
+    cursorBHCore.appendChild(swirl);
+
+    // Cursor BH styles
+    cursorBHCore.style.width = '100%';
+    cursorBHCore.style.height = '100%';
+
+    // ====== PLANETS (hero-only) ======
+    function makePlanet({ top, left, right, bottom, size, gradient, hasRing, driftClass, opacity }) {
       const p = document.createElement('div');
-      p.className = 'particle';
-      const size = Math.random() * 5 + 2;
+      p.className = `planet ${driftClass || 'drift-a'}`;
       p.style.width = size + 'px';
       p.style.height = size + 'px';
-      p.style.left = Math.random() * 100 + '%';
-      p.style.top = Math.random() * 100 + '%';
-      p.style.animationDelay = Math.random() * 6 + 's';
-      p.style.animationDuration = (Math.random() * 6 + 6) + 's';
-      particlesContainer.appendChild(p);
-    }
+      p.style.background = gradient;
+      p.style.opacity = (opacity ?? 0.9);
 
-    // ====== PLANETS BACK (same vibe) ======
-    const planetsLayer = document.getElementById('planets');
-
-    function makePlanet({ top, left, right, bottom, size, gradient, hasRing, driftClass, opacity }) {
-      const planet = document.createElement('div');
-      planet.className = `planet ${driftClass || 'drift-slow'}`;
-      planet.style.width = size + 'px';
-      planet.style.height = size + 'px';
-      planet.style.background = gradient;
-      planet.style.opacity = (opacity ?? 0.95);
-
-      if (top != null) planet.style.top = top;
-      if (left != null) planet.style.left = left;
-      if (right != null) planet.style.right = right;
-      if (bottom != null) planet.style.bottom = bottom;
+      if (top != null) p.style.top = top;
+      if (left != null) p.style.left = left;
+      if (right != null) p.style.right = right;
+      if (bottom != null) p.style.bottom = bottom;
 
       const shadow = document.createElement('div');
       shadow.className = 'shadow';
-      planet.appendChild(shadow);
+      p.appendChild(shadow);
 
       if (hasRing) {
         const ring = document.createElement('div');
         ring.className = 'ring';
-        planet.appendChild(ring);
+        p.appendChild(ring);
       }
 
-      planetsLayer.appendChild(planet);
+      planetsHost.appendChild(p);
     }
 
-    // 4 planet: biri ringli, biri uzak/soluk
+    // Planet set (geri geldi)
     makePlanet({
-      top: '12%', right: '8%',
-      size: 260,
-      opacity: 0.55,
-      driftClass: 'drift-slow2',
-      hasRing: true,
+      top: '12%', right: '7%',
+      size: 260, opacity: 0.58, driftClass: 'drift-b', hasRing: true,
       gradient: `radial-gradient(circle at 35% 30%,
         rgba(255,255,255,0.18) 0%,
         rgba(120,170,255,0.20) 18%,
@@ -813,11 +763,8 @@
     });
 
     makePlanet({
-      bottom: '-60px', left: '-70px',
-      size: 340,
-      opacity: 0.75,
-      driftClass: 'drift-mid',
-      hasRing: false,
+      bottom: '-70px', left: '-85px',
+      size: 340, opacity: 0.78, driftClass: 'drift-a', hasRing: false,
       gradient: `radial-gradient(circle at 30% 25%,
         rgba(255,255,255,0.16) 0%,
         rgba(255,190,120,0.22) 18%,
@@ -828,10 +775,7 @@
 
     makePlanet({
       top: '58%', left: '10%',
-      size: 170,
-      opacity: 0.50,
-      driftClass: 'drift-slow',
-      hasRing: false,
+      size: 170, opacity: 0.52, driftClass: 'drift-c', hasRing: false,
       gradient: `radial-gradient(circle at 35% 30%,
         rgba(255,255,255,0.14) 0%,
         rgba(210,180,255,0.18) 20%,
@@ -842,10 +786,7 @@
 
     makePlanet({
       top: '34%', left: '58%',
-      size: 120,
-      opacity: 0.38,
-      driftClass: 'drift-slow2',
-      hasRing: false,
+      size: 120, opacity: 0.40, driftClass: 'drift-b', hasRing: false,
       gradient: `radial-gradient(circle at 30% 28%,
         rgba(255,255,255,0.12) 0%,
         rgba(160,220,200,0.14) 20%,
@@ -854,44 +795,41 @@
         rgba(2,6,8,1) 100%)`
     });
 
-    const spaceContainer = document.getElementById('space-objects');
-
-    // ====== BLACK HOLES (2) ======
-    const blackHolePositions = [
-      { top: '18%', left: '16%', size: 140 },
-      { top: '58%', right: '12%', size: 165 }
-    ];
-
+    // ====== BLACK HOLES (2) hero-only ======
     const blackHoles = [];
-    blackHolePositions.forEach(pos => {
+
+    function createBlackHole({ top, left, right, bottom, size }) {
       const container = document.createElement('div');
       container.className = 'black-hole-container';
 
-      if (pos.top) container.style.top = pos.top;
-      if (pos.bottom) container.style.bottom = pos.bottom;
-      if (pos.left) container.style.left = pos.left;
-      if (pos.right) container.style.right = pos.right;
+      if (top != null) container.style.top = top;
+      if (left != null) container.style.left = left;
+      if (right != null) container.style.right = right;
+      if (bottom != null) container.style.bottom = bottom;
 
       const bh = document.createElement('div');
       bh.className = 'black-hole';
-      bh.style.width = pos.size + 'px';
-      bh.style.height = pos.size + 'px';
+      bh.style.width = size + 'px';
+      bh.style.height = size + 'px';
 
-      const swirl = document.createElement('div');
-      swirl.className = 'bh-swirl';
-      bh.appendChild(swirl);
+      const innerSwirl = document.createElement('div');
+      innerSwirl.className = 'bh-swirl';
+      bh.appendChild(innerSwirl);
 
       const lens = document.createElement('div');
       lens.className = 'gravitational-lens';
 
       container.appendChild(bh);
       container.appendChild(lens);
-      spaceContainer.appendChild(container);
+      blackholesHost.appendChild(container);
 
-      blackHoles.push({ element: bh });
-    });
+      blackHoles.push({ container, bh });
+    }
 
-    // ====== SHIP SVG ======
+    createBlackHole({ top: '18%', left: '15%', size: 140 });
+    createBlackHole({ top: '58%', right: '12%', size: 165 });
+
+    // ====== SHIPS / ASTEROIDS (6 + 6) hero-only, slow drift ======
     const spaceshipSVG = `
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
@@ -925,7 +863,6 @@
       </svg>
     `;
 
-    // ====== ASTEROID SVG ======
     const asteroidSVG = `
       <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -950,15 +887,42 @@
                  C28,66 30,46 42,35 Z"
               fill="rgba(0,0,0,0.18)"/>
         <ellipse cx="45" cy="38" rx="28" ry="22" fill="url(#shine)"/>
-        <path d="M34,54 L40,58 L37,66 L30,63 Z" fill="rgba(0,0,0,0.18)"/>
-        <path d="M78,58 L86,62 L82,70 L74,66 Z" fill="rgba(255,255,255,0.05)"/>
-        <path d="M55,80 L62,84 L58,92 L50,88 Z" fill="rgba(0,0,0,0.22)"/>
       </svg>
     `;
 
-    // ====== FIXED OBJECTS (6 ships + 6 asteroids) ======
     const objects = [];
     function rand(min, max) { return min + Math.random() * (max - min); }
+
+    function spawnObject(obj) {
+      const rect = hero.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      obj.captured = false;
+      obj.captureT = 0;
+      obj.opacity = obj.type === 'ship' ? 0.95 : 0.88;
+      obj.scale = 1;
+
+      obj.x = rand(0.12, 0.88) * w;
+      obj.y = rand(0.18, 0.82) * h;
+
+      const speed = obj.type === 'ship' ? rand(0.8, 1.6) : rand(0.7, 1.5); // px/sec (aşırı yavaş)
+      const ang = rand(0, Math.PI * 2);
+      obj.vx = Math.cos(ang) * speed;
+      obj.vy = Math.sin(ang) * speed;
+
+      obj.rot = rand(0, 360);
+      obj.rotSpeed = obj.type === 'ship' ? rand(-0.25, 0.25) : rand(-0.35, 0.35); // deg/sec (çok az)
+
+      obj.drift = rand(1.2, 3.0);
+      obj.wobbleSpeed = rand(0.10, 0.18);
+      obj.wobblePhase = rand(0, Math.PI * 2);
+
+      obj.el.style.opacity = obj.opacity;
+      obj.el.style.transform = `rotate(${obj.rot}deg) scale(1)`;
+      obj.el.style.left = obj.x + 'px';
+      obj.el.style.top = obj.y + 'px';
+    }
 
     function createShip() {
       const el = document.createElement('div');
@@ -967,109 +931,137 @@
 
       const trail = document.createElement('div');
       trail.className = 'trail';
-      trail.style.right = '100%';
-      trail.style.top = '50%';
-      trail.style.transform = 'translateY(-50%)';
       el.appendChild(trail);
 
-      spaceContainer.appendChild(el);
+      objectsHost.appendChild(el);
 
-      const vw = innerWidth, vh = innerHeight;
-      const x = rand(0.12, 0.88) * vw;
-      const y = rand(0.16, 0.84) * vh;
-
-      // AŞIRI YAVAŞ
-      const speed = rand(0.9, 1.8); // px/sec
-      const angle = rand(0, Math.PI * 2);
-
-      // drift çok hafif
-      const drift = rand(1.5, 3.5);
-      const wobbleSpeed = rand(0.10, 0.20);
-
-      // rotasyon: yok denecek kadar az
-      const baseRot = rand(0, 360);
-      const rotSpeed = rand(-0.25, 0.25); // deg/sec
-
-      objects.push({
-        type: 'ship',
-        el,
-        x, y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        rot: baseRot,
-        rotSpeed,
-        drift,
-        wobbleSpeed,
-        wobblePhase: rand(0, Math.PI * 2),
-      });
-
-      el.style.left = x + 'px';
-      el.style.top = y + 'px';
-      el.style.transform = `rotate(${baseRot}deg)`;
+      const obj = { type: 'ship', el };
+      objects.push(obj);
+      spawnObject(obj);
     }
 
     function createAsteroid() {
       const el = document.createElement('div');
       el.className = 'asteroid';
       el.innerHTML = asteroidSVG;
-      spaceContainer.appendChild(el);
-
-      const vw = innerWidth, vh = innerHeight;
-      const x = rand(0.12, 0.88) * vw;
-      const y = rand(0.16, 0.84) * vh;
-
-      // AŞIRI YAVAŞ
-      const speed = rand(0.7, 1.6); // px/sec
-      const angle = rand(0, Math.PI * 2);
 
       const size = rand(26, 52);
       el.style.width = size + 'px';
       el.style.height = size + 'px';
 
-      // rotasyon: çok az
-      const rot = rand(0, 360);
-      const rotSpeed = rand(-0.35, 0.35); // deg/sec
+      objectsHost.appendChild(el);
 
-      objects.push({
-        type: 'asteroid',
-        el,
-        x, y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        rot,
-        rotSpeed,
-        drift: rand(1.2, 3.0),
-        wobbleSpeed: rand(0.10, 0.18),
-        wobblePhase: rand(0, Math.PI * 2),
-      });
-
-      el.style.left = x + 'px';
-      el.style.top = y + 'px';
-      el.style.transform = `rotate(${rot}deg)`;
+      const obj = { type: 'asteroid', el };
+      objects.push(obj);
+      spawnObject(obj);
     }
 
     for (let i = 0; i < 6; i++) createShip();
     for (let i = 0; i < 6; i++) createAsteroid();
 
-    // ====== SINGLE ANIMATION LOOP ======
+    // ====== CURSOR BH tracking (hero-only) ======
+    let mouseInHero = false;
+    let mouseX = 0, mouseY = 0; // hero-relative
+
+    function setCursorBH(x, y) {
+      cursorBH.style.left = x + 'px';
+      cursorBH.style.top = y + 'px';
+    }
+
+    hero.addEventListener('mouseenter', () => {
+      mouseInHero = true;
+      cursorBH.classList.add('active');
+    });
+
+    hero.addEventListener('mouseleave', () => {
+      mouseInHero = false;
+      cursorBH.classList.remove('active');
+    });
+
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+      setCursorBH(mouseX, mouseY);
+    });
+
+    // ====== Capture logic (cursor BH + static BHs) ======
+    function getBHCentersHeroSpace() {
+      const rectHero = hero.getBoundingClientRect();
+
+      const centers = [];
+
+      // static BHs
+      for (const bh of blackHoles) {
+        const r = bh.bh.getBoundingClientRect();
+        centers.push({
+          x: (r.left - rectHero.left) + r.width / 2,
+          y: (r.top - rectHero.top) + r.height / 2,
+          radius: r.width / 2
+        });
+      }
+
+      // cursor BH (only if in hero)
+      if (mouseInHero) {
+        centers.push({
+          x: mouseX,
+          y: mouseY,
+          radius: 42
+        });
+      }
+
+      return centers;
+    }
+
+    // one loop only (performance)
     let last = performance.now();
 
-    function wrapPosition(o, vw, vh) {
-      const margin = 140;
-      if (o.x < -margin) o.x = vw + margin;
-      if (o.x > vw + margin) o.x = -margin;
-      if (o.y < -margin) o.y = vh + margin;
-      if (o.y > vh + margin) o.y = -margin;
+    function wrap(o, w, h) {
+      const margin = 120;
+      if (o.x < -margin) o.x = w + margin;
+      if (o.x > w + margin) o.x = -margin;
+      if (o.y < -margin) o.y = h + margin;
+      if (o.y > h + margin) o.y = -margin;
     }
 
     function animate(now) {
-      const dt = (now - last) / 1000;
+      const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
 
-      const vw = innerWidth;
-      const vh = innerHeight;
+      const rect = hero.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      const bhCenters = getBHCentersHeroSpace();
 
       for (const o of objects) {
+        // If captured: ease into BH center, then respawn (no extra spawn, same 12 objects)
+        if (o.captured) {
+          o.captureT += dt;
+
+          const t = Math.min(1, o.captureT / 1.25);
+          const ease = 1 - Math.pow(1 - t, 3);
+
+          o.x = o.startX + (o.targetX - o.startX) * ease;
+          o.y = o.startY + (o.targetY - o.startY) * ease;
+
+          o.rot += 140 * dt; // small spin while being sucked
+          o.scale = 1 - 0.85 * ease;
+          o.opacity = 1 - 1.0 * ease;
+
+          o.el.style.opacity = Math.max(0, o.opacity);
+          o.el.style.left = o.x + 'px';
+          o.el.style.top = o.y + 'px';
+          o.el.style.transform = `rotate(${o.rot}deg) scale(${Math.max(0.05, o.scale)})`;
+
+          if (t >= 1) {
+            // respawn same object after a tiny delay (still 6+6, no spam)
+            setTimeout(() => spawnObject(o), 220);
+          }
+          continue;
+        }
+
+        // normal drift
         o.x += o.vx * dt;
         o.y += o.vy * dt;
 
@@ -1077,19 +1069,48 @@
         const ox = wobble * 0.7;
         const oy = wobble * 0.5;
 
-        wrapPosition(o, vw, vh);
+        wrap(o, w, h);
 
-        o.rot += o.rotSpeed * dt * 60; // dt stabil
+        o.rot += o.rotSpeed * dt * 60;
+
+        // position update
         o.el.style.left = (o.x + ox) + 'px';
         o.el.style.top  = (o.y + oy) + 'px';
         o.el.style.transform = `rotate(${o.rot}deg)`;
+
+        // check capture (cursor BH + static BHs)
+        const cx = o.x + 28; // approx center
+        const cy = o.y + 28;
+
+        for (const bh of bhCenters) {
+          const dx = cx - bh.x;
+          const dy = cy - bh.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+
+          // capture radius
+          const captureRadius = bh.radius * 1.05;
+
+          if (dist < captureRadius) {
+            o.captured = true;
+            o.captureT = 0;
+
+            o.startX = o.x;
+            o.startY = o.y;
+            o.targetX = bh.x;
+            o.targetY = bh.y;
+
+            // make sure it stays visible ON TOP while getting sucked
+            o.el.style.zIndex = 9;
+            break;
+          }
+        }
       }
 
       requestAnimationFrame(animate);
     }
     requestAnimationFrame(animate);
 
-    // Smooth scrolling
+    // ====== Smooth scrolling ======
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', (e) => {
         e.preventDefault();

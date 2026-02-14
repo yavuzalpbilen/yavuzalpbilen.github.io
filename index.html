@@ -174,7 +174,6 @@
       box-shadow: 0 14px 40px rgba(255, 255, 255, 0.18);
     }
 
-    /* PLAYFIELD */
     .playfield {
       position: absolute;
       top: 0;
@@ -188,92 +187,77 @@
       contain: layout paint;
     }
 
-    /* ✅ Cursor Black Hole: görseli BOZMADIM (orijinal Interstellar stil)
-       ✅ Z-ORDER: Cursor BH arkada, objeler önde */
+    /* ✅ FIX: cursor BH arkada, objeler önde */
     .cursor-bh {
       position: absolute;
-      width: 92px;
-      height: 92px;
+      width: 86px;
+      height: 86px;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 12;              /* BH arkada */
+      z-index: 18; /* was 25 */
       opacity: 0;
       transform: translate(-50%, -50%);
       transition: opacity 0.15s ease;
     }
     .cursor-bh.active { opacity: 1; }
 
-    /* Black Holes - Interstellar Style */
+    .black-hole-container { position: absolute; z-index: 3; pointer-events: none; }
     .black-hole {
       position: absolute;
-      inset: 0;
       border-radius: 50%;
       background: radial-gradient(circle at 35% 35%,
-        #000000 0%,
-        #000000 25%,
-        #0a0a0a 30%,
-        transparent 40%
-      );
+        #000 0%, #000 26%, #0a0a0a 32%, transparent 42%);
       box-shadow:
-        inset 0 0 50px rgba(0, 0, 0, 1),
-        0 0 30px rgba(0, 0, 0, 0.8);
-      animation: rotateBlackHole 30s linear infinite;
+        inset 0 0 34px rgba(0,0,0,1),
+        0 0 20px rgba(0,0,0,0.60);
+      animation: rotateBH 80s linear infinite;
     }
 
-    /* Event Horizon */
-    .black-hole::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: #000000;
-      box-shadow:
-        0 0 20px rgba(0, 0, 0, 0.9),
-        inset 0 0 20px rgba(0, 0, 0, 1);
-    }
-
-    /* Accretion Disk - Glowing ring */
     .black-hole::after {
       content: '';
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 180%;
-      height: 180%;
+      width: 185%;
+      height: 185%;
       border-radius: 50%;
-      background:
-        radial-gradient(ellipse at center,
-          transparent 35%,
-          rgba(255, 150, 50, 0.26) 40%,
-          rgba(255, 180, 80, 0.42) 45%,
-          rgba(255, 200, 100, 0.34) 50%,
-          rgba(200, 150, 80, 0.26) 55%,
-          rgba(150, 100, 50, 0.18) 60%,
-          transparent 70%
-        );
-      animation: accretionDisk 15s linear infinite;
-      filter: blur(3px);
-      opacity: 0.95;
+      background: radial-gradient(ellipse at center,
+        transparent 35%,
+        rgba(170, 190, 220, 0.08) 41%,
+        rgba(120, 140, 170, 0.12) 46%,
+        rgba(70, 85, 105, 0.10) 52%,
+        rgba(30, 35, 45, 0.06) 60%,
+        transparent 72%);
+      animation: rotateDisk 72s linear infinite;
+      opacity: 0.85;
     }
 
-    @keyframes rotateBlackHole {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    @keyframes accretionDisk {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    .bh-flow {
+      position: absolute;
+      inset: -15%;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        rgba(255,255,255,0.00) 0deg,
+        rgba(255,255,255,0.04) 90deg,
+        rgba(255,255,255,0.00) 180deg,
+        rgba(255,255,255,0.03) 270deg,
+        rgba(255,255,255,0.00) 360deg
+      );
+      opacity: 0.18;
+      animation: rotateFlow 68s linear infinite;
+      -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 72%);
+      mask-image: radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 72%);
     }
 
-    /* Background BH (visual only) */
-    .black-hole-container { position: absolute; z-index: 2; pointer-events: none; }
+    @keyframes rotateBH { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes rotateDisk { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+    @keyframes rotateFlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-    /* Planets */
+    .cursor-bh .black-hole { inset: 0; width: 100%; height: 100%; animation: rotateBH 40s linear infinite; }
+    .cursor-bh .black-hole::after { animation: rotateDisk 36s linear infinite; }
+    .cursor-bh .bh-flow { animation: rotateFlow 34s linear infinite; opacity: 0.16; }
+
     .planet {
       position: absolute;
       border-radius: 50%;
@@ -282,6 +266,7 @@
       will-change: transform;
       opacity: 0.75;
     }
+
     .planet .shade {
       position: absolute;
       inset: 0;
@@ -292,6 +277,7 @@
         rgba(0,0,0,0.75) 100%);
       opacity: 0.95;
     }
+
     .planet .atm {
       position: absolute;
       inset: -10%;
@@ -306,18 +292,20 @@
     .drift-a { animation: driftA 140s ease-in-out infinite; }
     .drift-b { animation: driftB 170s ease-in-out infinite; }
     .drift-c { animation: driftC 155s ease-in-out infinite; }
+
     @keyframes driftA { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(-14px, 10px, 0); } }
     @keyframes driftB { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(12px, -9px, 0); } }
     @keyframes driftC { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(-10px, -10px, 0); } }
 
-    /* ✅ Objeler her zaman BH'nin önünde */
+    /* ✅ FIX: only ships + asteroids are above the cursor black hole */
     .spaceship, .asteroid {
       position: absolute;
       pointer-events: none;
       will-change: transform, left, top, opacity;
-      z-index: 20;      /* objeler önde */
+      z-index: 30; /* was 20 */
       opacity: 0.92;
     }
+
     .spaceship {
       width: 55px;
       height: 55px;
@@ -446,7 +434,9 @@
 
     @media (prefers-reduced-motion: reduce) {
       .drift-a, .drift-b, .drift-c,
-      .black-hole, .black-hole::after { animation: none !important; }
+      .black-hole, .black-hole::after, .bh-flow {
+        animation: none !important;
+      }
     }
   </style>
 </head>
@@ -471,9 +461,10 @@
   <section class="hero" id="hero">
     <div class="playfield" id="playfield"></div>
 
-    <!-- ✅ Cursor BH arkada; objeler her zaman önde -->
     <div class="cursor-bh" id="cursor-bh">
-      <div class="black-hole"></div>
+      <div class="black-hole">
+        <div class="bh-flow"></div>
+      </div>
     </div>
 
     <div class="hero-content">
@@ -606,8 +597,10 @@
     function updatePlayfieldWidth() {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
+
       const aspect = vw / Math.max(1, vh);
       const factor = clamp(1.65 + (aspect - 0.7) * 0.75, 1.65, 2.85);
+
       const pfw = Math.round(vw * factor);
       root.style.setProperty('--pfw', pfw + 'px');
     }
@@ -682,7 +675,7 @@
     resizeCanvas();
 
     // ======================
-    // PLANETS + BG BH
+    // FIXED SPACE ELEMENTS (PLANETS + BG BH)
     // ======================
     const planetsHost = document.getElementById('planets-host');
     const bgBHHost = document.getElementById('bg-blackhole-host');
@@ -743,7 +736,7 @@
         rgba(6,7,12,1) 100%)`
     });
 
-    function createBackgroundBlackHole({ top, left, right, bottom, size }) {
+    function createBlackHole({ top, left, right, bottom, size }) {
       const container = document.createElement('div');
       container.className = 'black-hole-container';
       if (top != null) container.style.top = top;
@@ -756,10 +749,14 @@
       bh.style.width = size + 'px';
       bh.style.height = size + 'px';
 
+      const flow = document.createElement('div');
+      flow.className = 'bh-flow';
+      bh.appendChild(flow);
+
       container.appendChild(bh);
       bgBHHost.appendChild(container);
     }
-    createBackgroundBlackHole({ top: '36%', right: '12%', size: 165 });
+    createBlackHole({ top: '36%', right: '12%', size: 165 });
 
     // ======================
     // CURSOR BLACK HOLE
@@ -791,7 +788,7 @@
     });
 
     // ======================
-    // SHIPS & ASTEROIDS (NO SPAWN) - CENTER CLUSTER
+    // SHIPS & ASTEROIDS (NO SPAWN) - CENTER CLUSTER (NOW 2.25x TOTAL)
     // ======================
     const spaceshipSVG = `
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -850,11 +847,13 @@
 
     const objects = [];
     function rand(min, max) { return min + Math.random() * (max - min); }
+
     function getPlayBounds() {
       const w = playfield.clientWidth;
       const h = playfield.clientHeight;
       return { minX: 0, maxX: w, minY: 0, maxY: h };
     }
+
     function getClusterBounds() {
       const b = getPlayBounds();
       const cx = b.maxX * 0.50;
@@ -882,6 +881,7 @@
       obj.captureT = 0;
 
       const c = getClusterBounds();
+
       obj.x = rand(c.minX, c.maxX);
       obj.y = rand(c.minY, c.maxY);
 
@@ -904,7 +904,6 @@
       obj.el.style.left = obj.x + 'px';
       obj.el.style.top = obj.y + 'px';
       obj.el.style.transform = `rotate(${obj.rot}deg)`;
-      obj.el.style.zIndex = 20; // ✅ default önde
     }
 
     function createShip() {
@@ -988,7 +987,7 @@
       const cursorInPlayX = cursorWorldX - playRect.left;
       const cursorInPlayY = cursorWorldY - playRect.top;
 
-      const cursorRadius = 46;
+      const cursorRadius = 43;
 
       for (const o of objects) {
         if (o.dead) continue;
@@ -1005,8 +1004,8 @@
           o.scale = 1 - 0.86 * ease;
           o.opacity = 1 - 1.0 * ease;
 
-          // ✅ capture anında da önde kalsın
-          o.el.style.zIndex = 22;
+          /* ✅ keep captured objects even higher */
+          o.el.style.zIndex = 60;
 
           o.el.style.opacity = Math.max(0, o.opacity);
           o.el.style.left = o.x + 'px';

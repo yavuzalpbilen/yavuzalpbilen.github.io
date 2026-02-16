@@ -434,7 +434,6 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .contact-links { display:flex; justify-content:center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; }
-
     .contact-link {
       padding: 1rem 2rem;
       background: rgba(255, 255, 255, 0.05);
@@ -444,19 +443,21 @@
       border-radius: 10px;
       transition: all 0.2s;
       font-weight: bold;
+    }
+    .contact-link:hover { background: #888888; color:#0a0a0a; transform: translateY(-2px); }
 
-      /* ✅ icon layout (only) */
+    /* ✅ ICON FIX (SVG) */
+    .contact-link{
       display: inline-flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 10px;
     }
     .contact-link .icon{
-      width: 18px;
-      height: 18px;
-      display: inline-block;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+      fill: currentColor;
     }
-
-    .contact-link:hover { background: #888888; color:#0a0a0a; transform: translateY(-2px); }
 
     footer {
       width: 100%;
@@ -627,23 +628,35 @@
       <h2>Let's Create Something Amazing</h2>
       <p style="font-size: 1.2rem; margin-bottom: 1rem;">Available for relevant roles.</p>
 
-        <a href="https://github.com/yavuzalpbilen" class="contact-link">
-          <img class="icon" src="assets/icons/github-logo-png_seeklogo-480450.png" alt="">
+      <div class="contact-links">
+        <a href="mailto:contact@example.com" class="contact-link">Email Me</a>
+
+        <a href="https://github.com/yavuzalpbilen" class="contact-link" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 .5C5.73.5.75 5.67.75 12.08c0 5.12 3.29 9.46 7.86 11 .58.11.79-.26.79-.57v-2.02c-3.2.71-3.87-1.58-3.87-1.58-.52-1.36-1.27-1.72-1.27-1.72-1.04-.74.08-.73.08-.73 1.15.08 1.76 1.22 1.76 1.22 1.02 1.8 2.67 1.28 3.32.98.1-.76.4-1.28.72-1.58-2.55-.3-5.24-1.31-5.24-5.84 0-1.29.45-2.35 1.18-3.18-.12-.3-.51-1.53.11-3.18 0 0 .97-.32 3.18 1.21a10.7 10.7 0 0 1 2.9-.4c.98 0 1.97.14 2.9.4 2.2-1.53 3.18-1.21 3.18-1.21.62 1.65.23 2.88.11 3.18.74.83 1.18 1.89 1.18 3.18 0 4.54-2.7 5.54-5.27 5.83.41.36.78 1.08.78 2.18v3.23c0 .32.2.69.8.57 4.56-1.54 7.85-5.88 7.85-11C23.25 5.67 18.27.5 12 .5z"/>
+          </svg>
           GitHub
         </a>
 
-        <a href="https://www.linkedin.com/in/yavuz-a-9243211a4/" class="contact-link">
-          <img class="icon" src="assets/icons/linkedin-black-icon-logo-png_seeklogo-387472.png" alt="">
+        <a href="https://www.linkedin.com/in/yavuz-a-9243211a4/" class="contact-link" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.05-1.86-3.05-1.86 0-2.14 1.45-2.14 2.95v5.67H9.33V9h3.42v1.56h.05c.48-.9 1.64-1.86 3.36-1.86 3.59 0 4.25 2.37 4.25 5.45v6.3zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .78 0 1.74v20.52C0 23.22.79 24 1.77 24h20.46c.98 0 1.77-.78 1.77-1.74V1.74C24 .78 23.21 0 22.23 0z"/>
+          </svg>
           LinkedIn
         </a>
 
-        <a href="https://yavuzalpbilen.itch.io/" class="contact-link">
-          <img class="icon" src="assets/icons/itch-io-logo-png_seeklogo-449206.png" alt="">
+        <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4.2 7.3c2.3-1.4 5.1-2.1 7.8-2.1s5.5.7 7.8 2.1c.6.4 1 1.1.9 1.9l-.8 7.1c-.1 1.1-1 1.9-2.1 1.9H6.2c-1.1 0-2-.8-2.1-1.9l-.8-7.1c-.1-.8.3-1.5.9-1.9zm7.8 8.8c1.9 0 3.5-1.6 3.5-3.5S13.9 9.1 12 9.1 8.5 10.7 8.5 12.6s1.6 3.5 3.5 3.5z"/>
+          </svg>
           itch.io
         </a>
 
         <a href="#" class="contact-link">
-          <img class="icon" src="assets/icons/documents-symbol.png" alt="">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm1 7V3.5L19.5 9H15z"/>
+            <path d="M8 12h8v2H8zm0 4h8v2H8z"/>
+          </svg>
           CV
         </a>
       </div>

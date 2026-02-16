@@ -449,11 +449,23 @@
     }
     .contact-link:hover { background: #888888; color:#0a0a0a; transform: translateY(-2px); }
 
+    /* icons */
     .contact-link .icon{
       width: 22px;
       height: 22px;
       flex: 0 0 auto;
-      fill: currentColor;
+      display: block;
+    }
+    .contact-link svg.icon{ fill: currentColor; }
+
+    /* ✅ itch.io PNG nicer */
+    .contact-link img.icon{
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+      background: #ffffff;
+      border-radius: 6px;
+      padding: 3px;
     }
 
     footer {
@@ -626,8 +638,6 @@
       <p style="font-size: 1.2rem; margin-bottom: 1rem;">Available for relevant roles.</p>
 
       <div class="contact-links">
-        <a href="mailto:contact@example.com" class="contact-link">Email Me</a>
-
         <a href="https://github.com/yavuzalpbilen" class="contact-link" target="_blank" rel="noopener">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 .5C5.73.5.75 5.67.75 12.08c0 5.12 3.29 9.46 7.86 11 .58.11.79-.26.79-.57v-2.02c-3.2.71-3.87-1.58-3.87-1.58-.52-1.36-1.27-1.72-1.27-1.72-1.04-.74.08-.73.08-.73 1.15.08 1.76 1.22 1.76 1.22 1.02 1.8 2.67 1.28 3.32.98.1-.76.4-1.28.72-1.58-2.55-.3-5.24-1.31-5.24-5.84 0-1.29.45-2.35 1.18-3.18-.12-.3-.51-1.53.11-3.18 0 0 .97-.32 3.18 1.21a10.7 10.7 0 0 1 2.9-.4c.98 0 1.97.14 2.9.4 2.2-1.53 3.18-1.21 3.18-1.21.62 1.65.23 2.88.11 3.18.74.83 1.18 1.89 1.18 3.18 0 4.54-2.7 5.54-5.27 5.83.41.36.78 1.08.78 2.18v3.23c0 .32.2.69.8.57 4.56-1.54 7.85-5.88 7.85-11C23.25 5.67 18.27.5 12 .5z"/>
@@ -642,20 +652,9 @@
           LinkedIn
         </a>
 
-        <!-- ✅ FIXED itch.io ICON -->
+        <!-- ✅ itch.io PNG (senin attığın dosya adıyla) -->
         <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <!-- awning top -->
-            <path d="M4 5h16v3H4z"/>
-            <!-- scallops -->
-            <path d="M4 8c1 .9 3 .9 4 0c1 .9 3 .9 4 0c1 .9 3 .9 4 0c1 .9 3 .9 4 0v2H4V8z"/>
-            <!-- shop body -->
-            <path d="M6 10h12v10H6z"/>
-            <!-- controller -->
-            <path d="M8.1 15.6c.45-1.1 1.45-1.9 2.65-1.9h2.5c1.2 0 2.2.8 2.65 1.9l.6 1.55c.32.83-.3 1.85-1.2 1.85h-.75c-.55 0-1.03-.34-1.22-.86l-.18-.49h-2.3l-.18.49c-.19.52-.67.86-1.22.86h-.75c-.9 0-1.52-1.02-1.2-1.85l.6-1.55z"/>
-            <!-- upload arrow -->
-            <path d="M12 12.1l-2 2h1.25V16h1.5v-1.9H14l-2-2z"/>
-          </svg>
+          <img class="icon" src="assets/icons/itch-io-logo-png_seeklogo-449206.png" alt="itch.io">
           itch.io
         </a>
 
@@ -763,7 +762,6 @@
 
         twinklePhase += dt * 0.8;
 
-        // ✅ no per-star string allocations
         ctx.fillStyle = '#ffffff';
         for (let i = 0; i < stars.length; i++) {
           const s = stars[i];

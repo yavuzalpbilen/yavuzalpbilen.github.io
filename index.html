@@ -434,6 +434,7 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .contact-links { display:flex; justify-content:center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; }
+
     .contact-link {
       padding: 1rem 2rem;
       background: rgba(255, 255, 255, 0.05);
@@ -443,7 +444,18 @@
       border-radius: 10px;
       transition: all 0.2s;
       font-weight: bold;
+
+      /* ✅ icon layout (only) */
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
     }
+    .contact-link .icon{
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+    }
+
     .contact-link:hover { background: #888888; color:#0a0a0a; transform: translateY(-2px); }
 
     footer {
@@ -614,12 +626,31 @@
     <section class="contact reveal">
       <h2>Let's Create Something Amazing</h2>
       <p style="font-size: 1.2rem; margin-bottom: 1rem;">Available for relevant roles.</p>
+
       <div class="contact-links">
-        <a href="#" class="contact-link">CV</a>
-        <a href="https://www.linkedin.com/in/yavuz-a-9243211a4/" class="contact-link">LinkedIn</a>
-        <a href="https://yavuzalpbilen.itch.io/" class="contact-link">Itch.io</a>
-        <a href="https://github.com/yavuzalpbilen" class="contact-link">Github</a>
+        <a href="mailto:contact@example.com" class="contact-link">Email Me</a>
+
+        <a href="https://github.com/yavuzalpbilen" class="contact-link">
+          <img class="icon" src="assets/icons/github-24.png" alt="">
+          GitHub
+        </a>
+
+        <a href="https://www.linkedin.com/in/yavuz-a-9243211a4/" class="contact-link">
+          <img class="icon" src="assets/icons/linkedin-24.png" alt="">
+          LinkedIn
+        </a>
+
+        <a href="https://yavuzalpbilen.itch.io/" class="contact-link">
+          <img class="icon" src="assets/icons/itchio-24.png" alt="">
+          itch.io
+        </a>
+
+        <a href="#" class="contact-link">
+          <img class="icon" src="assets/icons/cv-24.png" alt="">
+          CV
+        </a>
       </div>
+
     </section>
   </div>
 

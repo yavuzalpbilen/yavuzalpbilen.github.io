@@ -443,15 +443,12 @@
       border-radius: 10px;
       transition: all 0.2s;
       font-weight: bold;
-    }
-    .contact-link:hover { background: #888888; color:#0a0a0a; transform: translateY(-2px); }
-
-    /* ✅ ICON FIX (SVG) */
-    .contact-link{
       display: inline-flex;
       align-items: center;
       gap: 10px;
     }
+    .contact-link:hover { background: #888888; color:#0a0a0a; transform: translateY(-2px); }
+
     .contact-link .icon{
       width: 22px;
       height: 22px;
@@ -645,9 +642,19 @@
           LinkedIn
         </a>
 
+        <!-- ✅ FIXED itch.io ICON -->
         <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4.2 7.3c2.3-1.4 5.1-2.1 7.8-2.1s5.5.7 7.8 2.1c.6.4 1 1.1.9 1.9l-.8 7.1c-.1 1.1-1 1.9-2.1 1.9H6.2c-1.1 0-2-.8-2.1-1.9l-.8-7.1c-.1-.8.3-1.5.9-1.9zm7.8 8.8c1.9 0 3.5-1.6 3.5-3.5S13.9 9.1 12 9.1 8.5 10.7 8.5 12.6s1.6 3.5 3.5 3.5z"/>
+            <!-- awning top -->
+            <path d="M4 5h16v3H4z"/>
+            <!-- scallops -->
+            <path d="M4 8c1 .9 3 .9 4 0c1 .9 3 .9 4 0c1 .9 3 .9 4 0c1 .9 3 .9 4 0v2H4V8z"/>
+            <!-- shop body -->
+            <path d="M6 10h12v10H6z"/>
+            <!-- controller -->
+            <path d="M8.1 15.6c.45-1.1 1.45-1.9 2.65-1.9h2.5c1.2 0 2.2.8 2.65 1.9l.6 1.55c.32.83-.3 1.85-1.2 1.85h-.75c-.55 0-1.03-.34-1.22-.86l-.18-.49h-2.3l-.18.49c-.19.52-.67.86-1.22.86h-.75c-.9 0-1.52-1.02-1.2-1.85l.6-1.55z"/>
+            <!-- upload arrow -->
+            <path d="M12 12.1l-2 2h1.25V16h1.5v-1.9H14l-2-2z"/>
           </svg>
           itch.io
         </a>

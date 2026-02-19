@@ -217,7 +217,7 @@
       width: var(--pfw, 200vw);
       height: 100%;
       transform: translateX(-50%);
-      z-index: 25; /* objects above cursor BH */
+      z-index: 25;
       pointer-events: none;
       overflow: visible;
       contain: layout paint;
@@ -229,7 +229,7 @@
       height: 86px;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 18; /* BH behind objects */
+      z-index: 18;
       opacity: 0;
       transform: translate(-50%, -50%);
       transition: opacity 0.15s ease;
@@ -417,13 +417,148 @@
     .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .tag { background: rgba(255, 255, 255, 0.05); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; border: 1px solid rgba(255, 255, 255, 0.2); }
 
-    .skills-grid {
+    /* ===== Education & Experience ===== */
+    .timeline-wrap{
       width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2rem;
+      grid-template-columns: 1fr;
+      gap: 2.2rem;
     }
-    .skill-category { background: rgba(255, 255, 255, 0.03); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); }
+
+    .timeline-block{
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 18px;
+      padding: 1.6rem 1.6rem;
+      overflow: hidden;
+    }
+
+    .timeline-title{
+      font-size: 1.35rem;
+      margin-bottom: 1.15rem;
+      letter-spacing: 0.2px;
+      color: rgba(255,255,255,0.92);
+      text-shadow: 0 0 12px rgba(255,255,255,0.08);
+    }
+
+    .timeline-list{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .timeline-item{
+      display: grid;
+      grid-template-columns: 76px 1fr; /* ✅ 64 -> 76 */
+      gap: 14px;
+      align-items: center;
+      padding: 14px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .timeline-item:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.055);
+      border-color: rgba(255,255,255,0.16);
+    }
+
+    .timeline-logo{
+      width: 76px;          /* ✅ 64 -> 76 */
+      height: 76px;         /* ✅ 64 -> 76 */
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;     /* ✅ taşanı kes */
+      position: relative;
+    }
+
+    /* ✅ İSTEDİĞİN MOD:
+       - resim kutudan büyük olabilir
+       - kenarlar/köşeler kesilebilir
+    */
+    .timeline-logo img{
+      width: 118%;           /* ✅ kutudan büyük */
+      height: 118%;
+      object-fit: cover;     /* ✅ kırp */
+      display: block;
+
+      padding: 0;            /* ✅ padding yok, daha büyük görünür */
+      background: #ffffff;
+      border-radius: 12px;
+
+      transform: scale(1.18); /* ✅ ekstra büyüt */
+      transform-origin: center;
+
+      image-rendering: -webkit-optimize-contrast;
+      translate: 0 0;
+    }
+
+    .timeline-main{
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .timeline-top{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .timeline-name{
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.95);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .timeline-date{
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.92);
+      background: rgba(0,0,0,0.30);
+      border: 1px solid rgba(255,255,255,0.10);
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .timeline-sub{
+      font-size: 0.95rem;
+      color: rgba(204,204,204,0.92);
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .timeline-desc{
+      font-size: 0.95rem;
+      color: rgba(176,176,176,0.95);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 640px){
+      .timeline-item{ grid-template-columns: 62px 1fr; } /* ✅ 54 -> 62 */
+      .timeline-logo{ width: 62px; height: 62px; }      /* ✅ 54 -> 62 */
+      .timeline-logo img{
+        width: 122%;
+        height: 122%;
+        transform: scale(1.16);
+      }
+      .timeline-top{ flex-direction: column; align-items: flex-start; gap: 6px; }
+    }
 
     .contact {
       width: 100%;
@@ -458,30 +593,14 @@
     }
     .contact-link svg.icon{ fill: currentColor; }
 
-    /*
-      ✅ itch.io PNG istediğin gibi:
-      - PNG daha büyük olabilir
-      - Border/arka plan kutusu sabit kalır
-      - Köşeler/yanlar kesilse de problem değil (overflow hidden)
-    */
+    /* ✅ itch.io PNG nicer + slightly bigger */
     .contact-link img.icon{
-      width: 34px;          /* PNG büyüdü */
-      height: 34px;
-      object-fit: cover;    /* kenarları kesebilir */
-      background: #ffffff;  /* kutu rengi */
-      border-radius: 8px;   /* kutu köşesi */
-      padding: 3px;         /* kutu iç boşluğu */
-      overflow: hidden;     /* taşanı kes */
-      display: block;
-    }
-    /* itch için ekstra büyütme + biraz crop (sadece itch linkinde) */
-    .contact-link.itch img.icon{
-      width: 38px;
-      height: 38px;
-      padding: 2px;                  /* daha dolu görünsün */
-      border-radius: 9px;
-      transform: scale(1.10);        /* PNG kutudan büyük olabilir */
-      transform-origin: center;
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      background: #ffffff;
+      border-radius: 6px;
+      padding: 3px;
     }
 
     footer {
@@ -503,10 +622,6 @@
 
       .score-hud{ top: 71px; padding: 9px 14px; }
       .score-text{ font-size: 0.9rem; }
-
-      /* mobile'da da itch biraz büyük kalsın */
-      .contact-link img.icon{ width: 32px; height: 32px; }
-      .contact-link.itch img.icon{ width: 36px; height: 36px; transform: scale(1.08); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -623,31 +738,109 @@
   </section>
 
   <section id="skills">
-    <h2>Education & Experience</h2>
-    <div class="skills-grid">
-      <div class="skill-category reveal">
-        <h3>Education</h3>
-        <p style="color: #999; font-size: 0.95rem; margin-top: 0.5rem;">
-          Game Design Academy - Comprehensive program covering systems design, level design, and game mechanics with specialization in level and environment design.
-        </p>
-        <p style="color: #999; font-size: 0.95rem; margin-top: 1.0rem;">
-          Unity Technologies - Certified in level design tools, lighting systems, and environment optimization.
-        </p>
+    <h2>Background</h2>
+
+    <div class="timeline-wrap">
+      <!-- EDUCATION -->
+      <div class="timeline-block reveal">
+        <div class="timeline-title">Education</div>
+
+        <div class="timeline-list">
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="assets/icons/WARSAW_banner-14.jpg" alt="CD Projekt RED x Futuregames">
+            </div>
+            <div class="timeline-main">
+              <div class="timeline-top">
+                <div class="timeline-name">CD Projekt RED x Futuregames</div>
+                <div class="timeline-date">2024–2026</div>
+              </div>
+              <div class="timeline-sub">Game Design</div>
+              <div class="timeline-desc">
+                Game Development &amp; Game Design training with a specialization in Level Design—focused on player flow, encounter design, and building readable, engaging spaces.
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="assets/icons/logo_2.jpg" alt="Atılım University">
+            </div>
+            <div class="timeline-main">
+              <div class="timeline-top">
+                <div class="timeline-name">Atılım University</div>
+                <div class="timeline-date">2017–2022</div>
+              </div>
+              <div class="timeline-sub">Computer Engineering</div>
+              <div class="timeline-desc">
+                Strong engineering foundation in software development, algorithms, and problem-solving—supporting robust design decisions and technical collaboration.
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="skill-category reveal">
-        <h3>Level Design Skills</h3>
-        <p style="color:#999; font-size:0.95rem;">Level Design • Environment Design • Player Flow</p>
-      </div>
+      <!-- EXPERIENCE -->
+      <div class="timeline-block reveal">
+        <div class="timeline-title">Experience</div>
 
-      <div class="skill-category reveal">
-        <h3>Engine Experience</h3>
-        <p style="color:#999; font-size:0.95rem;">Unity • Unreal Engine • Lighting & VFX</p>
-      </div>
+        <div class="timeline-list">
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="assets/experience/job1.png" alt="Company 1">
+            </div>
+            <div class="timeline-main">
+              <div class="timeline-top">
+                <div class="timeline-name">Company / Studio Name 1</div>
+                <div class="timeline-date">Start–End</div>
+              </div>
+              <div class="timeline-sub">Role / Title</div>
+              <div class="timeline-desc">One-line description of what you did there (tools, responsibilities, impact).</div>
+            </div>
+          </div>
 
-      <div class="skill-category reveal">
-        <h3>Professional Experience</h3>
-        <p style="color: #999; font-size: 0.95rem;">Independent Studio (2022 - Present) • Freelance (2020 - 2022)</p>
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="assets/experience/job2.png" alt="Company 2">
+            </div>
+            <div class="timeline-main">
+              <div class="timeline-top">
+                <div class="timeline-name">Company / Studio Name 2</div>
+                <div class="timeline-date">Start–End</div>
+              </div>
+              <div class="timeline-sub">Role / Title</div>
+              <div class="timeline-desc">One-line description of what you did there (tools, responsibilities, impact).</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="assets/experience/job3.png" alt="Company 3">
+            </div>
+            <div class="timeline-main">
+              <div class="timeline-top">
+                <div class="timeline-name">Company / Studio Name 3</div>
+                <div class="timeline-date">Start–End</div>
+              </div>
+              <div class="timeline-sub">Role / Title</div>
+              <div class="timeline-desc">One-line description of what you did there (tools, responsibilities, impact).</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="assets/experience/job4.png" alt="Company 4">
+            </div>
+            <div class="timeline-main">
+              <div class="timeline-top">
+                <div class="timeline-name">Company / Studio Name 4</div>
+                <div class="timeline-date">Start–End</div>
+              </div>
+              <div class="timeline-sub">Role / Title</div>
+              <div class="timeline-desc">One-line description of what you did there (tools, responsibilities, impact).</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -672,8 +865,7 @@
           LinkedIn
         </a>
 
-        <!-- ✅ itch.io PNG (büyütüldü + crop OK) -->
-        <a href="https://yavuzalpbilen.itch.io/" class="contact-link itch" target="_blank" rel="noopener">
+        <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
           <img class="icon" src="assets/icons/itch-io-logo-png_seeklogo-449206.png" alt="itch.io">
           itch.io
         </a>
@@ -731,7 +923,7 @@
       }
       updateScoreUI();
 
-      // STARFIELD (less allocations)
+      // STARFIELD
       let canvas = document.getElementById('starfield');
       let ctx = canvas.getContext('2d', { alpha: true });
 
@@ -752,9 +944,7 @@
 
         ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 
-        // ✅ YILDIZLAR 2x: 16000 -> 8000
         const count = Math.floor((W * H) / 8000);
-
         stars = new Array(count).fill(0).map(() => ({
           x: Math.random() * W,
           y: Math.random() * H,
@@ -1193,7 +1383,7 @@
       window.addEventListener('scroll', revealOnScroll, { passive: true });
       revealOnScroll();
 
-      // ✅ HARD CLEANUP (reload’da da çalışsın)
+      // CLEANUP
       let cleaned = false;
       function cleanup() {
         if (cleaned) return;
@@ -1212,14 +1402,13 @@
 
         try { if (playfield) playfield.innerHTML = ''; } catch (e) {}
 
-        // ✅ Canvas release: detach + zero size
         try {
           stars = [];
           g1 = null; g2 = null;
           if (ctx) { ctx.setTransform(1,0,0,1,0,0); }
           if (canvas) {
             canvas.width = 0; canvas.height = 0;
-            canvas.remove(); // detach
+            canvas.remove();
           }
           ctx = null;
           canvas = null;
@@ -1236,7 +1425,7 @@
 
       window.__SPACE_CLEANUP__ = cleanup;
 
-      // anchors (same)
+      // anchors
       document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', (e) => {
           e.preventDefault();

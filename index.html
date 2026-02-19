@@ -417,6 +417,7 @@
     .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .tag { background: rgba(255, 255, 255, 0.05); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; border: 1px solid rgba(255, 255, 255, 0.2); }
 
+    /* (eski) skills-grid stillerini bozmuyoruz; ama artık kullanılmasa da kalsın */
     .skills-grid {
       width: 100%;
       display: grid;
@@ -424,6 +425,88 @@
       gap: 2rem;
     }
     .skill-category { background: rgba(255, 255, 255, 0.03); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); }
+
+    /* ===== Education / Experience (logos + text) ===== */
+    .eduexp-grid{
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.6rem;
+    }
+
+    .eduexp-card{
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 16px;
+      padding: 1.4rem 1.4rem;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .eduexp-left{
+      width: 54px;
+      height: 54px;
+      flex: 0 0 auto;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .eduexp-logo{
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 0 10px rgba(0,0,0,0.25));
+    }
+
+    .eduexp-right{ text-align: left; }
+
+    .eduexp-title{
+      margin: 0;
+      font-size: 1.15rem;
+      line-height: 1.2;
+    }
+
+    .eduexp-sub{
+      margin-top: 6px;
+      color: rgba(255,255,255,0.72);
+      font-size: 0.92rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .eduexp-chip{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.78);
+    }
+
+    .eduexp-desc{
+      margin-top: 10px;
+      color: #b0b0b0;
+      line-height: 1.55;
+      font-size: 0.96rem;
+    }
+
+    .eduexp-divider{
+      width: 100%;
+      height: 1px;
+      margin: 3.2rem 0;
+      background: rgba(255,255,255,0.10);
+    }
 
     .contact {
       width: 100%;
@@ -487,6 +570,9 @@
 
       .score-hud{ top: 71px; padding: 9px 14px; }
       .score-text{ font-size: 0.9rem; }
+
+      .eduexp-left{ width: 50px; height: 50px; }
+      .eduexp-logo{ width: 36px; height: 36px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -602,32 +688,123 @@
     </div>
   </section>
 
+  <!-- ✅ UPDATED: Education + Experience (separate headings, logos, role, dates, description) -->
   <section id="skills">
-    <h2>Education & Experience</h2>
-    <div class="skills-grid">
-      <div class="skill-category reveal">
-        <h3>Education</h3>
-        <p style="color: #999; font-size: 0.95rem; margin-top: 0.5rem;">
-          Game Design Academy - Comprehensive program covering systems design, level design, and game mechanics with specialization in level and environment design.
-        </p>
-        <p style="color: #999; font-size: 0.95rem; margin-top: 1.0rem;">
-          Unity Technologies - Certified in level design tools, lighting systems, and environment optimization.
-        </p>
+    <h2>Education</h2>
+
+    <div class="eduexp-grid">
+      <!-- SCHOOL 1 -->
+      <div class="eduexp-card reveal">
+        <div class="eduexp-left">
+          <img class="eduexp-logo" src="assets/icons/school1.png" alt="School 1">
+        </div>
+        <div class="eduexp-right">
+          <h3 class="eduexp-title">School Name 1</h3>
+          <div class="eduexp-sub">
+            <span class="eduexp-chip">Program / Degree</span>
+            <span class="eduexp-chip">Start: 2021</span>
+            <span class="eduexp-chip">End: 2025</span>
+          </div>
+          <p class="eduexp-desc">
+            1–2 cümle: burada ne yaptın / odak / projeler.
+          </p>
+        </div>
       </div>
 
-      <div class="skill-category reveal">
-        <h3>Level Design Skills</h3>
-        <p style="color:#999; font-size:0.95rem;">Level Design • Environment Design • Player Flow</p>
+      <!-- SCHOOL 2 -->
+      <div class="eduexp-card reveal">
+        <div class="eduexp-left">
+          <img class="eduexp-logo" src="assets/icons/school2.png" alt="School 2">
+        </div>
+        <div class="eduexp-right">
+          <h3 class="eduexp-title">School Name 2</h3>
+          <div class="eduexp-sub">
+            <span class="eduexp-chip">Program / Degree</span>
+            <span class="eduexp-chip">Start: 2018</span>
+            <span class="eduexp-chip">End: 2021</span>
+          </div>
+          <p class="eduexp-desc">
+            1–2 cümle: burada ne yaptın / odak / projeler.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="eduexp-divider"></div>
+
+    <h2>Experience</h2>
+
+    <div class="eduexp-grid">
+      <!-- JOB 1 -->
+      <div class="eduexp-card reveal">
+        <div class="eduexp-left">
+          <img class="eduexp-logo" src="assets/icons/job1.png" alt="Job 1">
+        </div>
+        <div class="eduexp-right">
+          <h3 class="eduexp-title">Company / Studio 1</h3>
+          <div class="eduexp-sub">
+            <span class="eduexp-chip">Role</span>
+            <span class="eduexp-chip">Start: 2023-06</span>
+            <span class="eduexp-chip">End: 2024-01</span>
+          </div>
+          <p class="eduexp-desc">
+            1–2 cümle: orada ne yaptın (net ve somut).
+          </p>
+        </div>
       </div>
 
-      <div class="skill-category reveal">
-        <h3>Engine Experience</h3>
-        <p style="color:#999; font-size:0.95rem;">Unity • Unreal Engine • Lighting & VFX</p>
+      <!-- JOB 2 -->
+      <div class="eduexp-card reveal">
+        <div class="eduexp-left">
+          <img class="eduexp-logo" src="assets/icons/job2.png" alt="Job 2">
+        </div>
+        <div class="eduexp-right">
+          <h3 class="eduexp-title">Company / Studio 2</h3>
+          <div class="eduexp-sub">
+            <span class="eduexp-chip">Role</span>
+            <span class="eduexp-chip">Start: 2022-03</span>
+            <span class="eduexp-chip">End: 2023-05</span>
+          </div>
+          <p class="eduexp-desc">
+            1–2 cümle: orada ne yaptın.
+          </p>
+        </div>
       </div>
 
-      <div class="skill-category reveal">
-        <h3>Professional Experience</h3>
-        <p style="color: #999; font-size: 0.95rem;">Independent Studio (2022 - Present) • Freelance (2020 - 2022)</p>
+      <!-- JOB 3 -->
+      <div class="eduexp-card reveal">
+        <div class="eduexp-left">
+          <img class="eduexp-logo" src="assets/icons/job3.png" alt="Job 3">
+        </div>
+        <div class="eduexp-right">
+          <h3 class="eduexp-title">Company / Studio 3</h3>
+          <div class="eduexp-sub">
+            <span class="eduexp-chip">Role</span>
+            <span class="eduexp-chip">Start: 2021-01</span>
+            <span class="eduexp-chip">End: 2022-02</span>
+          </div>
+          <p class="eduexp-desc">
+            1–2 cümle: orada ne yaptın.
+          </p>
+        </div>
+      </div>
+
+      <!-- JOB 4 -->
+      <div class="eduexp-card reveal">
+        <div class="eduexp-left">
+          <img class="eduexp-logo" src="assets/icons/job4.png" alt="Job 4">
+        </div>
+        <div class="eduexp-right">
+          <h3 class="eduexp-title">Company / Studio 4</h3>
+          <div class="eduexp-sub">
+            <span class="eduexp-chip">Role</span>
+            <span class="eduexp-chip">Start: 2020-07</span>
+            <span class="eduexp-chip">End: 2020-12</span>
+          </div>
+          <p class="eduexp-desc">
+            1–2 cümle: orada ne yaptın.
+          </p>
+        </div>
       </div>
     </div>
   </section>

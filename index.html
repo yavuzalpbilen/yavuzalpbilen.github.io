@@ -449,12 +449,13 @@
       gap: 1rem;
     }
 
+    /* ✅ LOGO BORDER/KUTU BÜYÜTÜLDÜ (Education + Experience) */
     .timeline-item{
       display: grid;
-      grid-template-columns: 76px 1fr; /* ✅ 64 -> 76 */
-      gap: 14px;
+      grid-template-columns: 96px 1fr; /* ✅ 76 -> 96 */
+      gap: 16px;
       align-items: center;
-      padding: 14px 14px;
+      padding: 16px 16px; /* biraz daha ferah */
       border-radius: 14px;
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.08);
@@ -467,33 +468,30 @@
     }
 
     .timeline-logo{
-      width: 76px;          /* ✅ 64 -> 76 */
-      height: 76px;         /* ✅ 64 -> 76 */
-      border-radius: 14px;
+      width: 96px;          /* ✅ 76 -> 96 */
+      height: 96px;         /* ✅ 76 -> 96 */
+      border-radius: 18px;  /* biraz daha premium */
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.10);
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;     /* ✅ taşanı kes */
+      overflow: hidden;     /* taşanı kes */
       position: relative;
     }
 
-    /* ✅ İSTEDİĞİN MOD:
-       - resim kutudan büyük olabilir
-       - kenarlar/köşeler kesilebilir
-    */
+    /* logo daha büyük dursun, kenarlar kesilebilir */
     .timeline-logo img{
-      width: 118%;           /* ✅ kutudan büyük */
-      height: 118%;
-      object-fit: cover;     /* ✅ kırp */
+      width: 120%;
+      height: 120%;
+      object-fit: cover;
       display: block;
 
-      padding: 0;            /* ✅ padding yok, daha büyük görünür */
+      padding: 0;
       background: #ffffff;
-      border-radius: 12px;
+      border-radius: 14px;
 
-      transform: scale(1.18); /* ✅ ekstra büyüt */
+      transform: scale(1.20);
       transform-origin: center;
 
       image-rendering: -webkit-optimize-contrast;
@@ -550,11 +548,11 @@
     }
 
     @media (max-width: 640px){
-      .timeline-item{ grid-template-columns: 62px 1fr; } /* ✅ 54 -> 62 */
-      .timeline-logo{ width: 62px; height: 62px; }      /* ✅ 54 -> 62 */
+      .timeline-item{ grid-template-columns: 76px 1fr; } /* ✅ mobilde de büyüt */
+      .timeline-logo{ width: 76px; height: 76px; }
       .timeline-logo img{
-        width: 122%;
-        height: 122%;
+        width: 124%;
+        height: 124%;
         transform: scale(1.16);
       }
       .timeline-top{ flex-direction: column; align-items: flex-start; gap: 6px; }

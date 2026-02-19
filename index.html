@@ -449,7 +449,6 @@
       gap: 1rem;
     }
 
-    /* ✅ bigger cards + bigger logo border */
     .timeline-item{
       display: grid;
       grid-template-columns: 92px 1fr;
@@ -580,15 +579,39 @@
     }
     .contact-link svg.icon{ fill: currentColor; }
 
-    /* ✅ itch.io => PNG'yi maske yap, currentColor ile gri boya */
+    /* ✅ itch.io => PNG mask + currentColor (gri) + fallback */
     .contact-link .itch-icon{
       width: 22px;
       height: 22px;
       display: block;
       flex: 0 0 auto;
-      background: currentColor;
-      -webkit-mask: url("assets/icons/itch-io-icon.png") center / contain no-repeat;
-      mask: url("assets/icons/itch-io-icon.png") center / contain no-repeat;
+
+      background-color: currentColor;
+
+      -webkit-mask-image: url("assets/icons/itch-io-icon.png");
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      -webkit-mask-size: contain;
+
+      mask-image: url("assets/icons/itch-io-icon.png");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      mask-size: contain;
+    }
+
+    /* fallback img normalde gizli */
+    .contact-link img.itch-fallback{
+      display: none;
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      filter: grayscale(1) brightness(1.35) opacity(0.92);
+    }
+
+    /* mask desteklenmiyorsa span gizle, img göster */
+    @supports not ((mask-image: url("")) or (-webkit-mask-image: url(""))) {
+      .contact-link .itch-icon{ display:none; }
+      .contact-link img.itch-fallback{ display:block; }
     }
 
     footer {
@@ -853,9 +876,10 @@
           LinkedIn
         </a>
 
-        <!-- ✅ itch.io (MASKED PNG) -->
+        <!-- ✅ itch.io (MASK + fallback img) -->
         <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
           <span class="icon itch-icon" aria-hidden="true"></span>
+          <img class="icon itch-fallback" src="assets/icons/itch-io-icon.png" alt="">
           itch.io
         </a>
 

@@ -417,95 +417,139 @@
     .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .tag { background: rgba(255, 255, 255, 0.05); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; border: 1px solid rgba(255, 255, 255, 0.2); }
 
-    /* (eski) skills-grid stillerini bozmuyoruz; ama artık kullanılmasa da kalsın */
-    .skills-grid {
+    /* ===== Education & Experience (new) ===== */
+    .timeline-wrap{
       width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2rem;
-    }
-    .skill-category { background: rgba(255, 255, 255, 0.03); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); }
-
-    /* ===== Education / Experience (logos + text) ===== */
-    .eduexp-grid{
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.6rem;
+      grid-template-columns: 1fr;
+      gap: 2.2rem;
     }
 
-    .eduexp-card{
+    .timeline-block{
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.10);
-      border-radius: 16px;
-      padding: 1.4rem 1.4rem;
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-    }
-
-    .eduexp-left{
-      width: 54px;
-      height: 54px;
-      flex: 0 0 auto;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.10);
-      display: grid;
-      place-items: center;
+      border-radius: 18px;
+      padding: 1.6rem 1.6rem;
       overflow: hidden;
     }
 
-    .eduexp-logo{
-      width: 40px;
-      height: 40px;
-      object-fit: contain;
-      display: block;
-      filter: drop-shadow(0 0 10px rgba(0,0,0,0.25));
+    .timeline-title{
+      font-size: 1.35rem;
+      margin-bottom: 1.15rem;
+      letter-spacing: 0.2px;
+      color: rgba(255,255,255,0.92);
+      text-shadow: 0 0 12px rgba(255,255,255,0.08);
     }
 
-    .eduexp-right{ text-align: left; }
-
-    .eduexp-title{
-      margin: 0;
-      font-size: 1.15rem;
-      line-height: 1.2;
+    .timeline-list{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
     }
 
-    .eduexp-sub{
-      margin-top: 6px;
-      color: rgba(255,255,255,0.72);
-      font-size: 0.92rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+    .timeline-item{
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 14px;
       align-items: center;
+      padding: 14px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .timeline-item:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.055);
+      border-color: rgba(255,255,255,0.16);
     }
 
-    .eduexp-chip{
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 999px;
+    .timeline-logo{
+      width: 64px;
+      height: 64px;
+      border-radius: 14px;
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.10);
-      font-size: 0.88rem;
-      color: rgba(255,255,255,0.78);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
-
-    .eduexp-desc{
-      margin-top: 10px;
-      color: #b0b0b0;
-      line-height: 1.55;
-      font-size: 0.96rem;
-    }
-
-    .eduexp-divider{
+    .timeline-logo img{
       width: 100%;
-      height: 1px;
-      margin: 3.2rem 0;
-      background: rgba(255,255,255,0.10);
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      padding: 8px;
+      /* image netliği */
+      image-rendering: -webkit-optimize-contrast;
+      transform: translateZ(0);
+    }
+
+    .timeline-main{
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .timeline-top{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .timeline-name{
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.95);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .timeline-date{
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.92);
+      background: rgba(0,0,0,0.30);
+      border: 1px solid rgba(255,255,255,0.10);
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .timeline-sub{
+      font-size: 0.95rem;
+      color: rgba(204,204,204,0.92);
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .timeline-desc{
+      font-size: 0.95rem;
+      color: rgba(176,176,176,0.95);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 640px){
+      .timeline-item{
+        grid-template-columns: 54px 1fr;
+      }
+      .timeline-logo{
+        width: 54px;
+        height: 54px;
+      }
+      .timeline-top{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
     }
 
     .contact {
@@ -541,10 +585,10 @@
     }
     .contact-link svg.icon{ fill: currentColor; }
 
-    /* ✅ itch.io PNG nicer */
+    /* ✅ itch.io PNG nicer + slightly bigger */
     .contact-link img.icon{
-      width: 26px;
-      height: 26px;
+      width: 28px;
+      height: 28px;
       object-fit: contain;
       background: #ffffff;
       border-radius: 6px;
@@ -570,9 +614,6 @@
 
       .score-hud{ top: 71px; padding: 9px 14px; }
       .score-text{ font-size: 0.9rem; }
-
-      .eduexp-left{ width: 50px; height: 50px; }
-      .eduexp-logo{ width: 36px; height: 36px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -688,122 +729,115 @@
     </div>
   </section>
 
-  <!-- ✅ UPDATED: Education + Experience (separate headings, logos, role, dates, description) -->
   <section id="skills">
-    <h2>Education</h2>
+    <h2>Background</h2>
 
-    <div class="eduexp-grid">
-      <!-- SCHOOL 1 -->
-      <div class="eduexp-card reveal">
-        <div class="eduexp-left">
-          <img class="eduexp-logo" src="assets/icons/school1.png" alt="School 1">
-        </div>
-        <div class="eduexp-right">
-          <h3 class="eduexp-title">School Name 1</h3>
-          <div class="eduexp-sub">
-            <span class="eduexp-chip">Program / Degree</span>
-            <span class="eduexp-chip">Start: 2021</span>
-            <span class="eduexp-chip">End: 2025</span>
+    <div class="timeline-wrap">
+      <!-- EDUCATION -->
+      <div class="timeline-block reveal">
+        <div class="timeline-title">Education</div>
+
+        <div class="timeline-list">
+          <!-- Put these images here in your repo:
+               assets/education/WARSAW_banner-14.jpg
+               assets/education/logo_2.jpg
+          -->
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="assets/education/WARSAW_banner-14.jpg" alt="CD Projekt RED x Futuregames">
+            </div>
+            <div class="timeline-main">
+              <div class="timeline-top">
+                <div class="timeline-name">CD Projekt RED x Futuregames</div>
+                <div class="timeline-date">2024–2026</div>
+              </div>
+              <div class="timeline-sub">Game Design</div>
+              <div class="timeline-desc">Program focused on game design fundamentals, systems, and production practices.</div>
+            </div>
           </div>
-          <p class="eduexp-desc">
-            1–2 cümle: burada ne yaptın / odak / projeler.
-          </p>
+
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="assets/education/logo_2.jpg" alt="Atılım University">
+            </div>
+            <div class="timeline-main">
+              <div class="timeline-top">
+                <div class="timeline-name">Atılım University</div>
+                <div class="timeline-date">2017–2022</div>
+              </div>
+              <div class="timeline-sub">Computer Engineering</div>
+              <div class="timeline-desc">Engineering background with strong foundations in software development and problem-solving.</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- SCHOOL 2 -->
-      <div class="eduexp-card reveal">
-        <div class="eduexp-left">
-          <img class="eduexp-logo" src="assets/icons/school2.png" alt="School 2">
-        </div>
-        <div class="eduexp-right">
-          <h3 class="eduexp-title">School Name 2</h3>
-          <div class="eduexp-sub">
-            <span class="eduexp-chip">Program / Degree</span>
-            <span class="eduexp-chip">Start: 2018</span>
-            <span class="eduexp-chip">End: 2021</span>
+      <!-- EXPERIENCE -->
+      <div class="timeline-block reveal">
+        <div class="timeline-title">Experience</div>
+
+        <div class="timeline-list">
+          <!-- Place your job logos like:
+               assets/experience/job1.png
+               assets/experience/job2.png
+               assets/experience/job3.png
+               assets/experience/job4.png
+          -->
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="assets/experience/job1.png" alt="Company 1">
+            </div>
+            <div class="timeline-main">
+              <div class="timeline-top">
+                <div class="timeline-name">Company / Studio Name 1</div>
+                <div class="timeline-date">Start–End</div>
+              </div>
+              <div class="timeline-sub">Role / Title</div>
+              <div class="timeline-desc">One-line description of what you did there (tools, responsibilities, impact).</div>
+            </div>
           </div>
-          <p class="eduexp-desc">
-            1–2 cümle: burada ne yaptın / odak / projeler.
-          </p>
-        </div>
-      </div>
-    </div>
 
-    <div class="eduexp-divider"></div>
-
-    <h2>Experience</h2>
-
-    <div class="eduexp-grid">
-      <!-- JOB 1 -->
-      <div class="eduexp-card reveal">
-        <div class="eduexp-left">
-          <img class="eduexp-logo" src="assets/icons/job1.png" alt="Job 1">
-        </div>
-        <div class="eduexp-right">
-          <h3 class="eduexp-title">Company / Studio 1</h3>
-          <div class="eduexp-sub">
-            <span class="eduexp-chip">Role</span>
-            <span class="eduexp-chip">Start: 2023-06</span>
-            <span class="eduexp-chip">End: 2024-01</span>
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="assets/experience/job2.png" alt="Company 2">
+            </div>
+            <div class="timeline-main">
+              <div class="timeline-top">
+                <div class="timeline-name">Company / Studio Name 2</div>
+                <div class="timeline-date">Start–End</div>
+              </div>
+              <div class="timeline-sub">Role / Title</div>
+              <div class="timeline-desc">One-line description of what you did there (tools, responsibilities, impact).</div>
+            </div>
           </div>
-          <p class="eduexp-desc">
-            1–2 cümle: orada ne yaptın (net ve somut).
-          </p>
-        </div>
-      </div>
 
-      <!-- JOB 2 -->
-      <div class="eduexp-card reveal">
-        <div class="eduexp-left">
-          <img class="eduexp-logo" src="assets/icons/job2.png" alt="Job 2">
-        </div>
-        <div class="eduexp-right">
-          <h3 class="eduexp-title">Company / Studio 2</h3>
-          <div class="eduexp-sub">
-            <span class="eduexp-chip">Role</span>
-            <span class="eduexp-chip">Start: 2022-03</span>
-            <span class="eduexp-chip">End: 2023-05</span>
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="assets/experience/job3.png" alt="Company 3">
+            </div>
+            <div class="timeline-main">
+              <div class="timeline-top">
+                <div class="timeline-name">Company / Studio Name 3</div>
+                <div class="timeline-date">Start–End</div>
+              </div>
+              <div class="timeline-sub">Role / Title</div>
+              <div class="timeline-desc">One-line description of what you did there (tools, responsibilities, impact).</div>
+            </div>
           </div>
-          <p class="eduexp-desc">
-            1–2 cümle: orada ne yaptın.
-          </p>
-        </div>
-      </div>
 
-      <!-- JOB 3 -->
-      <div class="eduexp-card reveal">
-        <div class="eduexp-left">
-          <img class="eduexp-logo" src="assets/icons/job3.png" alt="Job 3">
-        </div>
-        <div class="eduexp-right">
-          <h3 class="eduexp-title">Company / Studio 3</h3>
-          <div class="eduexp-sub">
-            <span class="eduexp-chip">Role</span>
-            <span class="eduexp-chip">Start: 2021-01</span>
-            <span class="eduexp-chip">End: 2022-02</span>
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="assets/experience/job4.png" alt="Company 4">
+            </div>
+            <div class="timeline-main">
+              <div class="timeline-top">
+                <div class="timeline-name">Company / Studio Name 4</div>
+                <div class="timeline-date">Start–End</div>
+              </div>
+              <div class="timeline-sub">Role / Title</div>
+              <div class="timeline-desc">One-line description of what you did there (tools, responsibilities, impact).</div>
+            </div>
           </div>
-          <p class="eduexp-desc">
-            1–2 cümle: orada ne yaptın.
-          </p>
-        </div>
-      </div>
-
-      <!-- JOB 4 -->
-      <div class="eduexp-card reveal">
-        <div class="eduexp-left">
-          <img class="eduexp-logo" src="assets/icons/job4.png" alt="Job 4">
-        </div>
-        <div class="eduexp-right">
-          <h3 class="eduexp-title">Company / Studio 4</h3>
-          <div class="eduexp-sub">
-            <span class="eduexp-chip">Role</span>
-            <span class="eduexp-chip">Start: 2020-07</span>
-            <span class="eduexp-chip">End: 2020-12</span>
-          </div>
-          <p class="eduexp-desc">
-            1–2 cümle: orada ne yaptın.
-          </p>
         </div>
       </div>
     </div>
@@ -829,7 +863,6 @@
           LinkedIn
         </a>
 
-        <!-- ✅ itch.io PNG (senin attığın dosya adıyla) -->
         <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
           <img class="icon" src="assets/icons/itch-io-logo-png_seeklogo-449206.png" alt="itch.io">
           itch.io

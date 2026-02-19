@@ -449,43 +449,49 @@
       gap: 1rem;
     }
 
+    /* ✅ bigger cards + bigger logo border */
     .timeline-item{
       display: grid;
-      grid-template-columns: 64px 1fr;
-      gap: 14px;
+      grid-template-columns: 92px 1fr; /* was 64px */
+      gap: 16px;                      /* was 14px */
       align-items: center;
-      padding: 14px 14px;
-      border-radius: 14px;
+      padding: 18px 18px;             /* was 14px */
+      border-radius: 16px;            /* was 14px */
       background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.10); /* a tiny bit stronger */
       transition: transform 0.2s, border-color 0.2s, background 0.2s;
     }
     .timeline-item:hover{
       transform: translateY(-2px);
-      background: rgba(255,255,255,0.055);
-      border-color: rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.058);
+      border-color: rgba(255,255,255,0.18);
     }
 
     .timeline-logo{
-      width: 64px;
-      height: 64px;
-      border-radius: 14px;
+      width: 92px;   /* was 64px */
+      height: 92px;  /* was 64px */
+      border-radius: 18px; /* bigger border feel */
       background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.12);
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
+      overflow: hidden; /* image can crop */
     }
 
+    /* ✅ make logos "baya büyük" like old vibe */
     .timeline-logo img{
-      width: 100%;
-      height: 100%;
+      width: 112%;
+      height: 112%;
       object-fit: contain;
       display: block;
-      padding: 8px;
+
+      /* less padding so logo looks bigger */
+      padding: 6px; /* was 8px */
+
       background: #ffffff;
-      border-radius: 12px;
+      border-radius: 14px;
+
       image-rendering: -webkit-optimize-contrast;
       transform: translateZ(0);
     }
@@ -540,8 +546,9 @@
     }
 
     @media (max-width: 640px){
-      .timeline-item{ grid-template-columns: 54px 1fr; }
-      .timeline-logo{ width: 54px; height: 54px; }
+      .timeline-item{ grid-template-columns: 76px 1fr; padding: 16px 16px; }
+      .timeline-logo{ width: 76px; height: 76px; border-radius: 16px; }
+      .timeline-logo img{ width: 112%; height: 112%; padding: 6px; border-radius: 12px; }
       .timeline-top{ flex-direction: column; align-items: flex-start; gap: 6px; }
     }
 
@@ -569,6 +576,7 @@
     }
     .contact-link:hover { background: #888888; color:#0a0a0a; transform: translateY(-2px); }
 
+    /* icons */
     .contact-link .icon{
       width: 22px;
       height: 22px;
@@ -577,6 +585,7 @@
     }
     .contact-link svg.icon{ fill: currentColor; }
 
+    /* itch.io PNG nicer + slightly bigger */
     .contact-link img.icon{
       width: 28px;
       height: 28px;
@@ -747,7 +756,6 @@
 
           <div class="timeline-item">
             <div class="timeline-logo">
-              <!-- ✅ Atılım logo: logo_9.jpg -->
               <img src="assets/icons/logo_9.jpg" alt="Atılım University">
             </div>
             <div class="timeline-main">
@@ -897,6 +905,7 @@
       }
       updatePlayfieldWidth();
 
+      // SCORE
       const TOTAL_SCORE = 12;
       let score = 0;
       const scoreTextEl = document.getElementById('score-text');
@@ -906,6 +915,7 @@
       }
       updateScoreUI();
 
+      // STARFIELD
       let canvas = document.getElementById('starfield');
       let ctx = canvas.getContext('2d', { alpha: true });
 
@@ -968,6 +978,7 @@
 
       resizeCanvas();
 
+      // PLANETS + BG BH
       function makePlanet({ top, left, right, bottom, size, gradient, drift, opacity }) {
         const p = document.createElement('div');
         p.className = `planet ${drift || 'drift-a'}`;
@@ -1046,6 +1057,7 @@
       }
       createBlackHole({ top: '36%', right: '12%', size: 165 });
 
+      // CURSOR BH
       const cursorBH = document.getElementById('cursor-bh');
       let mouseInHero = false;
       let mouseX = 0, mouseY = 0;
@@ -1066,6 +1078,7 @@
       hero.addEventListener('mouseleave', onHeroLeave);
       hero.addEventListener('mousemove', onHeroMove);
 
+      // SHIPS & ASTEROIDS
       const spaceshipSVG = `
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
@@ -1157,6 +1170,7 @@
         obj.scored = false;
 
         const c = getClusterBounds();
+
         obj.x = rand(c.minX, c.maxX);
         obj.y = rand(c.minY, c.maxY);
 
@@ -1225,6 +1239,7 @@
         if (o.y > c.maxY + m) o.y = c.minY - m;
       }
 
+      // LOOP (30fps) + star 20fps
       let running = true;
       let rafId = 0;
 
@@ -1360,6 +1375,7 @@
       window.addEventListener('scroll', revealOnScroll, { passive: true });
       revealOnScroll();
 
+      // CLEANUP
       let cleaned = false;
       function cleanup() {
         if (cleaned) return;
@@ -1401,6 +1417,7 @@
 
       window.__SPACE_CLEANUP__ = cleanup;
 
+      // anchors
       document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', (e) => {
           e.preventDefault();
@@ -1412,4 +1429,3 @@
   </script>
 </body>
 </html>
-

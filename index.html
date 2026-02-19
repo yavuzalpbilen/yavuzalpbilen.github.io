@@ -217,7 +217,7 @@
       width: var(--pfw, 200vw);
       height: 100%;
       transform: translateX(-50%);
-      z-index: 25; /* objects above cursor BH */
+      z-index: 25;
       pointer-events: none;
       overflow: visible;
       contain: layout paint;
@@ -229,7 +229,7 @@
       height: 86px;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 18; /* BH behind objects */
+      z-index: 18;
       opacity: 0;
       transform: translate(-50%, -50%);
       transition: opacity 0.15s ease;
@@ -417,7 +417,7 @@
     .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .tag { background: rgba(255, 255, 255, 0.05); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; border: 1px solid rgba(255, 255, 255, 0.2); }
 
-    /* ===== Education & Experience (new) ===== */
+    /* ===== Education & Experience ===== */
     .timeline-wrap{
       width: 100%;
       max-width: 1200px;
@@ -477,13 +477,19 @@
       justify-content: center;
       overflow: hidden;
     }
+
+    /* ✅ logo görünsün diye “clean card” */
     .timeline-logo img{
       width: 100%;
       height: 100%;
       object-fit: contain;
       display: block;
       padding: 8px;
-      /* image netliği */
+
+      /* logolar beyaz/karışık olunca düzgün dursun */
+      background: #ffffff;
+      border-radius: 12px;
+
       image-rendering: -webkit-optimize-contrast;
       transform: translateZ(0);
     }
@@ -538,18 +544,9 @@
     }
 
     @media (max-width: 640px){
-      .timeline-item{
-        grid-template-columns: 54px 1fr;
-      }
-      .timeline-logo{
-        width: 54px;
-        height: 54px;
-      }
-      .timeline-top{
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-      }
+      .timeline-item{ grid-template-columns: 54px 1fr; }
+      .timeline-logo{ width: 54px; height: 54px; }
+      .timeline-top{ flex-direction: column; align-items: flex-start; gap: 6px; }
     }
 
     .contact {
@@ -738,13 +735,14 @@
         <div class="timeline-title">Education</div>
 
         <div class="timeline-list">
-          <!-- Put these images here in your repo:
-               assets/education/WARSAW_banner-14.jpg
-               assets/education/logo_2.jpg
+          <!-- ✅ LOGO PATHS:
+               Bu iki dosyayı repo’da şu klasöre koy:
+               assets/icons/WARSAW_banner-14.jpg
+               assets/icons/logo_2.jpg
           -->
           <div class="timeline-item">
             <div class="timeline-logo">
-              <img src="assets/education/WARSAW_banner-14.jpg" alt="CD Projekt RED x Futuregames">
+              <img src="assets/icons/WARSAW_banner-14.jpg" alt="CD Projekt RED x Futuregames">
             </div>
             <div class="timeline-main">
               <div class="timeline-top">
@@ -752,13 +750,15 @@
                 <div class="timeline-date">2024–2026</div>
               </div>
               <div class="timeline-sub">Game Design</div>
-              <div class="timeline-desc">Program focused on game design fundamentals, systems, and production practices.</div>
+              <div class="timeline-desc">
+                Game Development &amp; Game Design training with a specialization in Level Design—focused on player flow, encounter design, and building readable, engaging spaces.
+              </div>
             </div>
           </div>
 
           <div class="timeline-item">
             <div class="timeline-logo">
-              <img src="assets/education/logo_2.jpg" alt="Atılım University">
+              <img src="assets/icons/logo_2.jpg" alt="Atılım University">
             </div>
             <div class="timeline-main">
               <div class="timeline-top">
@@ -766,7 +766,9 @@
                 <div class="timeline-date">2017–2022</div>
               </div>
               <div class="timeline-sub">Computer Engineering</div>
-              <div class="timeline-desc">Engineering background with strong foundations in software development and problem-solving.</div>
+              <div class="timeline-desc">
+                Strong engineering foundation in software development, algorithms, and problem-solving—supporting robust design decisions and technical collaboration.
+              </div>
             </div>
           </div>
         </div>
@@ -777,7 +779,7 @@
         <div class="timeline-title">Experience</div>
 
         <div class="timeline-list">
-          <!-- Place your job logos like:
+          <!-- Job logo dosyalarını da şuraya koyacaksın:
                assets/experience/job1.png
                assets/experience/job2.png
                assets/experience/job3.png
@@ -921,7 +923,7 @@
       }
       updateScoreUI();
 
-      // STARFIELD (less allocations)
+      // STARFIELD
       let canvas = document.getElementById('starfield');
       let ctx = canvas.getContext('2d', { alpha: true });
 
@@ -942,9 +944,7 @@
 
         ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 
-        // ✅ YILDIZLAR 2x: 16000 -> 8000
         const count = Math.floor((W * H) / 8000);
-
         stars = new Array(count).fill(0).map(() => ({
           x: Math.random() * W,
           y: Math.random() * H,
@@ -1383,7 +1383,7 @@
       window.addEventListener('scroll', revealOnScroll, { passive: true });
       revealOnScroll();
 
-      // ✅ HARD CLEANUP (reload’da da çalışsın)
+      // CLEANUP
       let cleaned = false;
       function cleanup() {
         if (cleaned) return;
@@ -1402,14 +1402,13 @@
 
         try { if (playfield) playfield.innerHTML = ''; } catch (e) {}
 
-        // ✅ Canvas release: detach + zero size
         try {
           stars = [];
           g1 = null; g2 = null;
           if (ctx) { ctx.setTransform(1,0,0,1,0,0); }
           if (canvas) {
             canvas.width = 0; canvas.height = 0;
-            canvas.remove(); // detach
+            canvas.remove();
           }
           ctx = null;
           canvas = null;
@@ -1426,7 +1425,7 @@
 
       window.__SPACE_CLEANUP__ = cleanup;
 
-      // anchors (same)
+      // anchors
       document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', (e) => {
           e.preventDefault();

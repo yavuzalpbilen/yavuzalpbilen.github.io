@@ -105,6 +105,7 @@
       padding-top: 90px;
     }
 
+    /* SCORE HUD */
     .score-hud{
       position: absolute;
       top: 90px;
@@ -409,32 +410,14 @@
       border-color: rgba(255, 255, 255, 0.22);
     }
 
-    .project-image {
-      width: 100%;
-      height: 250px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:3rem;
-      overflow: hidden;
-      position: relative;
-    }
-
-    /* video cover for project card */
-    .project-image video{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      background: #111;
-    }
-
+    .project-image { width: 100%; height: 250px; display:flex; align-items:center; justify-content:center; font-size:3rem; }
     .project-info { padding: 1.5rem; }
     .project-role { color: #999; font-size: 0.9rem; margin-bottom: 0.8rem; font-style: italic; }
     .project-info p { color: #b0b0b0; line-height: 1.6; margin-bottom: 1rem; }
     .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .tag { background: rgba(255, 255, 255, 0.05); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; border: 1px solid rgba(255, 255, 255, 0.2); }
 
+    /* ===== Education & Experience ===== */
     .timeline-wrap{
       width: 100%;
       max-width: 1200px;
@@ -587,14 +570,16 @@
     }
     .contact-link:hover { background: #888888; color:#0a0a0a; transform: translateY(-2px); }
 
+    /* icons */
     .contact-link .icon{
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       flex: 0 0 auto;
       display: block;
     }
     .contact-link svg.icon{ fill: currentColor; }
 
+    /* ✅ itch.io => PNG'yi maske yap, currentColor ile gri boya */
     .contact-link .itch-icon{
       width: 24px;
       height: 24px;
@@ -603,7 +588,6 @@
       background: currentColor;
       -webkit-mask: url("assets/icons/itch-io-icon.png") center / contain no-repeat;
       mask: url("assets/icons/itch-io-icon.png") center / contain no-repeat;
-      transform: translateY(1px);
     }
 
     footer {
@@ -724,21 +708,23 @@
         </div>
       </div>
 
-      <!-- ✅ 4th project: video card -->
+      <!-- ✅ 4th project = VIDEO -->
       <div class="project-card reveal">
-        <div class="project-image">
-          <video autoplay muted loop playsinline preload="metadata">
-            <source src="assets/icons/video4.mp4" type="video/mp4" />
+        <div class="project-image" style="padding:0; overflow:hidden; background:#111;">
+          <video autoplay muted loop playsinline preload="metadata"
+                 style="width:100%; height:100%; object-fit: cover; display:block;"
+                 onerror="this.outerHTML='<div style=&quot;color:#fff;font-size:14px;padding:12px;&quot;>Video failed to load</div>'">
+            <source src="assets/icons/video4.mp4" type="video/mp4">
           </video>
         </div>
         <div class="project-info">
           <h3>ZUS Life Run</h3>
-          <div class="project-role">Game Designer</div>
-          <p>Designed and developed core gameplay flow, level pacing, and player experience systems for ZUS Life Run, focusing on readability, movement feel, and engaging progression.</p>
+          <div class="project-role">Environment & Level Designer</div>
+          <p>Showcase gameplay clip (looping). Built a clean, readable run flow with strong readability, pacing, and environment-driven feedback.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
             <span class="tag">Runner</span>
-            <span class="tag">Game Design</span>
+            <span class="tag">Video</span>
           </div>
         </div>
       </div>
@@ -749,6 +735,7 @@
     <h2>Background</h2>
 
     <div class="timeline-wrap">
+      <!-- EDUCATION -->
       <div class="timeline-block reveal">
         <div class="timeline-title">Education</div>
 
@@ -787,6 +774,7 @@
         </div>
       </div>
 
+      <!-- EXPERIENCE -->
       <div class="timeline-block reveal">
         <div class="timeline-title">Experience</div>
 
@@ -871,6 +859,7 @@
           LinkedIn
         </a>
 
+        <!-- ✅ itch.io (MASKED PNG) -->
         <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
           <span class="icon itch-icon" aria-hidden="true"></span>
           itch.io
@@ -884,6 +873,7 @@
           CV
         </a>
       </div>
+
     </section>
   </div>
 
@@ -918,6 +908,7 @@
       }
       updatePlayfieldWidth();
 
+      // SCORE
       const TOTAL_SCORE = 12;
       let score = 0;
       const scoreTextEl = document.getElementById('score-text');
@@ -927,6 +918,7 @@
       }
       updateScoreUI();
 
+      // STARFIELD
       let canvas = document.getElementById('starfield');
       let ctx = canvas.getContext('2d', { alpha: true });
 
@@ -989,6 +981,7 @@
 
       resizeCanvas();
 
+      // PLANETS + BG BH
       function makePlanet({ top, left, right, bottom, size, gradient, drift, opacity }) {
         const p = document.createElement('div');
         p.className = `planet ${drift || 'drift-a'}`;
@@ -1067,6 +1060,7 @@
       }
       createBlackHole({ top: '36%', right: '12%', size: 165 });
 
+      // CURSOR BH
       const cursorBH = document.getElementById('cursor-bh');
       let mouseInHero = false;
       let mouseX = 0, mouseY = 0;
@@ -1087,6 +1081,7 @@
       hero.addEventListener('mouseleave', onHeroLeave);
       hero.addEventListener('mousemove', onHeroMove);
 
+      // SHIPS & ASTEROIDS
       const spaceshipSVG = `
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
@@ -1247,6 +1242,7 @@
         if (o.y > c.maxY + m) o.y = c.minY - m;
       }
 
+      // LOOP (30fps) + star 20fps
       let running = true;
       let rafId = 0;
 
@@ -1382,6 +1378,7 @@
       window.addEventListener('scroll', revealOnScroll, { passive: true });
       revealOnScroll();
 
+      // CLEANUP
       let cleaned = false;
       function cleanup() {
         if (cleaned) return;
@@ -1413,6 +1410,7 @@
         } catch (e) {}
 
         try { objects.length = 0; } catch (e) {}
+
         try { delete window.__SPACE_CLEANUP__; } catch (e) {}
       }
 
@@ -1422,6 +1420,7 @@
 
       window.__SPACE_CLEANUP__ = cleanup;
 
+      // anchors
       document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', (e) => {
           e.preventDefault();

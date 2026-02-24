@@ -687,10 +687,15 @@
         </div>
       </div>
 
+      <!-- 2nd project video (video2.mp4) -->
       <div class="project-card reveal">
-        <div class="project-image" style="background: linear-gradient(135deg, #5a5a5a 0%, #3a3a3a 100%);">🌲</div>
+        <div class="project-image" style="background:#111; padding:0; overflow:hidden;">
+          <video id="project-video-2" muted autoplay loop playsinline webkit-playsinline preload="auto">
+            <source src="./assets/icons/video2.mp4" type="video/mp4">
+          </video>
+        </div>
         <div class="project-info">
-          <h3>Forest of Echoes</h3>
+          <h3>Ecdysis</h3>
           <div class="project-role">Environment Designer</div>
           <p>Crafted atmospheric forest environments for single-player adventure. Designed exploration-focused levels with environmental storytelling elements.</p>
           <div class="project-tags">
@@ -701,10 +706,15 @@
         </div>
       </div>
 
+      <!-- 3rd project video (video3.mp4) -->
       <div class="project-card reveal">
-        <div class="project-image" style="background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);">🏰</div>
+        <div class="project-image" style="background:#111; padding:0; overflow:hidden;">
+          <video id="project-video-3" muted autoplay loop playsinline webkit-playsinline preload="auto">
+            <source src="./assets/icons/video3.mp4" type="video/mp4">
+          </video>
+        </div>
         <div class="project-info">
-          <h3>Siege Masters</h3>
+          <h3>Project Trash</h3>
           <div class="project-role">Level Designer</div>
           <p>Developed castle siege levels with destructible environments and dynamic objectives. Created asymmetric maps balancing attacker and defender advantages.</p>
           <div class="project-tags">
@@ -1381,22 +1391,26 @@
       window.addEventListener('scroll', revealOnScroll, { passive: true });
       revealOnScroll();
 
-      // Force-play project video (helps on some browsers)
-      const pvid4 = document.getElementById('project-video-4');
-      if (pvid4) {
-        pvid4.muted = true;
-        pvid4.defaultMuted = true;
+      // Force-play project videos (helps on some browsers)
+      const projectVideos = [
+        document.getElementById('project-video-2'),
+        document.getElementById('project-video-3'),
+        document.getElementById('project-video-4')
+      ].filter(Boolean);
 
-        const tryPlay = () => {
-          const pr = pvid4.play();
+      const tryPlayAllProjectVideos = () => {
+        projectVideos.forEach(v => {
+          v.muted = true;
+          v.defaultMuted = true;
+          const pr = v.play();
           if (pr && typeof pr.catch === 'function') pr.catch(() => {});
-        };
-
-        tryPlay();
-        ['click', 'touchstart', 'keydown'].forEach(evt => {
-          window.addEventListener(evt, tryPlay, { once: true, passive: true });
         });
-      }
+      };
+
+      tryPlayAllProjectVideos();
+      ['click', 'touchstart', 'keydown'].forEach(evt => {
+        window.addEventListener(evt, tryPlayAllProjectVideos, { once: true, passive: true });
+      });
 
       // CLEANUP
       let cleaned = false;

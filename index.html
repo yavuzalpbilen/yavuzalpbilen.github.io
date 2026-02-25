@@ -414,13 +414,42 @@
       display: none;
     }
 
-    .project-image { width: 100%; height: 250px; display:flex; align-items:center; justify-content:center; font-size:3rem; }
+    .project-image {
+      width: 100%;
+      height: 250px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
     .project-image video{
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center center;
       display: block;
       background: #111;
+      transform: scale(1);
+    }
+
+    /* Video crop tuning (only inside media, outer card size stays same) */
+    #project-video-2{
+      transform: scale(1.06);
+      object-position: center 58%;
+    }
+
+    #project-video-3{
+      transform: scale(1.06);
+      object-position: center 60%;
+    }
+
+    /* Vertical mobile video: crop sides more, show more height */
+    #project-video-4{
+      transform: scale(1.22);
+      object-position: center 35%;
     }
 
     .project-info { padding: 1.5rem; }
@@ -556,6 +585,20 @@
       .timeline-logo{ width: 76px; height: 76px; border-radius: 16px; }
       .timeline-logo img{ width: 112%; height: 112%; padding: 6px; border-radius: 12px; }
       .timeline-top{ flex-direction: column; align-items: flex-start; gap: 6px; }
+
+      /* Mobile crop tuning */
+      #project-video-2{
+        transform: scale(1.08);
+        object-position: center 60%;
+      }
+      #project-video-3{
+        transform: scale(1.08);
+        object-position: center 62%;
+      }
+      #project-video-4{
+        transform: scale(1.28);
+        object-position: center 30%;
+      }
     }
 
     .contact {
@@ -938,7 +981,6 @@
       }
       updatePlayfieldWidth();
 
-      // SCORE
       const TOTAL_SCORE = 12;
       let score = 0;
       const scoreTextEl = document.getElementById('score-text');
@@ -948,7 +990,6 @@
       }
       updateScoreUI();
 
-      // STARFIELD
       let canvas = document.getElementById('starfield');
       let ctx = canvas.getContext('2d', { alpha: true });
 
@@ -1011,7 +1052,6 @@
 
       resizeCanvas();
 
-      // PLANETS + BG BH
       function makePlanet({ top, left, right, bottom, size, gradient, drift, opacity }) {
         const p = document.createElement('div');
         p.className = `planet ${drift || 'drift-a'}`;
@@ -1090,7 +1130,6 @@
       }
       createBlackHole({ top: '36%', right: '12%', size: 165 });
 
-      // CURSOR BH
       const cursorBH = document.getElementById('cursor-bh');
       let mouseInHero = false;
       let mouseX = 0, mouseY = 0;
@@ -1111,7 +1150,6 @@
       hero.addEventListener('mouseleave', onHeroLeave);
       hero.addEventListener('mousemove', onHeroMove);
 
-      // SHIPS & ASTEROIDS
       const spaceshipSVG = `
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
@@ -1285,7 +1323,6 @@
 
       let last = performance.now();
       let acc = 0;
-
       let lastStar = performance.now();
       let starAcc = 0;
       const STAR_STEP = 1 / 20;
@@ -1433,7 +1470,6 @@
         cleaned = true;
 
         try { cancelAnimationFrame(rafId); } catch (e) {}
-
         try {
           hero.removeEventListener('mouseenter', onHeroEnter);
           hero.removeEventListener('mouseleave', onHeroLeave);
@@ -1442,13 +1478,12 @@
 
         try { window.removeEventListener('resize', onResize); } catch (e) {}
         try { window.removeEventListener('scroll', revealOnScroll); } catch (e) {}
-
         try { if (playfield) playfield.innerHTML = ''; } catch (e) {}
 
         try {
           stars = [];
           g1 = null; g2 = null;
-          if (ctx) { ctx.setTransform(1,0,0,1,0,0); }
+          if (ctx) ctx.setTransform(1,0,0,1,0,0);
           if (canvas) {
             canvas.width = 0; canvas.height = 0;
             canvas.remove();
@@ -1458,7 +1493,6 @@
         } catch (e) {}
 
         try { objects.length = 0; } catch (e) {}
-
         try { delete window.__SPACE_CLEANUP__; } catch (e) {}
       }
 

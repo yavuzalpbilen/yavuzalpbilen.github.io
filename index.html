@@ -105,7 +105,6 @@
       padding-top: 90px;
     }
 
-    /* SCORE HUD */
     .score-hud{
       position: absolute;
       top: 90px;
@@ -389,10 +388,13 @@
       width: 100%;
     }
 
+    /* ===== PROJECTS STACKED / LARGE ===== */
     .projects-grid {
       width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      grid-template-columns: 1fr;
       gap: 2rem;
     }
 
@@ -405,24 +407,26 @@
       cursor: pointer;
     }
     .project-card:hover {
-      transform: translateY(-10px) scale(1.01);
+      transform: translateY(-6px);
       box-shadow: 0 22px 50px rgba(0, 0, 0, 0.50);
       border-color: rgba(255, 255, 255, 0.22);
     }
 
-    .project-card.is-hidden {
-      display: none;
-    }
+    .project-card.is-hidden { display: none; }
 
     .project-image {
       width: 100%;
-      height: 250px;
+      aspect-ratio: 16 / 9;
+      min-height: 320px;
+      max-height: 620px;
       display:flex;
       align-items:center;
       justify-content:center;
       font-size:3rem;
       position: relative;
       overflow: hidden;
+      background: #111;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
     .project-image video{
@@ -435,28 +439,29 @@
       transform: scale(1);
     }
 
-    /* Video crop tuning (only inside media, outer card size stays same) */
+    /* 2-3 yatay mobil videolar: biraz daha aşağıdan göster */
     #project-video-2{
-      transform: scale(1.06);
+      transform: scale(1.03);
       object-position: center 58%;
     }
 
     #project-video-3{
-      transform: scale(1.06);
-      object-position: center 60%;
+      transform: scale(1.03);
+      object-position: center 58%;
     }
 
-    /* Vertical mobile video: crop sides more, show more height */
+    /* 4 dikey mobil video: yanlardan crop, daha ortalanmış */
     #project-video-4{
-      transform: scale(1.22);
-      object-position: center 35%;
+      transform: scale(1.35);
+      object-position: center 38%;
     }
 
-    .project-info { padding: 1.5rem; }
-    .project-role { color: #999; font-size: 0.9rem; margin-bottom: 0.8rem; font-style: italic; }
-    .project-info p { color: #b0b0b0; line-height: 1.6; margin-bottom: 1rem; }
-    .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .tag { background: rgba(255, 255, 255, 0.05); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; border: 1px solid rgba(255, 255, 255, 0.2); }
+    .project-info { padding: 1.6rem 1.6rem 1.7rem; }
+    .project-info h3 { font-size: 1.35rem; margin-bottom: 0.45rem; }
+    .project-role { color: #999; font-size: 0.95rem; margin-bottom: 0.9rem; font-style: italic; }
+    .project-info p { color: #b0b0b0; line-height: 1.65; margin-bottom: 1rem; font-size: 1rem; }
+    .project-tags { display: flex; gap: 0.55rem; flex-wrap: wrap; }
+    .tag { background: rgba(255, 255, 255, 0.05); padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.85rem; border: 1px solid rgba(255, 255, 255, 0.2); }
 
     /* ===== Education & Experience ===== */
     .timeline-wrap{
@@ -580,27 +585,6 @@
       line-height: 1.5;
     }
 
-    @media (max-width: 640px){
-      .timeline-item{ grid-template-columns: 76px 1fr; padding: 16px 16px; }
-      .timeline-logo{ width: 76px; height: 76px; border-radius: 16px; }
-      .timeline-logo img{ width: 112%; height: 112%; padding: 6px; border-radius: 12px; }
-      .timeline-top{ flex-direction: column; align-items: flex-start; gap: 6px; }
-
-      /* Mobile crop tuning */
-      #project-video-2{
-        transform: scale(1.08);
-        object-position: center 60%;
-      }
-      #project-video-3{
-        transform: scale(1.08);
-        object-position: center 62%;
-      }
-      #project-video-4{
-        transform: scale(1.28);
-        object-position: center 30%;
-      }
-    }
-
     .contact {
       width: 100%;
       text-align: center;
@@ -662,6 +646,21 @@
 
       .score-hud{ top: 71px; padding: 9px 14px; }
       .score-text{ font-size: 0.9rem; }
+
+      .project-image{
+        min-height: 220px;
+      }
+
+      #project-video-2{ transform: scale(1.05); object-position: center 60%; }
+      #project-video-3{ transform: scale(1.05); object-position: center 60%; }
+      #project-video-4{ transform: scale(1.42); object-position: center 34%; }
+    }
+
+    @media (max-width: 640px){
+      .timeline-item{ grid-template-columns: 76px 1fr; padding: 16px 16px; }
+      .timeline-logo{ width: 76px; height: 76px; border-radius: 16px; }
+      .timeline-logo img{ width: 112%; height: 112%; padding: 6px; border-radius: 12px; }
+      .timeline-top{ flex-direction: column; align-items: flex-start; gap: 6px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -720,7 +719,7 @@
     <h2>Projects</h2>
     <div class="projects-grid">
       <!-- PROJECT 1 HIDDEN TEMPORARILY -->
-      <!-- Video hazır olunca class="project-card reveal is-hidden" -> class="project-card reveal" yap -->
+      <!-- Video hazır olunca "is-hidden" classını kaldır -->
       <div class="project-card reveal is-hidden">
         <div class="project-image" style="background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);">🏙️</div>
         <div class="project-info">
@@ -738,9 +737,8 @@
         </div>
       </div>
 
-      <!-- 2nd project video (video2.mp4) -->
       <div class="project-card reveal">
-        <div class="project-image" style="background:#111; padding:0; overflow:hidden;">
+        <div class="project-image">
           <video id="project-video-2" muted autoplay loop playsinline webkit-playsinline preload="auto">
             <source src="./assets/icons/video2.mp4" type="video/mp4">
           </video>
@@ -760,9 +758,8 @@
         </div>
       </div>
 
-      <!-- 3rd project video (video3.mp4) -->
       <div class="project-card reveal">
-        <div class="project-image" style="background:#111; padding:0; overflow:hidden;">
+        <div class="project-image">
           <video id="project-video-3" muted autoplay loop playsinline webkit-playsinline preload="auto">
             <source src="./assets/icons/video3.mp4" type="video/mp4">
           </video>
@@ -782,9 +779,8 @@
         </div>
       </div>
 
-      <!-- 4th project video -->
       <div class="project-card reveal">
-        <div class="project-image" style="background:#111; padding:0; overflow:hidden;">
+        <div class="project-image">
           <video id="project-video-4" muted autoplay loop playsinline webkit-playsinline preload="auto">
             <source src="./assets/icons/video4.mp4" type="video/mp4">
           </video>
@@ -792,7 +788,7 @@
         <div class="project-info">
           <h3>ZUS Life Run</h3>
           <div class="project-role">Gameplay Developer & Level Designer</div>
-          <p>In this mobile game for ZUS Insurance, you guide a character’s life from childhood to old age, balancing six stats through swiped decisions. I designed the narrative events and their stat effects, along with the core swiping mechanic linking choices to stats. </p>
+          <p>In this mobile game for ZUS Insurance, you guide a character’s life from childhood to old age, balancing six stats through swiped decisions. I designed the narrative events and their stat effects, along with the core swiping mechanic linking choices to stats.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
             <span class="tag">Decision-Making</span>
@@ -810,10 +806,8 @@
     <h2>Background</h2>
 
     <div class="timeline-wrap">
-      <!-- EDUCATION -->
       <div class="timeline-block reveal">
         <div class="timeline-title">Education</div>
-
         <div class="timeline-list">
           <div class="timeline-item">
             <div class="timeline-logo">
@@ -849,10 +843,8 @@
         </div>
       </div>
 
-      <!-- EXPERIENCE -->
       <div class="timeline-block reveal">
         <div class="timeline-title">Experience</div>
-
         <div class="timeline-list">
           <div class="timeline-item">
             <div class="timeline-logo">
@@ -1263,7 +1255,7 @@
         obj.el.style.opacity = obj.opacity;
         obj.el.style.left = obj.x + 'px';
         obj.el.style.top = obj.y + 'px';
-        obj.el.style.transform = `rotate(${obj.rot}deg)`;
+        obj.el.style.transform = \`rotate(\${obj.rot}deg)\`;
       }
 
       function createShip() {
@@ -1305,7 +1297,6 @@
 
         if (o.x < c.minX - m) o.x = c.maxX + m;
         if (o.x > c.maxX + m) o.x = c.minX - m;
-
         if (o.y < c.minY - m) o.y = c.maxY + m;
         if (o.y > c.maxY + m) o.y = c.minY - m;
       }
@@ -1353,7 +1344,6 @@
 
         const cursorWorldX = heroRect.left + mouseX;
         const cursorWorldY = heroRect.top + mouseY;
-
         const cursorInPlayX = cursorWorldX - playRect.left;
         const cursorInPlayY = cursorWorldY - playRect.top;
 
@@ -1379,7 +1369,7 @@
             o.el.style.opacity = Math.max(0, o.opacity);
             o.el.style.left = o.x + 'px';
             o.el.style.top = o.y + 'px';
-            o.el.style.transform = `rotate(${o.rot}deg) scale(${Math.max(0.05, o.scale)})`;
+            o.el.style.transform = \`rotate(\${o.rot}deg) scale(\${Math.max(0.05, o.scale)})\`;
 
             if (t >= 1) { o.dead = true; o.el.remove(); }
             continue;
@@ -1395,7 +1385,7 @@
 
           o.el.style.left = (o.x + wobble * 0.7) + 'px';
           o.el.style.top  = (o.y + wobble * 0.5) + 'px';
-          o.el.style.transform = `rotate(${o.rot}deg)`;
+          o.el.style.transform = \`rotate(\${o.rot}deg)\`;
 
           if (mouseInHero && score < TOTAL_SCORE) {
             const cx = o.x + 28;

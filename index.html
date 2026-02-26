@@ -484,6 +484,10 @@
       background: linear-gradient(45deg, rgba(145,145,145,0.34), rgba(210,210,210,0.20));
     }
 
+    .play-link.is-hidden{
+      display: none;
+    }
+
     .project-role { color: #999; font-size: 0.95rem; margin-bottom: 0.9rem; font-style: italic; }
     .project-info p { color: #b0b0b0; line-height: 1.65; margin-bottom: 1rem; font-size: 1rem; }
     .project-tags { display: flex; gap: 0.55rem; flex-wrap: wrap; }
@@ -749,7 +753,7 @@
         <div class="project-info">
           <div class="project-header">
             <h3>Kingdom of Vurnal</h3>
-            <a href="YOUR_PROJECT_1_LINK" class="play-link" target="_blank" rel="noopener">PLAY</a>
+            <a href="#" class="play-link">PLAY</a>
           </div>
           <div class="project-role">Gameplay Developer & Level Designer</div>
           <p>In this strategic rogue-like card-based tower defense game, you expand your kingdom while defending against enemy waves, adapting your strategy to different threats. I designed and developed everything from the core gameplay loop, level layouts, difficulty balancing, and kingdom progression systems as a solo project.</p>
@@ -773,7 +777,7 @@
         <div class="project-info">
           <div class="project-header">
             <h3>Ecdysis</h3>
-            <a href="YOUR_PROJECT_2_LINK" class="play-link" target="_blank" rel="noopener">PLAY</a>
+            <a href="https://futuregames.itch.io/ecdysis" class="play-link" target="_blank" rel="noopener">PLAY</a>
           </div>
           <div class="project-role">Gameplay Developer & Level Designer & Environment</div>
           <p>In this 2.5D action platformer, you defeat enemies, consume their skills, and evolve to progress through new biomes. I led the core game loop and combat design, but primarily focused on level and environment design—placing enemies, balancing encounters, and shaping biomes so players naturally navigate and evolve through each stage.</p>
@@ -797,7 +801,7 @@
         <div class="project-info">
           <div class="project-header">
             <h3>Project Trash</h3>
-            <a href="YOUR_PROJECT_3_LINK" class="play-link" target="_blank" rel="noopener">PLAY</a>
+            <a href="https://futuregames.itch.io/projecttrash" class="play-link" target="_blank" rel="noopener">PLAY</a>
           </div>
           <div class="project-role">Gameplay Developer & Level Designer</div>
           <p>In this arcade-style recycling game, you quickly sort and throw six types of waste into the correct bins, aiming for a high score. I designed the core gameplay concept, factory layout, and scoring system, and also contributed to coding the object sorting, scoring logic, and some hand movement mechanics.</p>
@@ -821,7 +825,7 @@
         <div class="project-info">
           <div class="project-header">
             <h3>ZUS Life Run</h3>
-            <a href="YOUR_PROJECT_4_LINK" class="play-link" target="_blank" rel="noopener">PLAY</a>
+            <a href="#" class="play-link is-hidden">PLAY</a>
           </div>
           <div class="project-role">Gameplay Developer & Level Designer</div>
           <p>In this mobile game for ZUS Insurance, you guide a character’s life from childhood to old age, balancing six stats through swiped decisions. I designed the narrative events and their stat effects, along with the core swiping mechanic linking choices to stats.</p>
@@ -1496,6 +1500,7 @@
         cleaned = true;
 
         try { cancelAnimationFrame(rafId); } catch (e) {}
+
         try {
           hero.removeEventListener('mouseenter', onHeroEnter);
           hero.removeEventListener('mouseleave', onHeroLeave);
@@ -1504,12 +1509,13 @@
 
         try { window.removeEventListener('resize', onResize); } catch (e) {}
         try { window.removeEventListener('scroll', revealOnScroll); } catch (e) {}
+
         try { if (playfield) playfield.innerHTML = ''; } catch (e) {}
 
         try {
           stars = [];
           g1 = null; g2 = null;
-          if (ctx) ctx.setTransform(1,0,0,1,0,0);
+          if (ctx) { ctx.setTransform(1,0,0,1,0,0); }
           if (canvas) {
             canvas.width = 0; canvas.height = 0;
             canvas.remove();
@@ -1519,6 +1525,7 @@
         } catch (e) {}
 
         try { objects.length = 0; } catch (e) {}
+
         try { delete window.__SPACE_CLEANUP__; } catch (e) {}
       }
 

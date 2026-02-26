@@ -436,23 +436,54 @@
       transform: none;
     }
 
-    #project-video-2{
-      transform: none;
-      object-position: center center;
-    }
-
-    #project-video-3{
-      transform: none;
-      object-position: center center;
-    }
-
+    #project-video-2,
+    #project-video-3,
     #project-video-4{
       transform: none;
       object-position: center center;
     }
 
     .project-info { padding: 1.6rem 1.6rem 1.7rem; }
-    .project-info h3 { font-size: 1.35rem; margin-bottom: 0.45rem; }
+
+    .project-header{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .project-info h3 {
+      font-size: 1.35rem;
+      margin-bottom: 0;
+    }
+
+    .play-link{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      color: #fff;
+      background: linear-gradient(45deg, rgba(120,120,120,0.28), rgba(170,170,170,0.18));
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.22);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .play-link:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.30);
+      border-color: rgba(255,255,255,0.30);
+      background: linear-gradient(45deg, rgba(145,145,145,0.34), rgba(210,210,210,0.20));
+    }
+
     .project-role { color: #999; font-size: 0.95rem; margin-bottom: 0.9rem; font-style: italic; }
     .project-info p { color: #b0b0b0; line-height: 1.65; margin-bottom: 1rem; font-size: 1rem; }
     .project-tags { display: flex; gap: 0.55rem; flex-wrap: wrap; }
@@ -644,6 +675,10 @@
       .project-image{
         height: 420px;
       }
+
+      .project-header{
+        align-items: flex-start;
+      }
     }
 
     @media (max-width: 640px){
@@ -712,7 +747,10 @@
       <div class="project-card reveal is-hidden">
         <div class="project-image" style="background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);">🏙️</div>
         <div class="project-info">
-          <h3>Kingdom of Vurnal</h3>
+          <div class="project-header">
+            <h3>Kingdom of Vurnal</h3>
+            <a href="YOUR_PROJECT_1_LINK" class="play-link" target="_blank" rel="noopener">PLAY</a>
+          </div>
           <div class="project-role">Gameplay Developer & Level Designer</div>
           <p>In this strategic rogue-like card-based tower defense game, you expand your kingdom while defending against enemy waves, adapting your strategy to different threats. I designed and developed everything from the core gameplay loop, level layouts, difficulty balancing, and kingdom progression systems as a solo project.</p>
           <div class="project-tags">
@@ -733,7 +771,10 @@
           </video>
         </div>
         <div class="project-info">
-          <h3>Ecdysis</h3>
+          <div class="project-header">
+            <h3>Ecdysis</h3>
+            <a href="YOUR_PROJECT_2_LINK" class="play-link" target="_blank" rel="noopener">PLAY</a>
+          </div>
           <div class="project-role">Gameplay Developer & Level Designer & Environment</div>
           <p>In this 2.5D action platformer, you defeat enemies, consume their skills, and evolve to progress through new biomes. I led the core game loop and combat design, but primarily focused on level and environment design—placing enemies, balancing encounters, and shaping biomes so players naturally navigate and evolve through each stage.</p>
           <div class="project-tags">
@@ -754,7 +795,10 @@
           </video>
         </div>
         <div class="project-info">
-          <h3>Project Trash</h3>
+          <div class="project-header">
+            <h3>Project Trash</h3>
+            <a href="YOUR_PROJECT_3_LINK" class="play-link" target="_blank" rel="noopener">PLAY</a>
+          </div>
           <div class="project-role">Gameplay Developer & Level Designer</div>
           <p>In this arcade-style recycling game, you quickly sort and throw six types of waste into the correct bins, aiming for a high score. I designed the core gameplay concept, factory layout, and scoring system, and also contributed to coding the object sorting, scoring logic, and some hand movement mechanics.</p>
           <div class="project-tags">
@@ -775,7 +819,10 @@
           </video>
         </div>
         <div class="project-info">
-          <h3>ZUS Life Run</h3>
+          <div class="project-header">
+            <h3>ZUS Life Run</h3>
+            <a href="YOUR_PROJECT_4_LINK" class="play-link" target="_blank" rel="noopener">PLAY</a>
+          </div>
           <div class="project-role">Gameplay Developer & Level Designer</div>
           <p>In this mobile game for ZUS Insurance, you guide a character’s life from childhood to old age, balancing six stats through swiped decisions. I designed the narrative events and their stat effects, along with the core swiping mechanic linking choices to stats.</p>
           <div class="project-tags">

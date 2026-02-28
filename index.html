@@ -897,7 +897,7 @@
         <div class="timeline-list">
           <div class="timeline-item">
             <div class="timeline-logo">
-              <img src="assets/experience/exp1.png" alt="Outlier">
+              <img class="exp-logo" data-base="assets/experience/exp1" alt="Outlier">
             </div>
             <div class="timeline-main">
               <div class="timeline-top">
@@ -911,7 +911,7 @@
 
           <div class="timeline-item">
             <div class="timeline-logo">
-              <img src="assets/experience/exp2.png" alt="Ertürkler A.Ş.">
+              <img class="exp-logo" data-base="assets/experience/exp2" alt="Ertürkler A.Ş.">
             </div>
             <div class="timeline-main">
               <div class="timeline-top">
@@ -925,7 +925,7 @@
 
           <div class="timeline-item">
             <div class="timeline-logo">
-              <img src="assets/experience/exp3.png" alt="Dias Teknoloji">
+              <img class="exp-logo" data-base="assets/experience/exp3" alt="Dias Teknoloji">
             </div>
             <div class="timeline-main">
               <div class="timeline-top">
@@ -939,7 +939,7 @@
 
           <div class="timeline-item">
             <div class="timeline-logo">
-              <img src="assets/experience/exp4.png" alt="DNS İnovasyon Sistemleri ve Teknoloji A.Ş.">
+              <img class="exp-logo" data-base="assets/experience/exp4" alt="DNS İnovasyon Sistemleri ve Teknoloji A.Ş.">
             </div>
             <div class="timeline-main">
               <div class="timeline-top">
@@ -953,7 +953,7 @@
 
           <div class="timeline-item">
             <div class="timeline-logo">
-              <img src="assets/experience/exp5.png" alt="Infopark Yazılım ve Danışmanlık">
+              <img class="exp-logo" data-base="assets/experience/exp5" alt="Infopark Yazılım ve Danışmanlık">
             </div>
             <div class="timeline-main">
               <div class="timeline-top">
@@ -1516,6 +1516,32 @@
       ['click', 'touchstart', 'keydown'].forEach(evt => {
         window.addEventListener(evt, tryPlayAllProjectVideos, { once: true, passive: true });
       });
+
+      const imageExtensions = ['png', 'jpg', 'jpeg', 'jfif', 'webp', 'avif', 'svg'];
+
+      function tryImageExtensions(img) {
+        const base = img.dataset.base;
+        if (!base) return;
+
+        let index = 0;
+
+        function tryNext() {
+          if (index >= imageExtensions.length) {
+            img.style.display = 'none';
+            return;
+          }
+
+          const testSrc = `${base}.${imageExtensions[index]}`;
+          index++;
+
+          img.onerror = tryNext;
+          img.src = testSrc;
+        }
+
+        tryNext();
+      }
+
+      document.querySelectorAll('.exp-logo[data-base]').forEach(tryImageExtensions);
 
       let cleaned = false;
       function cleanup() {

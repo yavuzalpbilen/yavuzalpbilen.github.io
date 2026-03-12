@@ -461,6 +461,27 @@
       flex-wrap: wrap;
     }
 
+    .project-title-group{
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .project-actions{
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 120px;
+      flex: 0 0 120px;
+    }
+
+    .project-actions.placeholder{
+      visibility: hidden;
+    }
+
     .project-info h3 {
       font-size: 1.35rem;
       margin-bottom: 0;
@@ -777,6 +798,11 @@
         align-items: flex-start;
       }
 
+      .project-actions{
+        min-width: auto;
+        flex: 0 0 auto;
+      }
+
       .floating-contact-links{
         bottom: 18px;
         gap: 0.75rem;
@@ -886,8 +912,12 @@
         <div class="project-image" style="background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);">🏙️</div>
         <div class="project-info">
           <div class="project-header">
-            <h3>Kingdom of Vurnal</h3>
-            <a href="#" class="play-link">PLAY</a>
+            <div class="project-title-group">
+              <h3>Kingdom of Vurnal</h3>
+            </div>
+            <div class="project-actions">
+              <a href="#" class="play-link">PLAY</a>
+            </div>
           </div>
           <div class="project-role">Gameplay Developer & Level Designer</div>
           <p>In this strategic rogue-like card-based tower defense game, you expand your kingdom while defending against enemy waves, adapting your strategy to different threats. I designed and developed everything from the core gameplay loop, level layouts, difficulty balancing, and kingdom progression systems as a solo project.</p>
@@ -910,8 +940,12 @@
         </div>
         <div class="project-info">
           <div class="project-header">
-            <h3>Ecdysis</h3>
-            <a href="https://futuregames.itch.io/ecdysis" class="play-link" target="_blank" rel="noopener">PLAY</a>
+            <div class="project-title-group">
+              <h3>Ecdysis</h3>
+            </div>
+            <div class="project-actions">
+              <a href="https://futuregames.itch.io/ecdysis" class="play-link" target="_blank" rel="noopener">PLAY</a>
+            </div>
           </div>
           <div class="project-role">Gameplay Developer & Level Designer & Environment</div>
           <p>In this 2.5D action platformer, you defeat enemies, consume their skills, and evolve to progress through new biomes. I led the core game loop and combat design, but primarily focused on level and environment design—placing enemies, balancing encounters, and shaping biomes so players naturally navigate and evolve through each stage.</p>
@@ -934,9 +968,13 @@
         </div>
         <div class="project-info">
           <div class="project-header">
-            <h3>Project Trash</h3>
-            <span class="award-badge">Best Green Theme Game Award</span>
-            <a href="https://futuregames.itch.io/projecttrash" class="play-link" target="_blank" rel="noopener">PLAY</a>
+            <div class="project-title-group">
+              <h3>Project Trash</h3>
+              <span class="award-badge">Best Green Theme Game Award</span>
+            </div>
+            <div class="project-actions">
+              <a href="https://futuregames.itch.io/projecttrash" class="play-link" target="_blank" rel="noopener">PLAY</a>
+            </div>
           </div>
           <div class="project-role">Gameplay Developer & Level Designer</div>
           <p>In this arcade-style recycling game, you quickly sort and throw six types of waste into the correct bins, aiming for a high score. I designed the core gameplay concept, factory layout, and scoring system, and also contributed to coding the object sorting, scoring logic, and some hand movement mechanics.</p>
@@ -959,9 +997,13 @@
         </div>
         <div class="project-info">
           <div class="project-header">
-            <h3>ZUS Life Run</h3>
-            <span class="award-badge">Best Advertising App Award</span>
-            <a href="#" class="play-link is-hidden">PLAY</a>
+            <div class="project-title-group">
+              <h3>ZUS Life Run</h3>
+              <span class="award-badge">Best Advertising App Award</span>
+            </div>
+            <div class="project-actions placeholder">
+              <a href="#" class="play-link">PLAY</a>
+            </div>
           </div>
           <div class="project-role">Gameplay Developer & Level Designer</div>
           <p>In this mobile game for ZUS Insurance, you guide a character’s life from childhood to old age, balancing six stats through swiped decisions. I designed the narrative events and their stat effects, along with the core swiping mechanic linking choices to stats.</p>

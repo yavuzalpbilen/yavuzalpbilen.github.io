@@ -496,6 +496,23 @@
       display: none;
     }
 
+    .award-badge{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--color-secondary);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212,196,171,0.25);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+      white-space: nowrap;
+    }
+
     .project-role {
       color: var(--color-muted);
       font-size: 0.95rem;
@@ -771,6 +788,11 @@
         padding: 0.9rem 1.15rem;
         font-size: 0.95rem;
       }
+
+      .award-badge{
+        font-size: 0.76rem;
+        padding: 0.5rem 0.9rem;
+      }
     }
 
     @media (max-width: 640px){
@@ -913,6 +935,7 @@
         <div class="project-info">
           <div class="project-header">
             <h3>Project Trash</h3>
+            <span class="award-badge">Best Green Theme Game Award</span>
             <a href="https://futuregames.itch.io/projecttrash" class="play-link" target="_blank" rel="noopener">PLAY</a>
           </div>
           <div class="project-role">Gameplay Developer & Level Designer</div>
@@ -937,6 +960,7 @@
         <div class="project-info">
           <div class="project-header">
             <h3>ZUS Life Run</h3>
+            <span class="award-badge">Best Advertising App Award</span>
             <a href="#" class="play-link is-hidden">PLAY</a>
           </div>
           <div class="project-role">Gameplay Developer & Level Designer</div>

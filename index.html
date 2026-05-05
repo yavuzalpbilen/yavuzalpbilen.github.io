@@ -10,6 +10,7 @@
       --side-pad: clamp(14px, 4vw, 64px);
       --pfw: 200vw;
 
+      /* THEME */
       --color-primary: #d4c4ab;
       --color-secondary: #b3a8a8;
       --color-tertiary: #8a91a6;
@@ -445,7 +446,8 @@
 
     #project-video-2,
     #project-video-3,
-    #project-video-4{
+    #project-video-4,
+    #project-video-5{
       transform: none;
       object-position: center center;
     }
@@ -508,6 +510,7 @@
       line-height: 1.65;
       margin-bottom: 1rem;
       font-size: 1rem;
+      white-space: pre-line;
     }
 
     .project-tags { display: flex; gap: 0.55rem; flex-wrap: wrap; }
@@ -778,30 +781,11 @@
       .timeline-logo{ width: 76px; height: 76px; border-radius: 16px; }
       .timeline-logo img{ width: 112%; height: 112%; padding: 6px; border-radius: 12px; }
       .timeline-top{ flex-direction: column; align-items: flex-start; gap: 6px; }
-
-      .timeline-logo img[alt="Ertürkler A.Ş."]{
-        transform: translateX(5px) translateZ(0);
-      }
-
-      .timeline-logo img[alt="Dias Teknoloji"]{
-        transform: translateX(-6px) translateZ(0);
-      }
-
-      .timeline-logo img[alt="DNS İnovasyon Sistemleri ve Teknoloji A.Ş."]{
-        width: 128%;
-        height: 128%;
-      }
-
-      .timeline-logo img[alt="Infopark Yazılım ve Danışmanlık"]{
-        width: 92%;
-        height: 92%;
-      }
-
-      .timeline-logo img[alt="Decentraland Foundation"]{
-        width: 92%;
-        height: 92%;
-        padding: 8px;
-      }
+      .timeline-logo img[alt="Ertürkler A.Ş."]{ transform: translateX(5px) translateZ(0); }
+      .timeline-logo img[alt="Dias Teknoloji"]{ transform: translateX(-6px) translateZ(0); }
+      .timeline-logo img[alt="DNS İnovasyon Sistemleri ve Teknoloji A.Ş."]{ width: 128%; height: 128%; }
+      .timeline-logo img[alt="Infopark Yazılım ve Danışmanlık"]{ width: 92%; height: 92%; }
+      .timeline-logo img[alt="Decentraland Foundation"]{ width: 92%; height: 92%; padding: 8px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -846,8 +830,8 @@
 
     <div class="hero-content">
       <h1>Yavuz Alp Bilen</h1>
-      <p class="subtitle">Game Developer & Game Designer</p>
-      <p class="specialization">Specializing in Environment & Level Design</p>
+      <p class="subtitle">Game Developer &amp; Game Designer</p>
+      <p class="specialization">Specializing in Environment &amp; Level Design</p>
       <div class="tools">
         <div class="tool-badge"><span>🎮</span><span>Unity</span></div>
         <div class="tool-badge"><span>⚡</span><span>Unreal Engine</span></div>
@@ -859,15 +843,16 @@
   <section id="projects">
     <h2>Projects</h2>
     <div class="projects-grid">
-      <!-- PROJECT 1 HIDDEN TEMPORARILY -->
-      <div class="project-card reveal is-hidden">
+
+      <!-- PROJECT 1 (RE-OPENED) -->
+      <div class="project-card reveal">
         <div class="project-image" style="background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);">🏙️</div>
         <div class="project-info">
           <div class="project-header">
             <h3>Kingdom of Vurnal</h3>
-            <a href="#" class="play-link">PLAY</a>
+            <a href="#" class="play-link is-hidden">PLAY</a>
           </div>
-          <div class="project-role">Gameplay Developer & Level Designer</div>
+          <div class="project-role">Gameplay Developer &amp; Level Designer</div>
           <p>In this strategic rogue-like card-based tower defense game, you expand your kingdom while defending against enemy waves, adapting your strategy to different threats. I designed and developed everything from the core gameplay loop, level layouts, difficulty balancing, and kingdom progression systems as a solo project.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
@@ -880,6 +865,31 @@
         </div>
       </div>
 
+      <!-- PROJECT 2 (NEW) -->
+      <div class="project-card reveal">
+        <div class="project-image">
+          <video id="project-video-5" muted autoplay loop playsinline webkit-playsinline preload="auto">
+            <source src="./assets/icons/AdvancedProjectileSimulationSystemVideo.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="project-info">
+          <div class="project-header">
+            <h3>Advanced Projectile Simulation System</h3>
+            <a href="#" class="play-link is-hidden">PLAY</a>
+          </div>
+          <div class="project-role">Unity Development &amp; Simulation</div>
+          <p>Developed a physics-based projectile simulation system with adjustable speed, wind, and launch angle controls, predictive trajectory
+visualization, and reliable hit detection. Implemented manual and auto-aim modes, including interception logic for moving targets following a
+predefined XZ-plane path.</p>
+          <div class="project-tags">
+            <span class="tag">Unity</span>
+            <span class="tag">Unity Development</span>
+            <span class="tag">Simulation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECT 3 -->
       <div class="project-card reveal">
         <div class="project-image">
           <video id="project-video-2" muted autoplay loop playsinline webkit-playsinline preload="auto">
@@ -891,7 +901,7 @@
             <h3>Ecdysis</h3>
             <a href="https://futuregames.itch.io/ecdysis" class="play-link" target="_blank" rel="noopener">PLAY</a>
           </div>
-          <div class="project-role">Gameplay Developer & Level Designer & Environment</div>
+          <div class="project-role">Gameplay Developer &amp; Level Designer &amp; Environment</div>
           <p>In this 2.5D action platformer, you defeat enemies, consume their skills, and evolve to progress through new biomes. I led the core game loop and combat design, but primarily focused on level and environment design—placing enemies, balancing encounters, and shaping biomes so players naturally navigate and evolve through each stage.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
@@ -904,6 +914,7 @@
         </div>
       </div>
 
+      <!-- PROJECT 4 -->
       <div class="project-card reveal">
         <div class="project-image">
           <video id="project-video-3" muted autoplay loop playsinline webkit-playsinline preload="auto">
@@ -915,7 +926,7 @@
             <h3>Project Trash</h3>
             <a href="https://futuregames.itch.io/projecttrash" class="play-link" target="_blank" rel="noopener">PLAY</a>
           </div>
-          <div class="project-role">Gameplay Developer & Level Designer</div>
+          <div class="project-role">Gameplay Developer &amp; Level Designer</div>
           <p>In this arcade-style recycling game, you quickly sort and throw six types of waste into the correct bins, aiming for a high score. I designed the core gameplay concept, factory layout, and scoring system, and also contributed to coding the object sorting, scoring logic, and some hand movement mechanics.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
@@ -928,6 +939,7 @@
         </div>
       </div>
 
+      <!-- PROJECT 5 -->
       <div class="project-card reveal">
         <div class="project-image">
           <video id="project-video-4" muted autoplay loop playsinline webkit-playsinline preload="auto">
@@ -939,7 +951,7 @@
             <h3>ZUS Life Run</h3>
             <a href="#" class="play-link is-hidden">PLAY</a>
           </div>
-          <div class="project-role">Gameplay Developer & Level Designer</div>
+          <div class="project-role">Gameplay Developer &amp; Level Designer</div>
           <p>In this mobile game for ZUS Insurance, you guide a character’s life from childhood to old age, balancing six stats through swiped decisions. I designed the narrative events and their stat effects, along with the core swiping mechanic linking choices to stats.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
@@ -951,6 +963,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -1111,7 +1124,8 @@
       itch.io
     </a>
 
-    <a href="#" class="contact-link">
+    <!-- CV LINK FIXED -->
+    <a href="assets/icons/YavuzAlpBilen-CV-eng.pdf" class="contact-link" target="_blank" rel="noopener">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm1 7V3.5L19.5 9H15z"/>
         <path d="M8 12h8v2H8zm0 4h8v2H8z"/>
@@ -1609,6 +1623,7 @@
       revealOnScroll();
 
       const projectVideos = [
+        document.getElementById('project-video-5'),
         document.getElementById('project-video-2'),
         document.getElementById('project-video-3'),
         document.getElementById('project-video-4')

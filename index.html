@@ -447,7 +447,8 @@
     #project-video-2,
     #project-video-3,
     #project-video-4,
-    #project-video-5{
+    #project-video-5,
+    #project-video-6{
       transform: none;
       object-position: center center;
     }
@@ -806,7 +807,7 @@
   </div>
 
   <header id="site-header">
-    <div class="logo">Yavuz Alp Bilen</div>
+    <div class="logo">Game Developer</div>
     <nav>
       <a href="#projects">Projects</a>
       <a href="#skills">Background</a>
@@ -830,8 +831,8 @@
 
     <div class="hero-content">
       <h1>Yavuz Alp Bilen</h1>
-      <p class="subtitle">Computer Engineer &amp; Unity Developer</p>
-      <p class="specialization">Specializing in Unity &amp; Simulations</p>
+      <p class="subtitle">Game Developer &amp; Game Designer</p>
+      <p class="specialization">Specializing in Environment &amp; Level Design</p>
       <div class="tools">
         <div class="tool-badge"><span>🎮</span><span>Unity</span></div>
         <div class="tool-badge"><span>⚡</span><span>Unreal Engine</span></div>
@@ -889,7 +890,30 @@ predefined XZ-plane path.</p>
         </div>
       </div>
 
-      <!-- PROJECT 3 -->
+      <!-- PROJECT 3 (NEW SLOT) -->
+      <div class="project-card reveal">
+        <div class="project-image">
+          <video id="project-video-6" muted autoplay loop playsinline webkit-playsinline preload="auto">
+            <!-- TODO: video dosya adını buna göre değiştir (assets/icons içine koy) -->
+            <source src="./assets/icons/SixCoinsVideo.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="project-info">
+          <div class="project-header">
+            <h3>Six Coins</h3>
+            <a href="#" class="play-link is-hidden">PLAY</a>
+          </div>
+          <div class="project-role">Gameplay Development</div>
+          <p><!-- TODO: kısa açıklama (2-3 cümle) --></p>
+          <div class="project-tags">
+            <span class="tag">Unity</span>
+            <span class="tag">Gameplay</span>
+            <span class="tag">Prototype</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECT 4 -->
       <div class="project-card reveal">
         <div class="project-image">
           <video id="project-video-2" muted autoplay loop playsinline webkit-playsinline preload="auto">
@@ -914,7 +938,7 @@ predefined XZ-plane path.</p>
         </div>
       </div>
 
-      <!-- PROJECT 4 -->
+      <!-- PROJECT 5 -->
       <div class="project-card reveal">
         <div class="project-image">
           <video id="project-video-3" muted autoplay loop playsinline webkit-playsinline preload="auto">
@@ -939,7 +963,7 @@ predefined XZ-plane path.</p>
         </div>
       </div>
 
-      <!-- PROJECT 5 -->
+      <!-- PROJECT 6 -->
       <div class="project-card reveal">
         <div class="project-image">
           <video id="project-video-4" muted autoplay loop playsinline webkit-playsinline preload="auto">
@@ -1124,7 +1148,7 @@ predefined XZ-plane path.</p>
       itch.io
     </a>
 
-    <a href="assets/icons/yavuzalpbilencv_r.pdf" class="contact-link" target="_blank" rel="noopener">
+    <a href="assets/icons/YavuzAlpBilen-CV-eng.pdf" class="contact-link" target="_blank" rel="noopener">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm1 7V3.5L19.5 9H15z"/>
         <path d="M8 12h8v2H8zm0 4h8v2H8z"/>
@@ -1623,6 +1647,7 @@ predefined XZ-plane path.</p>
 
       const projectVideos = [
         document.getElementById('project-video-5'),
+        document.getElementById('project-video-6'),
         document.getElementById('project-video-2'),
         document.getElementById('project-video-3'),
         document.getElementById('project-video-4')

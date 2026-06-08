@@ -444,13 +444,40 @@
       transform: none;
     }
 
-    #project-video-2,
-    #project-video-3,
-    #project-video-4,
-    #project-video-5,
-    #project-video-6{
-      transform: none;
-      object-position: center center;
+    /* per-video sound button */
+    .video-sound-btn{
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 20;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: rgba(255,255,255,0.95);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .video-sound-btn:hover{
+      transform: translateY(-2px);
+      border-color: rgba(212,196,171,0.28);
+      background: rgba(0,0,0,0.45);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.42);
+    }
+    .video-sound-btn:active{ transform: translateY(0px) scale(0.98); }
+    .video-sound-btn[aria-pressed="true"]{
+      border-color: rgba(212,196,171,0.45);
+      background: rgba(20,18,16,0.58);
     }
 
     .project-info { padding: 1.6rem 1.6rem 1.7rem; }
@@ -716,13 +743,6 @@
       max-width: calc(100vw - 28px);
     }
 
-    /* button reset (sound toggle) */
-    button.contact-link{
-      border: 2px solid rgba(212,196,171,0.65);
-      cursor: pointer;
-      font: inherit;
-    }
-
     footer {
       width: 100%;
       text-align: center;
@@ -757,6 +777,14 @@
       .contact-link{
         padding: 0.9rem 1.15rem;
         font-size: 0.95rem;
+      }
+
+      .video-sound-btn{
+        top: 12px;
+        right: 12px;
+        width: 42px;
+        height: 42px;
+        font-size: 17px;
       }
     }
 
@@ -852,6 +880,7 @@
       <!-- PROJECT 2 -->
       <div class="project-card reveal">
         <div class="project-image">
+          <button class="video-sound-btn" type="button" data-video="project-video-5" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
           <video id="project-video-5" muted autoplay loop playsinline webkit-playsinline preload="auto">
             <source src="./assets/icons/AdvancedProjectileSimulationSystemVideo.mp4" type="video/mp4">
           </video>
@@ -876,6 +905,7 @@ predefined XZ-plane path.</p>
       <!-- PROJECT 3 (SIX COINS) -->
       <div class="project-card reveal">
         <div class="project-image">
+          <button class="video-sound-btn" type="button" data-video="project-video-6" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
           <video id="project-video-6" muted autoplay loop playsinline webkit-playsinline preload="auto">
             <source src="./assets/icons/SixCoinsVideo.mp4" type="video/mp4">
           </video>
@@ -900,6 +930,7 @@ predefined XZ-plane path.</p>
       <!-- PROJECT 4 -->
       <div class="project-card reveal">
         <div class="project-image">
+          <button class="video-sound-btn" type="button" data-video="project-video-2" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
           <video id="project-video-2" muted autoplay loop playsinline webkit-playsinline preload="auto">
             <source src="./assets/icons/video2.mp4" type="video/mp4">
           </video>
@@ -925,6 +956,7 @@ predefined XZ-plane path.</p>
       <!-- PROJECT 5 -->
       <div class="project-card reveal">
         <div class="project-image">
+          <button class="video-sound-btn" type="button" data-video="project-video-3" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
           <video id="project-video-3" muted autoplay loop playsinline webkit-playsinline preload="auto">
             <source src="./assets/icons/video3.mp4" type="video/mp4">
           </video>
@@ -950,6 +982,7 @@ predefined XZ-plane path.</p>
       <!-- PROJECT 6 -->
       <div class="project-card reveal">
         <div class="project-image">
+          <button class="video-sound-btn" type="button" data-video="project-video-4" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
           <video id="project-video-4" muted autoplay loop playsinline webkit-playsinline preload="auto">
             <source src="./assets/icons/video4.mp4" type="video/mp4">
           </video>
@@ -1112,44 +1145,6 @@ predefined XZ-plane path.</p>
     <p>&copy; 2026 Portfolio.</p>
   </footer>
 
-  <div class="floating-contact-links">
-    <a href="https://github.com/yavuzalpbilen" class="contact-link" target="_blank" rel="noopener">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 .5C5.73.5.75 5.67.75 12.08c0 5.12 3.29 9.46 7.86 11 .58.11.79-.26.79-.57v-2.02c-3.2.71-3.87-1.58-3.87-1.58-.52-1.36-1.27-1.72-1.27-1.72-1.04-.74.08-.73.08-.73 1.15.08 1.76 1.22 1.76 1.22 1.02 1.8 2.67 1.28 3.32.98.1-.76.4-1.28.72-1.58-2.55-.3-5.24-1.31-5.24-5.84 0-1.29.45-2.35 1.18-3.18-.12-.3-.51-1.53.11-3.18 0 0 .97-.32 3.18 1.21a10.7 10.7 0 0 1 2.9-.4c.98 0 1.97.14 2.9.4 2.2-1.53 3.18-1.21 3.18-1.21.62 1.65.23 2.88.11 3.18.74.83 1.18 1.89 1.18 3.18 0 4.54-2.7 5.54-5.27 5.83.41.36.78 1.08.78 2.18v3.23c0 .32.2.69.8.57 4.56-1.54 7.85-5.88 7.85-11C23.25 5.67 18.27.5 12 .5z"/>
-      </svg>
-      GitHub
-    </a>
-
-    <a href="https://www.linkedin.com/in/yavuz-a-9243211a4/" class="contact-link" target="_blank" rel="noopener">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.05-1.86-3.05-1.86 0-2.14 1.45-2.14 2.95v5.67H9.33V9h3.42v1.56h.05c.48-.9 1.64-1.86 3.36-1.86 3.59 0 4.25 2.37 4.25 5.45v6.3zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .78 0 1.74v20.52C0 23.22.79 24 1.77 24h20.46c.98 0 1.77-.78 1.77-1.74V1.74C24 .78 23.21 0 22.23 0z"/>
-      </svg>
-      LinkedIn
-    </a>
-
-    <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
-      <span class="icon itch-icon" aria-hidden="true"></span>
-      itch.io
-    </a>
-
-    <a href="assets/icons/YavuzAlpBilen-CV-eng.pdf" class="contact-link" target="_blank" rel="noopener">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm1 7V3.5L19.5 9H15z"/>
-        <path d="M8 12h8v2H8zm0 4h8v2H8z"/>
-      </svg>
-      CV
-    </a>
-
-    <!-- SOUND TOGGLE -->
-    <button class="contact-link" id="sound-toggle" type="button" aria-pressed="false">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M11 5L6 9H3v6h3l5 4V5z"></path>
-        <path d="M15.5 8.5a4 4 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-      </svg>
-      Sound
-    </button>
-  </div>
-
   <script>
     (function () {
       if (window.__SPACE_CLEANUP__) {
@@ -1177,84 +1172,6 @@ predefined XZ-plane path.</p>
       }
       updatePlayfieldWidth();
 
-      /* =======================
-         AUDIO (Music + SFX)
-         ======================= */
-      const SOUND_KEY = 'portfolio_sound_enabled_v1';
-      const soundBtn = document.getElementById('sound-toggle');
-
-      // Put your files here:
-      // - assets/audio/bgm.mp3
-      // - assets/audio/capture.mp3
-      const bgm = new Audio('assets/audio/bgm.mp3');
-      bgm.loop = true;
-      bgm.volume = 0.35;
-
-      const sfxCapture = new Audio('assets/audio/capture.mp3');
-      sfxCapture.volume = 0.55;
-
-      let soundEnabled = true;
-      try {
-        const saved = localStorage.getItem(SOUND_KEY);
-        if (saved === '0') soundEnabled = false;
-      } catch (e) {}
-
-      function applySoundState() {
-        bgm.muted = !soundEnabled;
-        sfxCapture.muted = !soundEnabled;
-        if (soundBtn) {
-          soundBtn.setAttribute('aria-pressed', soundEnabled ? 'true' : 'false');
-          soundBtn.innerHTML = (soundEnabled ? `
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M11 5L6 9H3v6h3l5 4V5z"></path>
-              <path d="M15.5 8.5a4 4 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-            </svg> Sound
-          ` : `
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M11 5L6 9H3v6h3l5 4V5z"></path>
-              <path d="M16 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-              <path d="M21 8l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-            </svg> Muted
-          `);
-        }
-      }
-      applySoundState();
-
-      async function tryStartBgm() {
-        if (!soundEnabled) return;
-        try {
-          const pr = bgm.play();
-          if (pr && typeof pr.catch === 'function') await pr;
-        } catch (e) {}
-      }
-
-      function playCaptureSfx() {
-        if (!soundEnabled) return;
-        try {
-          sfxCapture.currentTime = 0;
-          const pr = sfxCapture.play();
-          if (pr && typeof pr.catch === 'function') pr.catch(() => {});
-        } catch (e) {}
-      }
-
-      if (soundBtn) {
-        soundBtn.addEventListener('click', async () => {
-          soundEnabled = !soundEnabled;
-          try { localStorage.setItem(SOUND_KEY, soundEnabled ? '1' : '0'); } catch (e) {}
-          applySoundState();
-          if (soundEnabled) await tryStartBgm();
-          else { try { bgm.pause(); } catch(e) {} }
-        });
-      }
-
-      const unlockAudioOnce = async () => { await tryStartBgm(); };
-      ['click', 'touchstart', 'keydown'].forEach(evt => {
-        window.addEventListener(evt, unlockAudioOnce, { once: true, passive: true });
-      });
-
-      /* =======================
-         SCORE HUD
-         ======================= */
       const TOTAL_SCORE = 12;
       let score = 0;
       const scoreTextEl = document.getElementById('score-text');
@@ -1264,9 +1181,6 @@ predefined XZ-plane path.</p>
       }
       updateScoreUI();
 
-      /* =======================
-         STARFIELD
-         ======================= */
       let canvas = document.getElementById('starfield');
       let ctx = canvas.getContext('2d', { alpha: true });
 
@@ -1503,12 +1417,7 @@ predefined XZ-plane path.</p>
         const cw = Math.min(b.maxX * 0.82, baseW * mul);
         const ch = Math.min(b.maxY * 0.75, baseH * mul);
 
-        return {
-          minX: cx - cw / 2,
-          maxX: cx + cw / 2,
-          minY: cy - ch / 2,
-          maxY: cy + ch / 2
-        };
+        return { minX: cx - cw / 2, maxX: cx + cw / 2, minY: cy - ch / 2, maxY: cy + ch / 2 };
       }
 
       function initObject(obj) {
@@ -1603,6 +1512,84 @@ predefined XZ-plane path.</p>
       let starAcc = 0;
       const STAR_STEP = 1 / 20;
 
+      /* =======================
+         PROJECT VIDEO SOUND (per card)
+         ======================= */
+      const projectVideos = [
+        document.getElementById('project-video-5'),
+        document.getElementById('project-video-6'),
+        document.getElementById('project-video-2'),
+        document.getElementById('project-video-3'),
+        document.getElementById('project-video-4')
+      ].filter(Boolean);
+
+      const videoBtns = Array.from(document.querySelectorAll('.video-sound-btn'));
+      const videoById = new Map(projectVideos.map(v => [v.id, v]));
+      const btnByVideoId = new Map(videoBtns.map(b => [b.getAttribute('data-video'), b]));
+
+      function setBtnState(btn, on){
+        if (!btn) return;
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        btn.textContent = on ? '🔊' : '🔇';
+      }
+
+      function muteAllVideos(exceptId){
+        projectVideos.forEach(v => {
+          const keep = (exceptId && v.id === exceptId);
+          v.muted = !keep;
+          v.volume = 0.9;
+          setBtnState(btnByVideoId.get(v.id), keep);
+        });
+      }
+
+      // default: all muted
+      muteAllVideos(null);
+
+      // clicking sound button: only that one becomes audible (others muted)
+      videoBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-video');
+          const vid = videoById.get(id);
+          if (!vid) return;
+
+          const isOn = btn.getAttribute('aria-pressed') === 'true';
+          if (isOn) {
+            // turn off
+            vid.muted = true;
+            setBtnState(btn, false);
+            return;
+          }
+
+          // turn on this video, mute others
+          muteAllVideos(id);
+
+          // ensure it’s playing (this click counts as user gesture)
+          try {
+            const pr = vid.play();
+            if (pr && typeof pr.catch === 'function') pr.catch(() => {});
+          } catch(e) {}
+        });
+      });
+
+      /* =======================
+         AUTO-PLAY VIDEOS (silent)
+         ======================= */
+      const tryPlayAllProjectVideos = () => {
+        projectVideos.forEach(v => {
+          // keep current mute state (don’t force)
+          const pr = v.play();
+          if (pr && typeof pr.catch === 'function') pr.catch(() => {});
+        });
+      };
+
+      tryPlayAllProjectVideos();
+      ['click', 'touchstart', 'keydown'].forEach(evt => {
+        window.addEventListener(evt, tryPlayAllProjectVideos, { once: true, passive: true });
+      });
+
+      /* =======================
+         STAR LOOP + MINI GAME
+         ======================= */
       function loop(now) {
         rafId = requestAnimationFrame(loop);
         if (!running) return;
@@ -1681,7 +1668,6 @@ predefined XZ-plane path.</p>
                 o.scored = true;
                 score++;
                 updateScoreUI();
-                playCaptureSfx();
               }
 
               o.captured = true;
@@ -1720,28 +1706,6 @@ predefined XZ-plane path.</p>
       window.addEventListener('scroll', revealOnScroll, { passive: true });
       revealOnScroll();
 
-      const projectVideos = [
-        document.getElementById('project-video-5'),
-        document.getElementById('project-video-6'),
-        document.getElementById('project-video-2'),
-        document.getElementById('project-video-3'),
-        document.getElementById('project-video-4')
-      ].filter(Boolean);
-
-      const tryPlayAllProjectVideos = () => {
-        projectVideos.forEach(v => {
-          v.muted = true;
-          v.defaultMuted = true;
-          const pr = v.play();
-          if (pr && typeof pr.catch === 'function') pr.catch(() => {});
-        });
-      };
-
-      tryPlayAllProjectVideos();
-      ['click', 'touchstart', 'keydown'].forEach(evt => {
-        window.addEventListener(evt, tryPlayAllProjectVideos, { once: true, passive: true });
-      });
-
       let cleaned = false;
       function cleanup() {
         if (cleaned) return;
@@ -1773,11 +1737,6 @@ predefined XZ-plane path.</p>
         } catch (e) {}
 
         try { objects.length = 0; } catch (e) {}
-
-        try {
-          try { bgm.pause(); } catch (e) {}
-          try { sfxCapture.pause(); } catch (e) {}
-        } catch (e) {}
 
         try { delete window.__SPACE_CLEANUP__; } catch (e) {}
       }

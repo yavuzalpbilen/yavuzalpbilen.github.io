@@ -495,9 +495,7 @@
       background: linear-gradient(45deg, rgba(212,196,171,0.90), rgba(179,168,168,0.62));
     }
 
-    .play-link.is-hidden{
-      display: none;
-    }
+    .play-link.is-hidden{ display: none; }
 
     .project-role {
       color: var(--color-muted);
@@ -597,29 +595,11 @@
       transform: translateZ(0);
     }
 
-    .timeline-logo img[alt="Ertürkler A.Ş."]{
-      transform: translateX(6px) translateZ(0);
-    }
-
-    .timeline-logo img[alt="Dias Teknoloji"]{
-      transform: translateX(-8px) translateZ(0);
-    }
-
-    .timeline-logo img[alt="DNS İnovasyon Sistemleri ve Teknoloji A.Ş."]{
-      width: 164%;
-      height: 164%;
-    }
-
-    .timeline-logo img[alt="Infopark Yazılım ve Danışmanlık"]{
-      width: 116%;
-      height: 116%;
-    }
-
-    .timeline-logo img[alt="Decentraland Foundation"]{
-      width: 118%;
-      height: 118%;
-      padding: 9px;
-    }
+    .timeline-logo img[alt="Ertürkler A.Ş."]{ transform: translateX(6px) translateZ(0); }
+    .timeline-logo img[alt="Dias Teknoloji"]{ transform: translateX(-8px) translateZ(0); }
+    .timeline-logo img[alt="DNS İnovasyon Sistemleri ve Teknoloji A.Ş."]{ width: 164%; height: 164%; }
+    .timeline-logo img[alt="Infopark Yazılım ve Danışmanlık"]{ width: 116%; height: 116%; }
+    .timeline-logo img[alt="Decentraland Foundation"]{ width: 118%; height: 118%; padding: 9px; }
 
     .timeline-main{
       display: flex;
@@ -736,6 +716,13 @@
       max-width: calc(100vw - 28px);
     }
 
+    /* button reset (sound toggle) */
+    button.contact-link{
+      border: 2px solid rgba(212,196,171,0.65);
+      cursor: pointer;
+      font: inherit;
+    }
+
     footer {
       width: 100%;
       text-align: center;
@@ -756,13 +743,9 @@
       .score-hud{ top: 71px; padding: 9px 14px; }
       .score-text{ font-size: 0.9rem; }
 
-      .project-image{
-        height: 420px;
-      }
+      .project-image{ height: 420px; }
 
-      .project-header{
-        align-items: flex-start;
-      }
+      .project-header{ align-items: flex-start; }
 
       .floating-contact-links{
         bottom: 18px;
@@ -907,8 +890,9 @@ predefined XZ-plane path.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
             <span class="tag">Card Game</span>
-            <span class="tag">Game Development</span>
+            <span class="tag">Gameplay Development</span>
             <span class="tag">Unity Development</span>
+            <span class="tag">Game Design</span>
           </div>
         </div>
       </div>
@@ -1155,6 +1139,15 @@ predefined XZ-plane path.</p>
       </svg>
       CV
     </a>
+
+    <!-- SOUND TOGGLE -->
+    <button class="contact-link" id="sound-toggle" type="button" aria-pressed="false">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M11 5L6 9H3v6h3l5 4V5z"></path>
+        <path d="M15.5 8.5a4 4 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+      Sound
+    </button>
   </div>
 
   <script>
@@ -1184,6 +1177,84 @@ predefined XZ-plane path.</p>
       }
       updatePlayfieldWidth();
 
+      /* =======================
+         AUDIO (Music + SFX)
+         ======================= */
+      const SOUND_KEY = 'portfolio_sound_enabled_v1';
+      const soundBtn = document.getElementById('sound-toggle');
+
+      // Put your files here:
+      // - assets/audio/bgm.mp3
+      // - assets/audio/capture.mp3
+      const bgm = new Audio('assets/audio/bgm.mp3');
+      bgm.loop = true;
+      bgm.volume = 0.35;
+
+      const sfxCapture = new Audio('assets/audio/capture.mp3');
+      sfxCapture.volume = 0.55;
+
+      let soundEnabled = true;
+      try {
+        const saved = localStorage.getItem(SOUND_KEY);
+        if (saved === '0') soundEnabled = false;
+      } catch (e) {}
+
+      function applySoundState() {
+        bgm.muted = !soundEnabled;
+        sfxCapture.muted = !soundEnabled;
+        if (soundBtn) {
+          soundBtn.setAttribute('aria-pressed', soundEnabled ? 'true' : 'false');
+          soundBtn.innerHTML = (soundEnabled ? `
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M11 5L6 9H3v6h3l5 4V5z"></path>
+              <path d="M15.5 8.5a4 4 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            </svg> Sound
+          ` : `
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M11 5L6 9H3v6h3l5 4V5z"></path>
+              <path d="M16 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+              <path d="M21 8l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            </svg> Muted
+          `);
+        }
+      }
+      applySoundState();
+
+      async function tryStartBgm() {
+        if (!soundEnabled) return;
+        try {
+          const pr = bgm.play();
+          if (pr && typeof pr.catch === 'function') await pr;
+        } catch (e) {}
+      }
+
+      function playCaptureSfx() {
+        if (!soundEnabled) return;
+        try {
+          sfxCapture.currentTime = 0;
+          const pr = sfxCapture.play();
+          if (pr && typeof pr.catch === 'function') pr.catch(() => {});
+        } catch (e) {}
+      }
+
+      if (soundBtn) {
+        soundBtn.addEventListener('click', async () => {
+          soundEnabled = !soundEnabled;
+          try { localStorage.setItem(SOUND_KEY, soundEnabled ? '1' : '0'); } catch (e) {}
+          applySoundState();
+          if (soundEnabled) await tryStartBgm();
+          else { try { bgm.pause(); } catch(e) {} }
+        });
+      }
+
+      const unlockAudioOnce = async () => { await tryStartBgm(); };
+      ['click', 'touchstart', 'keydown'].forEach(evt => {
+        window.addEventListener(evt, unlockAudioOnce, { once: true, passive: true });
+      });
+
+      /* =======================
+         SCORE HUD
+         ======================= */
       const TOTAL_SCORE = 12;
       let score = 0;
       const scoreTextEl = document.getElementById('score-text');
@@ -1193,6 +1264,9 @@ predefined XZ-plane path.</p>
       }
       updateScoreUI();
 
+      /* =======================
+         STARFIELD
+         ======================= */
       let canvas = document.getElementById('starfield');
       let ctx = canvas.getContext('2d', { alpha: true });
 
@@ -1607,6 +1681,7 @@ predefined XZ-plane path.</p>
                 o.scored = true;
                 score++;
                 updateScoreUI();
+                playCaptureSfx();
               }
 
               o.captured = true;
@@ -1698,6 +1773,11 @@ predefined XZ-plane path.</p>
         } catch (e) {}
 
         try { objects.length = 0; } catch (e) {}
+
+        try {
+          try { bgm.pause(); } catch (e) {}
+          try { sfxCapture.pause(); } catch (e) {}
+        } catch (e) {}
 
         try { delete window.__SPACE_CLEANUP__; } catch (e) {}
       }

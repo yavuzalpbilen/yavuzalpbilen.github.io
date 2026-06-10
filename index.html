@@ -798,7 +798,7 @@
         </div>
       </div>
 
-      <!-- PROJECTILE SYSTEM (HIDDEN FOR NOW) -->
+      <!-- Advanced Projectile Simulation System (HIDDEN FOR NOW) -->
       <div class="project-card reveal is-hidden">
         <div class="project-image">
           <button class="video-sound-btn" type="button" data-video="project-video-5" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
@@ -812,9 +812,7 @@
             <a href="#" class="play-link is-hidden">PLAY</a>
           </div>
           <div class="project-role">Unity Development &amp; Simulation</div>
-          <p>Developed a physics-based projectile simulation system with adjustable speed, wind, and launch angle controls, predictive trajectory
-visualization, and reliable hit detection. Implemented manual and auto-aim modes, including interception logic for moving targets following a
-predefined XZ-plane path.</p>
+          <p>Developed a physics-based projectile simulation system with adjustable speed, wind, and launch angle controls, predictive trajectory visualization, and reliable hit detection. Implemented manual and auto-aim modes, including interception logic for moving targets following a predefined XZ-plane path.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
             <span class="tag">Unity Development</span>
@@ -1375,8 +1373,9 @@ predefined XZ-plane path.</p>
         acc = 0;
 
         const playRect = playfield.getBoundingClientRect();
-        const cursorWorldX = hero.getBoundingClientRect().left + mouseX;
-        const cursorWorldY = hero.getBoundingClientRect().top + mouseY;
+        const heroRect = hero.getBoundingClientRect();
+        const cursorWorldX = heroRect.left + mouseX;
+        const cursorWorldY = heroRect.top + mouseY;
         const cursorInPlayX = cursorWorldX - playRect.left;
         const cursorInPlayY = cursorWorldY - playRect.top;
 

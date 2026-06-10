@@ -29,9 +29,7 @@
 
     #starfield { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
-    .space-layer {
-      position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
-    }
+    .space-layer { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
 
     #planets-host, #bg-blackhole-host { position: absolute; inset: 0; width: 100%; height: 100%; }
 
@@ -656,9 +654,7 @@
     <div class="playfield" id="playfield"></div>
 
     <div class="cursor-bh" id="cursor-bh">
-      <div class="black-hole">
-        <div class="bh-flow"></div>
-      </div>
+      <div class="black-hole"><div class="bh-flow"></div></div>
     </div>
 
     <div class="hero-content">
@@ -691,7 +687,7 @@
             <a href="#" class="play-link is-hidden">PLAY</a>
           </div>
           <div class="project-role">Gameplay Developer &amp; Level Designer</div>
-          <p>A wave-based tower defense strategy game where enemies push toward the kingdom level by level and you defend by purchasing and placing towers. As a solo developer, I implemented the core systems in Unity (wave progression, enemy behaviors, tower targeting/attacks, and the economy/resource loop), designed the tower roster and progression/balance, and built the full UI/UX for buying, placing, and upgrading. I also handled the visuals and presentation—prefab setup, VFX/feedback, and overall polish—to deliver a complete playable tower defense prototype.</p>
+          <p>A wave-based tower defense strategy game where enemies push toward the kingdom level by level and you defend by purchasing and placing towers. As a solo developer, I implemented the core systems in Unity (wave progression, enemy behaviors, tower targeting/attacks, and the economy/resource loop), designed the tower roster and progression/balance, and built the full UI/UX for buying, placing, and upgrading. I also handled the visuals and presentation, prefab setup, VFX/feedback, and overall polish to deliver a complete playable tower defense prototype.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
             <span class="tag">Strategy</span>
@@ -767,7 +763,7 @@ predefined XZ-plane path.</p>
             <a href="https://futuregames.itch.io/ecdysis" class="play-link" target="_blank" rel="noopener">PLAY</a>
           </div>
           <div class="project-role">Gameplay Developer &amp; Level Designer &amp; Environment</div>
-          <p>In this 2.5D action platformer, you defeat enemies, consume their skills, and evolve to progress through new biomes. I led the core game loop and combat design, but primarily focused on level and environment design—placing enemies, balancing encounters, and shaping biomes so players naturally navigate and evolve through each stage.</p>
+          <p>In this 2.5D action platformer, you defeat enemies, consume their skills, and evolve to progress through new biomes. I led the core game loop and combat design, but primarily focused on level and environment design, placing enemies, balancing encounters, and shaping biomes so players naturally navigate and evolve through each stage.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
             <span class="tag">Side-Scroller</span>
@@ -852,7 +848,7 @@ predefined XZ-plane path.</p>
               <div class="timeline-sub">Game Design</div>
               <div class="timeline-location">Warsaw, Poland</div>
               <div class="timeline-desc">
-                Game Development &amp; Game Design training with a specialization in Level Design—focused on player flow, encounter design, and building readable, engaging spaces.
+                Game Development &amp; Game Design training with a specialization in Level Design, focused on player flow, encounter design, and building readable, engaging spaces.
               </div>
             </div>
           </div>
@@ -868,7 +864,7 @@ predefined XZ-plane path.</p>
               <div class="timeline-sub">Computer Engineering</div>
               <div class="timeline-location">Ankara, Turkey</div>
               <div class="timeline-desc">
-                Strong engineering foundation in software development, algorithms, and problem-solving—supporting robust design decisions and technical collaboration.
+                Strong engineering foundation in software development, algorithms, and problem-solving, supporting robust design decisions and technical collaboration.
               </div>
             </div>
           </div>
@@ -1283,7 +1279,6 @@ predefined XZ-plane path.</p>
         if (o.y > c.maxY + m) o.y = c.minY - m;
       }
 
-      /* Project video sound per card */
       const projectVideos = [
         document.getElementById('project-video-1'),
         document.getElementById('project-video-5'),

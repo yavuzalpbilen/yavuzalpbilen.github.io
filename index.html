@@ -557,7 +557,10 @@
     .contact-link .icon{ width: 22px; height: 22px; flex: 0 0 auto; display: block; }
     .contact-link svg.icon{ fill: currentColor; }
     .contact-link .itch-icon{
-      width: 24px; height: 24px; display: block; flex: 0 0 auto;
+      width: 24px;
+      height: 24px;
+      display: block;
+      flex: 0 0 auto;
       background: currentColor;
       -webkit-mask: url("assets/icons/itch-io-icon.png") center / contain no-repeat;
       mask: url("assets/icons/itch-io-icon.png") center / contain no-repeat;
@@ -735,7 +738,7 @@
             <a href="#" class="play-link is-hidden">PLAY</a>
           </div>
           <div class="project-role">Gameplay Developer &amp; Level Designer</div>
-          <p>In this turn-based card game, you compete against three AI opponents, manage limited coins, and decide when to draw or stand to build the best hand each round. As a solo developer, I designed and built the entire project, including the core gameplay loop, turn flow, hand-ranking system, coin-based risk structure, AI behavior, UI, and overall visual presentation, creating a clear and polished digital card game experience.</p>
+          <p>In this turn-based card game, you compete against three AI opponents, manage limited coins, and decide when to draw or stand to build the best hand each round. I designed and built the entire project, including the core gameplay loop, turn flow, hand-ranking system, coin-based risk structure, AI behavior, UI, and overall visual presentation, creating a clear and polished digital card game experience.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
             <span class="tag">Card Game</span>
@@ -951,7 +954,6 @@
       LinkedIn
     </a>
 
-    <!-- itch.io BACK ON -->
     <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
       <span class="icon itch-icon" aria-hidden="true"></span>
       itch.io
@@ -1155,43 +1157,6 @@
       hero.addEventListener('mouseleave', onHeroLeave);
       hero.addEventListener('mousemove', onHeroMove);
 
-      const spaceshipSVG = `
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
-                fill="url(#centerBody)" stroke="#0a0a0a" stroke-width="1.5"/>
-          <path d="M 50 38 L 35 26 L 23 21 L 20 24 L 25 31 L 37 36 L 50 41 Z"
-                fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
-          <path d="M 50 62 L 35 74 L 23 79 L 20 76 L 25 69 L 37 64 L 50 59 Z"
-                fill="url(#wingGradient)" stroke="#0a0a0a" stroke-width="1.5"/>
-          <defs>
-            <radialGradient id="centerBody" cx="60%" cy="50%">
-              <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
-              <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
-            </radialGradient>
-            <linearGradient id="wingGradient" x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
-              <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
-            </linearGradient>
-          </defs>
-        </svg>
-      `;
-
-      const asteroidSVG = `
-        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="rock" cx="35%" cy="30%">
-              <stop offset="0%" stop-color="#6a6a6a" stop-opacity="1"/>
-              <stop offset="55%" stop-color="#3f3f3f" stop-opacity="1"/>
-              <stop offset="100%" stop-color="#1a1a1a" stop-opacity="1"/>
-            </radialGradient>
-          </defs>
-          <path d="M30,18 C48,7 78,10 95,30 C110,48 108,78 92,95 C74,112 45,112 25,95 C7,78 10,45 30,18 Z"
-                fill="url(#rock)" stroke="#0e0e0e" stroke-width="3"/>
-        </svg>
-      `;
-
       const objects = [];
       function rand(min, max) { return min + Math.random() * (max - min); }
 
@@ -1242,7 +1207,19 @@
       function createShip() {
         const el = document.createElement('div');
         el.className = 'spaceship';
-        el.innerHTML = spaceshipSVG;
+        el.innerHTML = `
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 15 50 L 35 42 L 50 38 L 65 42 L 80 50 L 65 58 L 50 62 L 35 58 Z"
+                  fill="url(#centerBody)" stroke="#0a0a0a" stroke-width="1.5"/>
+            <defs>
+              <radialGradient id="centerBody" cx="60%" cy="50%">
+                <stop offset="0%" style="stop-color:#2a2a2a;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+              </radialGradient>
+            </defs>
+          </svg>
+        `;
 
         const trail = document.createElement('div');
         trail.className = 'trail';
@@ -1257,7 +1234,19 @@
       function createAsteroid() {
         const el = document.createElement('div');
         el.className = 'asteroid';
-        el.innerHTML = asteroidSVG;
+        el.innerHTML = `
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="rock" cx="35%" cy="30%">
+                <stop offset="0%" stop-color="#6a6a6a" stop-opacity="1"/>
+                <stop offset="55%" stop-color="#3f3f3f" stop-opacity="1"/>
+                <stop offset="100%" stop-color="#1a1a1a" stop-opacity="1"/>
+              </radialGradient>
+            </defs>
+            <path d="M30,18 C48,7 78,10 95,30 C110,48 108,78 92,95 C74,112 45,112 25,95 C7,78 10,45 30,18 Z"
+                  fill="url(#rock)" stroke="#0e0e0e" stroke-width="3"/>
+          </svg>
+        `;
 
         const size = rand(28, 54);
         el.style.width = size + 'px';
@@ -1275,13 +1264,13 @@
       function wrapCluster(o) {
         const c = getClusterBounds();
         const m = 50;
-
         if (o.x < c.minX - m) o.x = c.maxX + m;
         if (o.x > c.maxX + m) o.x = c.minX - m;
         if (o.y < c.minY - m) o.y = c.maxY + m;
         if (o.y > c.maxY + m) o.y = c.minY - m;
       }
 
+      /* Project video sound (per card) */
       const projectVideos = [
         document.getElementById('project-video-1'),
         document.getElementById('project-video-2'),

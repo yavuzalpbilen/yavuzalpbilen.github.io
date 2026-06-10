@@ -419,8 +419,6 @@
       border-color: rgba(212,196,171,0.25);
     }
 
-    .project-card.is-hidden { display: none; }
-
     .project-image {
       width: 100%;
       height: 580px;
@@ -743,6 +741,8 @@
       max-width: calc(100vw - 28px);
     }
 
+    .contact-link.is-hidden{ display: none; }
+
     footer {
       width: 100%;
       text-align: center;
@@ -856,23 +856,28 @@
     <h2>Projects</h2>
     <div class="projects-grid">
 
-      <!-- PROJECT 1 (HIDDEN TEMPORARILY) -->
-      <div class="project-card reveal is-hidden">
-        <div class="project-image" style="background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);">🏙️</div>
+      <!-- PROJECT 1 (KINGDOM OF VULNAR) -->
+      <div class="project-card reveal">
+        <div class="project-image">
+          <button class="video-sound-btn" type="button" data-video="project-video-1" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
+          <video id="project-video-1" muted autoplay loop playsinline webkit-playsinline preload="auto">
+            <source src="./assets/icons/KingdomofVulnar.mp4" type="video/mp4">
+          </video>
+        </div>
         <div class="project-info">
           <div class="project-header">
-            <h3>Kingdom of Vurnal</h3>
+            <h3>Kingdom of Vulnar</h3>
             <a href="#" class="play-link is-hidden">PLAY</a>
           </div>
-          <div class="project-role">Gameplay Developer &amp; Level Designer</div>
-          <p>In this strategic rogue-like card-based tower defense game, you expand your kingdom while defending against enemy waves, adapting your strategy to different threats. I designed and developed everything from the core gameplay loop, level layouts, difficulty balancing, and kingdom progression systems as a solo project.</p>
+          <div class="project-role">Tower Defense &amp; Strategy</div>
+          <p>A wave-based tower defense strategy game where enemies advance level by level and you defend the kingdom by buying and placing towers. I built the full gameplay loop as a solo developer—covering resource management, tower placement strategy, enemy wave progression, balancing, UI feedback, and overall game feel to create a clear and engaging defense experience.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
-            <span class="tag">Rogue-like</span>
-            <span class="tag">Card Game</span>
-            <span class="tag">Gameplay</span>
-            <span class="tag">Level Design</span>
-            <span class="tag">Solo Project</span>
+            <span class="tag">Strategy</span>
+            <span class="tag">Tower Defense</span>
+            <span class="tag">Unity Development</span>
+            <span class="tag">Game Programming</span>
+            <span class="tag">Game Design</span>
           </div>
         </div>
       </div>
@@ -920,7 +925,7 @@ predefined XZ-plane path.</p>
           <div class="project-tags">
             <span class="tag">Unity</span>
             <span class="tag">Card Game</span>
-            <span class="tag">Gameplay Development</span>
+            <span class="tag">Game Programming</span>
             <span class="tag">Unity Development</span>
             <span class="tag">Game Design</span>
           </div>
@@ -1145,7 +1150,6 @@ predefined XZ-plane path.</p>
     <p>&copy; 2026 Portfolio.</p>
   </footer>
 
-  <!-- BOTTOM FLOATING LINKS (RESTORED) -->
   <div class="floating-contact-links">
     <a href="https://github.com/yavuzalpbilen" class="contact-link" target="_blank" rel="noopener">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -1161,7 +1165,8 @@ predefined XZ-plane path.</p>
       LinkedIn
     </a>
 
-    <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
+    <!-- itch.io HIDDEN TEMPORARILY -->
+    <a href="https://yavuzalpbilen.itch.io/" class="contact-link is-hidden" target="_blank" rel="noopener">
       <span class="icon itch-icon" aria-hidden="true"></span>
       itch.io
     </a>
@@ -1355,10 +1360,7 @@ predefined XZ-plane path.</p>
       let mouseInHero = false;
       let mouseX = 0, mouseY = 0;
 
-      function setCursorBH(x, y) {
-        cursorBH.style.left = x + 'px';
-        cursorBH.style.top = y + 'px';
-      }
+      function setCursorBH(x, y) { cursorBH.style.left = x + 'px'; cursorBH.style.top = y + 'px'; }
       function onHeroEnter() { mouseInHero = true; cursorBH.classList.add('active'); }
       function onHeroLeave() { mouseInHero = false; cursorBH.classList.remove('active'); }
       function onHeroMove(e) {
@@ -1529,6 +1531,7 @@ predefined XZ-plane path.</p>
          PROJECT VIDEO SOUND (per card)
          ======================= */
       const projectVideos = [
+        document.getElementById('project-video-1'),
         document.getElementById('project-video-5'),
         document.getElementById('project-video-6'),
         document.getElementById('project-video-2'),

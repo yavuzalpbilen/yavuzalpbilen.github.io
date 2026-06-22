@@ -724,7 +724,34 @@
         </div>
       </div>
 
-      <!-- 3) Six Coins -->
+      <!-- 3) Duel of the Fates -->
+      <div class="project-card reveal">
+        <div class="project-image">
+          <button class="video-sound-btn" type="button" data-video="project-video-7" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
+          <video id="project-video-7" muted autoplay loop playsinline webkit-playsinline preload="auto">
+            <source src="./assets/icons/0622%20(1)(4).mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="project-info">
+          <div class="project-header">
+            <h3>Duel of the Fates</h3>
+            <a href="#" class="play-link is-hidden">PLAY</a>
+          </div>
+          <div class="project-role">Gameplay Developer &amp; Level Designer</div>
+          <p>A tactical duel combat prototype built around three directional stances: up, left, and right. Players attack and block by reading the opponent’s stance, creating a timing-focused fighting system where positioning and reaction matter. I designed and implemented the combat mechanics, stance-based attacks, directional blocking, enemy duel behavior, and encounter flow in Unreal Engine, while also shaping the level layout to support clear one-on-one combat readability.</p>
+          <div class="project-tags">
+            <span class="tag">Unreal Engine</span>
+            <span class="tag">Fighting Game</span>
+            <span class="tag">Game Programming</span>
+            <span class="tag">Game Design</span>
+            <span class="tag">Combat Design</span>
+            <span class="tag">Unreal</span>
+            <span class="tag">Engine Development</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4) Six Coins -->
       <div class="project-card reveal">
         <div class="project-image">
           <button class="video-sound-btn" type="button" data-video="project-video-6" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
@@ -749,7 +776,7 @@
         </div>
       </div>
 
-      <!-- 4) Kingdom of Vulnar -->
+      <!-- 5) Kingdom of Vulnar -->
       <div class="project-card reveal">
         <div class="project-image">
           <button class="video-sound-btn" type="button" data-video="project-video-1" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
@@ -775,7 +802,7 @@
         </div>
       </div>
 
-      <!-- 5) ZUS Life Run -->
+      <!-- 6) ZUS Life Run -->
       <div class="project-card reveal">
         <div class="project-image">
           <button class="video-sound-btn" type="button" data-video="project-video-4" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
@@ -1270,14 +1297,14 @@
         if (o.y > c.maxY + m) o.y = c.minY - m;
       }
 
-      /* Project video sound (per card) */
       const projectVideos = [
         document.getElementById('project-video-1'),
         document.getElementById('project-video-2'),
         document.getElementById('project-video-3'),
         document.getElementById('project-video-4'),
         document.getElementById('project-video-5'),
-        document.getElementById('project-video-6')
+        document.getElementById('project-video-6'),
+        document.getElementById('project-video-7')
       ].filter(Boolean);
 
       const videoBtns = Array.from(document.querySelectorAll('.video-sound-btn'));

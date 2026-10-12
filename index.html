@@ -105,7 +105,7 @@
 
     /* TV glass bounds in the original 1920x1080 recordings.
        These percentages scale with the SAME stage as the room video. */
-    .vhs-tv-screen{
+    .vhs-tv-screen, .vhs-startup-screen{
       position: absolute;
       left: 29.06%; top: 12.4%;
       width: 40.47%; height: 51.3%;
@@ -127,6 +127,115 @@
       /* Preserve the complete trailer frame, with black letterbox bars. */
       object-fit: contain;
       object-position: center;
+    }
+
+    /* Startup-only CRT prompt: mostly readable, with two brief distorted states.
+       All effects stop when the first tape is selected. No extra video files. */
+    .vhs-startup-screen{
+      opacity: 1;
+      display: grid;
+      place-items: center;
+      container-type: inline-size;
+      color: #e7e9e4;
+      background: radial-gradient(ellipse at center, #151715 0%, #080a09 60%, #020303 100%);
+      font-family: "Courier New", Courier, monospace;
+      isolation: isolate;
+    }
+
+    .vhs-startup-screen[hidden]{ display: none; }
+
+    .vhs-startup-screen::before{
+      content: "";
+      position: absolute;
+      inset: -25% 0 auto;
+      height: 22%;
+      background: linear-gradient(transparent, rgba(220,230,220,.035), transparent);
+      animation: vhs-scan-drift 9s linear infinite;
+      pointer-events: none;
+    }
+
+    .vhs-startup-screen::after{
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.27) 2px 3px);
+      box-shadow: inset 0 0 55px rgba(0,0,0,.6);
+      pointer-events: none;
+    }
+
+    .vhs-startup-corner{
+      position: absolute;
+      top: 8%; left: 8%;
+      font-size: clamp(10px, 1.9cqw, 16px);
+      letter-spacing: .16em;
+      color: #737b74;
+    }
+
+    .vhs-startup-message{ text-align: center; }
+
+    .vhs-startup-status{
+      display: block;
+      margin-bottom: 1.3em;
+      font-size: clamp(10px, 1.9cqw, 16px);
+      letter-spacing: .35em;
+      color: #8e978f;
+    }
+
+    .vhs-startup-title{
+      position: relative;
+      display: inline-block;
+      font-size: clamp(20px, 5.4cqw, 52px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: .1em;
+      white-space: nowrap;
+      text-shadow: 0 0 3px rgba(235,245,235,.5), 0 0 16px rgba(215,235,215,.15);
+      animation: vhs-text-flicker 5.6s step-end infinite;
+    }
+
+    .vhs-startup-title::before, .vhs-startup-title::after{
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      color: #f4f5ee;
+      pointer-events: none;
+      animation: vhs-text-tear 5.6s step-end infinite;
+    }
+
+    .vhs-startup-title::before{
+      clip-path: inset(12% 0 51% 0);
+      transform: translateX(-.18em);
+    }
+
+    .vhs-startup-title::after{
+      clip-path: inset(54% 0 12% 0);
+      transform: translateX(.2em);
+      animation-direction: reverse;
+    }
+
+    @keyframes vhs-scan-drift{
+      to{ transform: translateY(650%); }
+    }
+
+    @keyframes vhs-text-flicker{
+      0%, 82%, 91%, 100%{ opacity: 1; transform: none; }
+      83%{ opacity: .55; transform: skewX(-6deg) translateX(.04em); }
+      87%{ opacity: .82; transform: translateX(-.03em); }
+    }
+
+    @keyframes vhs-text-tear{
+      0%, 82%, 91%, 100%{ opacity: 0; }
+      83%{ opacity: .9; }
+      87%{ opacity: .35; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .vhs-startup-screen::before,
+      .vhs-startup-title, .vhs-startup-title::before, .vhs-startup-title::after{
+        animation: none;
+      }
     }
 
     .vhs-hotspot{
@@ -540,6 +649,13 @@
         <video class="vhs-tv-trailer" id="vhs-tv-trailer" muted loop playsinline preload="none"
                aria-label="Selected game trailer"></video>
       </div>
+      <div class="vhs-startup-screen" id="vhs-startup-screen" role="note" aria-label="Select a VHS to play a trailer">
+        <span class="vhs-startup-corner" aria-hidden="true">AV 01 / VHS</span>
+        <div class="vhs-startup-message" aria-hidden="true">
+          <span class="vhs-startup-status">[ NO SIGNAL ]</span>
+          <span class="vhs-startup-title" data-text="SELECT A VHS">SELECT A VHS</span>
+        </div>
+      </div>
       <button class="vhs-hotspot hotspot-fav1" type="button" data-video="./assets/icons/fav1.mp4" aria-label="Play right top cassette"></button>
       <button class="vhs-hotspot hotspot-fav2" type="button" data-video="./assets/icons/fav2.mp4" aria-label="Play right middle cassette"></button>
       <button class="vhs-hotspot hotspot-fav3" type="button" data-video="./assets/icons/fav3.mp4" aria-label="Play left top cassette"></button>
@@ -924,6 +1040,7 @@
 
       const tvScreen = document.getElementById('vhs-tv-screen');
       const tvTrailer = document.getElementById('vhs-tv-trailer');
+      const startupScreen = document.getElementById('vhs-startup-screen');
       // Add your Veltarum trailer path here when it is ready, for example:
       // const veltarumTrailerSource = './assets/icons/VeltarumVideo.mp4';
       const veltarumTrailerSource = '';
@@ -942,6 +1059,8 @@
       }
 
       function cueTrailer(action) {
+        // Dismiss once per page visit, including a tape without a trailer yet.
+        startupScreen.hidden = true;
         ++trailerRequest;
         selectedTape = action;
         tvTrailer.pause();

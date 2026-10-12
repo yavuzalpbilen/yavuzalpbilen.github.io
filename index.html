@@ -81,9 +81,11 @@
       left: 50%; top: 50%;
       width: max(100%, calc(100vh * 16 / 9));
       aspect-ratio: 16 / 9;
+      background: #000 url("./assets/icons/favidle-poster.jpg") center / cover no-repeat;
       transform: translate(-50%, -50%);
     }
 
+    /* Keep the outgoing frame visible until the incoming video has rendered. */
     .vhs-video{
       position: absolute;
       inset: 0;
@@ -92,11 +94,15 @@
       object-fit: cover;
       object-position: center;
       pointer-events: none;
+      opacity: 0;
+      z-index: 0;
     }
+
+    .vhs-video.is-active{ opacity: 1; z-index: 1; }
 
     .vhs-hotspot{
       position: absolute;
-      z-index: 1;
+      z-index: 2;
       display: block;
       appearance: none;
       border: 0;
@@ -488,10 +494,19 @@
 
   <section class="hero" id="hero" aria-label="Interactive VHS room">
     <div class="vhs-stage">
-      <video class="vhs-video" id="vhs-hero-video" src="./assets/icons/favidle.mp4"
+      <video class="vhs-video is-active" id="vhs-hero-video" src="./assets/icons/favidle.mp4"
              autoplay muted loop playsinline preload="auto" poster="./assets/icons/favidle-poster.jpg" aria-label="VHS room">
         Your browser does not support HTML video.
       </video>
+      <!-- Paused clips preload in the background; only the visible clip plays. -->
+      <video class="vhs-video" id="vhs-action-1" src="./assets/icons/fav1.mp4"
+             muted playsinline preload="none" aria-hidden="true"></video>
+      <video class="vhs-video" id="vhs-action-2" src="./assets/icons/fav2.mp4"
+             muted playsinline preload="none" aria-hidden="true"></video>
+      <video class="vhs-video" id="vhs-action-3" src="./assets/icons/fav3.mp4"
+             muted playsinline preload="none" aria-hidden="true"></video>
+      <video class="vhs-video" id="vhs-action-4" src="./assets/icons/fav4.mp4"
+             muted playsinline preload="none" aria-hidden="true"></video>
       <button class="vhs-hotspot hotspot-fav1" type="button" data-video="./assets/icons/fav1.mp4" aria-label="Play right top cassette"></button>
       <button class="vhs-hotspot hotspot-fav2" type="button" data-video="./assets/icons/fav2.mp4" aria-label="Play right middle cassette"></button>
       <button class="vhs-hotspot hotspot-fav3" type="button" data-video="./assets/icons/fav3.mp4" aria-label="Play left top cassette"></button>
@@ -865,50 +880,157 @@
 
   <script>
     (function () {
-      const heroVideo = document.getElementById('vhs-hero-video');
+      const idleVideo = document.getElementById('vhs-hero-video');
+      const actionVideos = [1, 2, 3, 4].map(i => document.getElementById('vhs-action-' + i));
       const hotspots = Array.from(document.querySelectorAll('.vhs-hotspot'));
-      const idleSource = './assets/icons/favidle.mp4';
-      let playingAction = false;
-      let playbackRequest = 0;
+      const videosBySource = new Map(actionVideos.map(v => [v.getAttribute('src'), v]));
+      let activeVideo = idleVideo;
+      let switching = false;
+      let switchId = 0;
+      let resumeIdle = false;
 
-      function playHeroVideo(source, isAction) {
-        const request = ++playbackRequest;
-        playingAction = isAction;
-        hotspots.forEach(button => button.setAttribute('aria-disabled', String(isAction)));
-        heroVideo.loop = !isAction;
-        heroVideo.muted = true;
-        heroVideo.src = source;
-        heroVideo.load();
+      function setBusy(busy) {
+        hotspots.forEach(button => button.setAttribute('aria-disabled', String(busy)));
+      }
 
-        const playback = heroVideo.play();
-        if (playback && typeof playback.catch === 'function') {
-          playback.catch(() => {
-            // Ignore failures from a source that has already been replaced.
-            if (request === playbackRequest && isAction) returnToIdle();
-          });
+      function prepare(video) {
+        // Never reload the visible video. An already loaded clip keeps its buffer.
+        if (video.preload === 'none' || video.error) {
+          video.preload = 'auto';
+          video.load();
         }
       }
 
-      function returnToIdle() {
-        playHeroVideo(idleSource, false);
+      function playUntilFrame(video) {
+        return new Promise((resolve, reject) => {
+          let frameId;
+          let rafId;
+          let settled = false;
+          const timeout = setTimeout(() => finish(new Error('Video loading timed out')), 15000);
+
+          function finish(error) {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timeout);
+            if (frameId !== undefined) video.cancelVideoFrameCallback(frameId);
+            if (rafId !== undefined) cancelAnimationFrame(rafId);
+            video.removeEventListener('error', onError);
+            error ? reject(error) : resolve();
+          }
+
+          function onError() { finish(new Error('Video could not be loaded')); }
+
+          function framePresented() {
+            if (!video.seeking && video.readyState >= 2) finish();
+            else frameId = video.requestVideoFrameCallback(framePresented);
+          }
+
+          function checkFallback() {
+            if (!video.paused && !video.seeking && video.readyState >= 2 && video.currentTime > 0) {
+              // Older browsers: leave two paint opportunities before revealing it.
+              rafId = requestAnimationFrame(() => { rafId = requestAnimationFrame(() => finish()); });
+            } else rafId = requestAnimationFrame(checkFallback);
+          }
+
+          video.addEventListener('error', onError);
+          if (typeof video.requestVideoFrameCallback === 'function') frameId = video.requestVideoFrameCallback(framePresented);
+          else rafId = requestAnimationFrame(checkFallback);
+
+          try {
+            const playback = video.play();
+            if (playback) playback.catch(error => finish(error));
+          } catch (error) { finish(error); }
+        });
+      }
+
+      async function showVideo(next) {
+        if (switching || next === activeVideo) return;
+        switching = true;
+        setBusy(true);
+        const request = ++switchId;
+        const previous = activeVideo;
+
+        try {
+          prepare(next);
+          next.currentTime = 0;
+          await playUntilFrame(next);
+          if (request !== switchId) return;
+
+          // Swap both classes in one task, after the next decoded frame is ready.
+          next.classList.add('is-active');
+          next.setAttribute('aria-hidden', 'false');
+          previous.classList.remove('is-active');
+          previous.setAttribute('aria-hidden', 'true');
+          activeVideo = next;
+          previous.pause();
+          resumeIdle = false;
+        } catch (error) {
+          // Preserve the outgoing image, release the controls and allow a retry.
+          next.pause();
+          resumeIdle = next === idleVideo;
+          console.warn('VHS video unavailable; keeping the previous frame.', error);
+        } finally {
+          if (request === switchId) {
+            switching = false;
+            setBusy(activeVideo !== idleVideo && !activeVideo.ended && !activeVideo.error);
+          }
+        }
       }
 
       hotspots.forEach(button => {
         button.addEventListener('click', () => {
-          // Finish the current selection before accepting another cassette.
-          if (playingAction) return;
-          playHeroVideo(button.dataset.video, true);
+          if (switching || (activeVideo !== idleVideo && !activeVideo.ended && !activeVideo.error)) return;
+          const next = videosBySource.get(button.dataset.video);
+          if (next) showVideo(next);
         });
       });
 
-      heroVideo.addEventListener('ended', () => {
-        if (playingAction) returnToIdle();
+      actionVideos.forEach(video => {
+        video.addEventListener('ended', () => {
+          if (activeVideo === video) showVideo(idleVideo);
+        });
+        video.addEventListener('error', () => {
+          if (activeVideo === video && !switching) showVideo(idleVideo);
+        });
       });
-      heroVideo.addEventListener('error', () => {
-        // A missing action file must not leave the hotspots locked.
-        if (playingAction) returnToIdle();
-      });
-      returnToIdle();
+
+      function resumePlayback() {
+        if (document.hidden) return;
+        if (resumeIdle && !switching) showVideo(idleVideo);
+        else if (!switching && !activeVideo.ended) activeVideo.play().catch(() => {});
+      }
+      document.addEventListener('visibilitychange', resumePlayback);
+      window.addEventListener('pageshow', resumePlayback);
+      window.addEventListener('online', resumePlayback);
+      // A user gesture also retries playback if a browser blocked autoplay.
+      document.getElementById('hero').addEventListener('pointerdown', resumePlayback);
+
+      function bufferedForPlayback(video) {
+        return new Promise(resolve => {
+          let timer;
+          function done() {
+            clearTimeout(timer);
+            video.removeEventListener('canplaythrough', done);
+            video.removeEventListener('error', done);
+            resolve();
+          }
+          if (video.readyState >= 4 || video.error) return resolve();
+          video.addEventListener('canplaythrough', done);
+          video.addEventListener('error', done);
+          timer = setTimeout(done, 15000);
+        });
+      }
+
+      // Load idle first, then warm paused action clips one at a time.
+      // This avoids competing downloads at startup and keeps decoding work low.
+      (async () => {
+        await bufferedForPlayback(idleVideo);
+        for (const video of actionVideos) {
+          prepare(video);
+          await bufferedForPlayback(video);
+        }
+      })();
+      idleVideo.play().catch(() => {});
 
       const projectVideos = [
         document.getElementById('project-video-1'),

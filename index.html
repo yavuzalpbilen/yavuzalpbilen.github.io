@@ -103,9 +103,33 @@
 
     .vhs-video.is-active{ opacity: 1; z-index: 1; }
 
+    /* TV glass bounds in the original 1920x1080 recordings.
+       These percentages scale with the SAME stage as the room video. */
+    .vhs-tv-screen{
+      position: absolute;
+      left: 29.06%; top: 12.4%;
+      width: 40.47%; height: 51.3%;
+      clip-path: polygon(0 0, 100% 0, 97.8% 100%, 2.3% 100%);
+      overflow: hidden;
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+      background: #000;
+    }
+
+    .vhs-tv-screen.is-playing{ opacity: 1; }
+
+    .vhs-tv-trailer{
+      display: block;
+      width: 100%; height: 100%;
+      /* Fill the TV glass; use contain here if you prefer the entire trailer frame. */
+      object-fit: cover;
+      object-position: center;
+    }
+
     .vhs-hotspot{
       position: absolute;
-      z-index: 2;
+      z-index: 3;
       display: block;
       appearance: none;
       border: 0;
@@ -510,6 +534,10 @@
              muted playsinline preload="none" aria-hidden="true"></video>
       <video class="vhs-video" id="vhs-action-4" src="./assets/icons/fav4.mp4"
              muted playsinline preload="none" aria-hidden="true"></video>
+      <div class="vhs-tv-screen" id="vhs-tv-screen" aria-hidden="true">
+        <video class="vhs-tv-trailer" id="vhs-tv-trailer" muted loop playsinline preload="none"
+               aria-label="Selected game trailer"></video>
+      </div>
       <button class="vhs-hotspot hotspot-fav1" type="button" data-video="./assets/icons/fav1.mp4" aria-label="Play right top cassette"></button>
       <button class="vhs-hotspot hotspot-fav2" type="button" data-video="./assets/icons/fav2.mp4" aria-label="Play right middle cassette"></button>
       <button class="vhs-hotspot hotspot-fav3" type="button" data-video="./assets/icons/fav3.mp4" aria-label="Play left top cassette"></button>
@@ -892,6 +920,69 @@
       let switchId = 0;
       let resumeIdle = false;
 
+      const tvScreen = document.getElementById('vhs-tv-screen');
+      const tvTrailer = document.getElementById('vhs-tv-trailer');
+      // Add your Veltarum trailer path here when it is ready, for example:
+      // const veltarumTrailerSource = './assets/icons/VeltarumVideo.mp4';
+      const veltarumTrailerSource = '';
+      const trailerProjects = {
+        'vhs-action-2': 'project-video-6', // Six Coins
+        'vhs-action-3': 'project-video-3', // Project Trash
+        'vhs-action-4': 'project-video-2'  // Ecdysis
+      };
+      let selectedTape = null;
+      let trailerRequest = 0;
+
+      function trailerSourceFor(action) {
+        if (action.id === 'vhs-action-1') return veltarumTrailerSource;
+        const project = document.getElementById(trailerProjects[action.id]);
+        return project?.querySelector('source')?.getAttribute('src') || project?.getAttribute('src') || '';
+      }
+
+      function cueTrailer(action) {
+        ++trailerRequest;
+        selectedTape = action;
+        tvTrailer.pause();
+        tvScreen.classList.remove('is-playing');
+        tvScreen.setAttribute('aria-hidden', 'true');
+        const source = trailerSourceFor(action);
+        if (!source) {
+          tvTrailer.removeAttribute('src');
+          tvTrailer.load();
+          return;
+        }
+        // Fetch while the hand inserts the tape; do not play over the hand.
+        tvTrailer.preload = 'auto';
+        tvTrailer.muted = true;
+        if (tvTrailer.getAttribute('src') !== source || tvTrailer.error) {
+          tvTrailer.src = source;
+          tvTrailer.load();
+        } else tvTrailer.currentTime = 0;
+      }
+
+      async function playTapeTrailer(action) {
+        if (selectedTape !== action || !trailerSourceFor(action)) return;
+        const request = trailerRequest;
+        try {
+          tvTrailer.currentTime = 0;
+          await playUntilFrame(tvTrailer);
+          if (request !== trailerRequest || activeVideo !== idleVideo || switching) return;
+          tvScreen.classList.add('is-playing');
+          tvScreen.setAttribute('aria-hidden', 'false');
+        } catch (error) {
+          if (request !== trailerRequest) return;
+          tvTrailer.pause();
+          tvScreen.classList.remove('is-playing');
+          console.warn('TV trailer unavailable; check its file path.', error);
+        }
+      }
+
+      tvTrailer.addEventListener('error', () => {
+        tvScreen.classList.remove('is-playing');
+        tvScreen.setAttribute('aria-hidden', 'true');
+      });
+
+
       function setBusy(busy) {
         hotspots.forEach(button => button.setAttribute('aria-disabled', String(busy)));
       }
@@ -984,13 +1075,20 @@
         button.addEventListener('click', () => {
           if (switching || (activeVideo !== idleVideo && !activeVideo.ended && !activeVideo.error)) return;
           const next = videosBySource.get(button.dataset.video);
-          if (next) showVideo(next);
+          if (next) {
+            cueTrailer(next);
+            showVideo(next);
+          }
         });
       });
 
       actionVideos.forEach(video => {
         video.addEventListener('ended', () => {
-          if (activeVideo === video) showVideo(idleVideo);
+          if (activeVideo === video) {
+            showVideo(idleVideo).then(() => {
+              if (activeVideo === idleVideo) playTapeTrailer(video);
+            });
+          }
         });
         video.addEventListener('error', () => {
           if (activeVideo === video && !switching) showVideo(idleVideo);
@@ -999,6 +1097,7 @@
 
       function resumePlayback() {
         if (document.hidden) return;
+        if (tvScreen.classList.contains('is-playing')) tvTrailer.play().catch(() => {});
         if (resumeIdle && !switching) showVideo(idleVideo);
         else if (!switching && !activeVideo.ended) activeVideo.play().catch(() => {});
       }

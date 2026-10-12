@@ -121,9 +121,11 @@
 
     .vhs-tv-trailer{
       display: block;
-      width: 100%; height: 100%;
-      /* Fill the TV glass; use contain here if you prefer the entire trailer frame. */
-      object-fit: cover;
+      /* Keep the full frame clear of the TV glass's angled side edges. */
+      width: 95.4%; height: 100%;
+      margin: 0 auto;
+      /* Preserve the complete trailer frame, with black letterbox bars. */
+      object-fit: contain;
       object-position: center;
     }
 

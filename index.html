@@ -568,17 +568,22 @@
 
     .floating-contact-links{
       position: fixed;
-      left: 50%;
+      left: var(--side-pad);
       bottom: 24px;
-      transform: translateX(-50%);
       z-index: 1400;
       display: flex;
-      justify-content: center;
-      gap: 2rem;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
       flex-wrap: nowrap;
       pointer-events: auto;
       width: max-content;
       max-width: calc(100vw - 28px);
+    }
+
+    .floating-contact-links .contact-link{
+      justify-content: center;
+      padding: 0.75rem 1rem;
     }
 
     .contact-link.is-hidden{ display: none; }
@@ -600,7 +605,7 @@
       nav{ display: none; }
       .project-image{ height: 420px; }
       .project-header{ align-items: flex-start; }
-      .floating-contact-links{ bottom: 18px; gap: 0.75rem; max-width: calc(100vw - 20px); flex-wrap: wrap; }
+      .floating-contact-links{ left: 14px; bottom: 18px; gap: 8px; max-width: calc(100vw - 28px); }
       .contact-link{ padding: 0.9rem 1.15rem; font-size: 0.95rem; }
       .video-sound-btn{ top: 12px; right: 12px; width: 42px; height: 42px; font-size: 17px; }
     }

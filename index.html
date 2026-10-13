@@ -132,7 +132,7 @@
     .vhs-channel-change{ opacity: 1; z-index: 4; }
     .vhs-channel-change[hidden]{ display: none; }
 
-    /* Startup-only CRT prompt: stays until the first trailer is ready.
+    /* Startup-only CRT prompt: clears when the hand presses the red button.
        No extra video files. */
     .vhs-startup-screen{
       opacity: 1;
@@ -1297,6 +1297,33 @@
       const tvScreen = document.getElementById('vhs-tv-screen');
       const tvTrailer = document.getElementById('vhs-tv-trailer');
       const startupScreen = document.getElementById('vhs-startup-screen');
+      // Seconds into each recording when the finger reaches the red button.
+      // Adjust these if the source videos are edited or replaced.
+      const redButtonPressTimes = {
+        'vhs-action-1': 0.90,
+        'vhs-action-2': 0.85,
+        'vhs-action-3': 1.10,
+        'vhs-action-4': 0.50
+      };
+
+      function updateStartupPrompt(video, mediaTime = video.currentTime) {
+        if (activeVideo === video && mediaTime >= redButtonPressTimes[video.id]) {
+          startupScreen.hidden = true;
+        }
+      }
+
+      function watchRedButtonPress(video) {
+        if (startupScreen.hidden || !(video.id in redButtonPressTimes)) return;
+        updateStartupPrompt(video);
+        if (typeof video.requestVideoFrameCallback !== 'function') return;
+        function checkFrame(now, metadata) {
+          if (activeVideo !== video || startupScreen.hidden) return;
+          updateStartupPrompt(video, metadata.mediaTime);
+          if (!startupScreen.hidden) video.requestVideoFrameCallback(checkFrame);
+        }
+        if (!startupScreen.hidden) video.requestVideoFrameCallback(checkFrame);
+      }
+
       const channelCanvas = document.getElementById('vhs-channel-change');
       let channelChanging = false;
       let cancelChannelChange = () => {};
@@ -1497,6 +1524,7 @@
           previous.classList.remove('is-active');
           previous.setAttribute('aria-hidden', 'true');
           activeVideo = next;
+          watchRedButtonPress(next);
           previous.pause();
           resumeIdle = false;
         } catch (error) {
@@ -1524,6 +1552,9 @@
       });
 
       actionVideos.forEach(video => {
+        // Fallback for browsers without per-frame callbacks; also handles seeking.
+        video.addEventListener('timeupdate', () => updateStartupPrompt(video));
+        video.addEventListener('seeked', () => updateStartupPrompt(video));
         video.addEventListener('ended', () => {
           if (activeVideo === video) {
             showVideo(idleVideo).then(() => {

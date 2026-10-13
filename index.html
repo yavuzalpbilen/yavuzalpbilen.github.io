@@ -710,7 +710,7 @@
 
     /* Static cassette catalog details: no flicker, scaling or video overlays. */
     #projects .project-info::before{
-      content: "TAPE " counter(tape, decimal-leading-zero) " / SIDE A";
+      content: counter(tape, decimal-leading-zero);
       display: block;
       padding-bottom: .85rem;
       padding-right: 3.5rem;

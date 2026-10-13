@@ -1306,22 +1306,25 @@
         'vhs-action-4': 0.50
       };
 
-      function updateStartupPrompt(video, mediaTime = video.currentTime) {
-        if (activeVideo === video && mediaTime >= redButtonPressTimes[video.id]) {
+      function updateRedButtonPress(video, mediaTime = video.currentTime) {
+        if (activeVideo === video && selectedTape === video && !redButtonPressed &&
+            mediaTime >= redButtonPressTimes[video.id]) {
+          redButtonPressed = true;
           startupScreen.hidden = true;
+          prepareTapeTrailer(video);
         }
       }
 
       function watchRedButtonPress(video) {
-        if (startupScreen.hidden || !(video.id in redButtonPressTimes)) return;
-        updateStartupPrompt(video);
+        if (redButtonPressed || !(video.id in redButtonPressTimes)) return;
+        updateRedButtonPress(video);
         if (typeof video.requestVideoFrameCallback !== 'function') return;
         function checkFrame(now, metadata) {
-          if (activeVideo !== video || startupScreen.hidden) return;
-          updateStartupPrompt(video, metadata.mediaTime);
-          if (!startupScreen.hidden) video.requestVideoFrameCallback(checkFrame);
+          if (activeVideo !== video || redButtonPressed) return;
+          updateRedButtonPress(video, metadata.mediaTime);
+          if (!redButtonPressed) video.requestVideoFrameCallback(checkFrame);
         }
-        if (!startupScreen.hidden) video.requestVideoFrameCallback(checkFrame);
+        if (!redButtonPressed) video.requestVideoFrameCallback(checkFrame);
       }
 
       const channelCanvas = document.getElementById('vhs-channel-change');
@@ -1390,6 +1393,7 @@
       };
       let selectedTape = null;
       let trailerRequest = 0;
+      let redButtonPressed = false;
 
       function trailerSourceFor(action) {
         if (action.id === 'vhs-action-1') return veltarumTrailerSource;
@@ -1401,6 +1405,11 @@
         ++trailerRequest;
         cancelChannelChange();
         selectedTape = action;
+        redButtonPressed = false;
+        // Keep the outgoing trailer playing until the recorded button press.
+      }
+
+      function prepareTapeTrailer(action) {
         tvTrailer.pause();
         tvScreen.classList.remove('is-playing');
         tvScreen.setAttribute('aria-hidden', 'true');
@@ -1410,7 +1419,7 @@
           tvTrailer.load();
           return;
         }
-        // Fetch while the hand inserts the tape; do not play over the hand.
+        // After the button press, fetch the next trailer while the hand inserts it.
         tvTrailer.preload = 'auto';
         tvTrailer.muted = true;
         if (tvTrailer.getAttribute('src') !== source || tvTrailer.error) {
@@ -1420,7 +1429,7 @@
       }
 
       async function playTapeTrailer(action) {
-        if (selectedTape !== action || !trailerSourceFor(action)) return;
+        if (selectedTape !== action || !redButtonPressed || !trailerSourceFor(action)) return;
         const request = trailerRequest;
         try {
           tvTrailer.currentTime = 0;
@@ -1553,10 +1562,11 @@
 
       actionVideos.forEach(video => {
         // Fallback for browsers without per-frame callbacks; also handles seeking.
-        video.addEventListener('timeupdate', () => updateStartupPrompt(video));
-        video.addEventListener('seeked', () => updateStartupPrompt(video));
+        video.addEventListener('timeupdate', () => updateRedButtonPress(video));
+        video.addEventListener('seeked', () => updateRedButtonPress(video));
         video.addEventListener('ended', () => {
           if (activeVideo === video) {
+            updateRedButtonPress(video);
             showVideo(idleVideo).then(() => {
               if (activeVideo === idleVideo) playTapeTrailer(video);
             });

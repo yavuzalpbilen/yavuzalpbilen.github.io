@@ -105,7 +105,7 @@
 
     /* TV glass bounds in the original 1920x1080 recordings.
        These percentages scale with the SAME stage as the room video. */
-    .vhs-tv-screen, .vhs-startup-screen{
+    .vhs-tv-screen, .vhs-startup-screen, .vhs-channel-change{
       position: absolute;
       left: 29.06%; top: 12.4%;
       width: 40.47%; height: 51.3%;
@@ -129,8 +129,11 @@
       object-position: center;
     }
 
-    /* Startup-only CRT prompt: mostly readable, with two brief distorted states.
-       All effects stop when the first tape is selected. No extra video files. */
+    .vhs-channel-change{ opacity: 1; z-index: 4; }
+    .vhs-channel-change[hidden]{ display: none; }
+
+    /* Startup-only CRT prompt: stays until the first trailer is ready.
+       No extra video files. */
     .vhs-startup-screen{
       opacity: 1;
       display: grid;
@@ -908,6 +911,7 @@
           <span class="vhs-startup-title" data-text="SELECT A VHS">SELECT A VHS</span>
         </div>
       </div>
+      <canvas class="vhs-channel-change" id="vhs-channel-change" width="320" height="180" hidden aria-hidden="true"></canvas>
       <button class="vhs-hotspot hotspot-fav1" type="button" data-video="./assets/icons/fav1.mp4" aria-label="Play right top cassette"></button>
       <button class="vhs-hotspot hotspot-fav2" type="button" data-video="./assets/icons/fav2.mp4" aria-label="Play right middle cassette"></button>
       <button class="vhs-hotspot hotspot-fav3" type="button" data-video="./assets/icons/fav3.mp4" aria-label="Play left top cassette"></button>
@@ -1293,6 +1297,62 @@
       const tvScreen = document.getElementById('vhs-tv-screen');
       const tvTrailer = document.getElementById('vhs-tv-trailer');
       const startupScreen = document.getElementById('vhs-startup-screen');
+      const channelCanvas = document.getElementById('vhs-channel-change');
+      let channelChanging = false;
+      let cancelChannelChange = () => {};
+
+      function channelChange() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return Promise.resolve();
+        const ctx = channelCanvas.getContext('2d');
+        if (!ctx) return Promise.resolve();
+        channelChanging = true;
+        setBusy(true);
+        channelCanvas.hidden = false;
+        // A brief, low-resolution analog tuning burst; no animation runs at rest.
+        return new Promise(resolve => {
+          const duration = 650;
+          const started = performance.now();
+          const noise = ctx.createImageData(320, 180);
+          let frame;
+          let lastPaint = -Infinity;
+          function finish() {
+            cancelAnimationFrame(frame);
+            channelChanging = false;
+            channelCanvas.hidden = true;
+            cancelChannelChange = () => {};
+            setBusy(switching || (activeVideo !== idleVideo && !activeVideo.ended && !activeVideo.error));
+            resolve();
+          }
+          cancelChannelChange = finish;
+          function paint(now) {
+            const progress = (now - started) / duration;
+            if (progress >= 1) { finish(); return; }
+            if (now - lastPaint >= 1000 / 24) {
+              lastPaint = now;
+              const band = (progress * 250) % 220 - 20;
+              for (let y = 0; y < 180; y++) {
+                const tracking = Math.abs(y - band) < 12;
+                const wave = Math.sin(y * .13 + progress * 25) * 22;
+                for (let x = 0; x < 320; x++) {
+                  const i = (y * 320 + x) * 4;
+                  const grain = Math.random();
+                  const level = tracking ? grain * 32 : 25 + grain * 100 + wave;
+                  noise.data[i] = noise.data[i + 1] = noise.data[i + 2] = level;
+                  noise.data[i + 3] = 255;
+                }
+              }
+              ctx.putImageData(noise, 0, 0);
+              ctx.fillStyle = 'rgba(0,0,0,.3)';
+              for (let y = 0; y < 180; y += 3) ctx.fillRect(0, y, 320, 1);
+              ctx.fillStyle = 'rgba(205,211,201,.5)';
+              ctx.fillRect(0, band + 14, 320, 1);
+              ctx.fillRect(Math.random() * 100, (band + 60) % 180, 100 + Math.random() * 180, 1);
+            }
+            frame = requestAnimationFrame(paint);
+          }
+          paint(started);
+        });
+      }
       // Add your Veltarum trailer path here when it is ready, for example:
       // const veltarumTrailerSource = './assets/icons/VeltarumVideo.mp4';
       const veltarumTrailerSource = '';
@@ -1311,9 +1371,8 @@
       }
 
       function cueTrailer(action) {
-        // Dismiss once per page visit, including a tape without a trailer yet.
-        startupScreen.hidden = true;
         ++trailerRequest;
+        cancelChannelChange();
         selectedTape = action;
         tvTrailer.pause();
         tvScreen.classList.remove('is-playing');
@@ -1340,6 +1399,13 @@
           tvTrailer.currentTime = 0;
           await playUntilFrame(tvTrailer);
           if (request !== trailerRequest || activeVideo !== idleVideo || switching) return;
+          // Hold the first decoded frame so the tuning effect does not skip the intro.
+          tvTrailer.pause();
+          await channelChange();
+          if (request !== trailerRequest || activeVideo !== idleVideo || switching) return;
+          await tvTrailer.play();
+          if (request !== trailerRequest || activeVideo !== idleVideo || switching) return;
+          startupScreen.hidden = true;
           tvScreen.classList.add('is-playing');
           tvScreen.setAttribute('aria-hidden', 'false');
         } catch (error) {
@@ -1351,6 +1417,8 @@
       }
 
       tvTrailer.addEventListener('error', () => {
+        ++trailerRequest;
+        cancelChannelChange();
         tvScreen.classList.remove('is-playing');
         tvScreen.setAttribute('aria-hidden', 'true');
       });
@@ -1446,7 +1514,7 @@
 
       hotspots.forEach(button => {
         button.addEventListener('click', () => {
-          if (switching || (activeVideo !== idleVideo && !activeVideo.ended && !activeVideo.error)) return;
+          if (switching || channelChanging || (activeVideo !== idleVideo && !activeVideo.ended && !activeVideo.error)) return;
           const next = videosBySource.get(button.dataset.video);
           if (next) {
             cueTrailer(next);

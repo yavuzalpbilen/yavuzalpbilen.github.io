@@ -927,8 +927,8 @@
       <div class="project-card reveal">
         <div class="project-image">
           <button class="video-sound-btn" type="button" data-video="project-video-2" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
-          <video id="project-video-2" muted autoplay loop playsinline webkit-playsinline preload="auto">
-            <source src="./assets/icons/video2.mp4" type="video/mp4">
+          <video id="project-video-2" muted loop playsinline webkit-playsinline preload="none">
+            <source data-src="./assets/icons/video2.mp4" type="video/mp4">
           </video>
         </div>
 
@@ -956,8 +956,8 @@
       <div class="project-card reveal">
         <div class="project-image">
           <button class="video-sound-btn" type="button" data-video="project-video-3" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
-          <video id="project-video-3" muted autoplay loop playsinline webkit-playsinline preload="auto">
-            <source src="./assets/icons/video3.mp4" type="video/mp4">
+          <video id="project-video-3" muted loop playsinline webkit-playsinline preload="none">
+            <source data-src="./assets/icons/video3.mp4" type="video/mp4">
           </video>
         </div>
 
@@ -985,8 +985,8 @@
       <div class="project-card reveal">
         <div class="project-image">
           <button class="video-sound-btn" type="button" data-video="project-video-7" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
-          <video id="project-video-7" muted autoplay loop playsinline webkit-playsinline preload="auto">
-            <source src="./assets/icons/0622 (1)(4).mp4" type="video/mp4">
+          <video id="project-video-7" muted loop playsinline webkit-playsinline preload="none">
+            <source data-src="./assets/icons/0622 (1)(4).mp4" type="video/mp4">
           </video>
         </div>
 
@@ -1015,8 +1015,8 @@
       <div class="project-card reveal">
         <div class="project-image">
           <button class="video-sound-btn" type="button" data-video="project-video-6" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
-          <video id="project-video-6" muted autoplay loop playsinline webkit-playsinline preload="auto">
-            <source src="./assets/icons/SixCoinsVideo.mp4" type="video/mp4">
+          <video id="project-video-6" muted loop playsinline webkit-playsinline preload="none">
+            <source data-src="./assets/icons/SixCoinsVideo.mp4" type="video/mp4">
           </video>
         </div>
 
@@ -1043,8 +1043,8 @@
       <div class="project-card reveal">
         <div class="project-image">
           <button class="video-sound-btn" type="button" data-video="project-video-1" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
-          <video id="project-video-1" muted autoplay loop playsinline webkit-playsinline preload="auto">
-            <source src="./assets/icons/KingdomofVulnar.mp4" type="video/mp4">
+          <video id="project-video-1" muted loop playsinline webkit-playsinline preload="none">
+            <source data-src="./assets/icons/KingdomofVulnar.mp4" type="video/mp4">
           </video>
         </div>
 
@@ -1072,8 +1072,8 @@
       <div class="project-card reveal">
         <div class="project-image">
           <button class="video-sound-btn" type="button" data-video="project-video-4" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
-          <video id="project-video-4" muted autoplay loop playsinline webkit-playsinline preload="auto">
-            <source src="./assets/icons/video4.mp4" type="video/mp4">
+          <video id="project-video-4" muted loop playsinline webkit-playsinline preload="none">
+            <source data-src="./assets/icons/video4.mp4" type="video/mp4">
           </video>
         </div>
 
@@ -1101,8 +1101,8 @@
       <div class="project-card reveal is-hidden">
         <div class="project-image">
           <button class="video-sound-btn" type="button" data-video="project-video-5" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
-          <video id="project-video-5" muted autoplay loop playsinline webkit-playsinline preload="auto">
-            <source src="./assets/icons/AdvancedProjectileSimulationSystemVideo.mp4" type="video/mp4">
+          <video id="project-video-5" muted loop playsinline webkit-playsinline preload="none">
+            <source data-src="./assets/icons/AdvancedProjectileSimulationSystemVideo.mp4" type="video/mp4">
           </video>
         </div>
 
@@ -1293,6 +1293,15 @@
       let switching = false;
       let switchId = 0;
       let resumeIdle = false;
+      let switchController = null;
+      let pendingVideo = null;
+      let actionStalled = false;
+      let actionProgressTime = 0;
+      let actionProgressAt = performance.now();
+
+      function actionIsBusy() {
+        return activeVideo !== idleVideo && !activeVideo.ended && !activeVideo.error && !actionStalled;
+      }
 
       const tvScreen = document.getElementById('vhs-tv-screen');
       const tvTrailer = document.getElementById('vhs-tv-trailer');
@@ -1350,7 +1359,7 @@
             channelChanging = false;
             channelCanvas.hidden = true;
             cancelChannelChange = () => {};
-            setBusy(switching || (activeVideo !== idleVideo && !activeVideo.ended && !activeVideo.error));
+            setBusy(actionIsBusy());
             resolve();
           }
           cancelChannelChange = finish;
@@ -1394,15 +1403,19 @@
       let selectedTape = null;
       let trailerRequest = 0;
       let redButtonPressed = false;
+      let trailerController = null;
 
       function trailerSourceFor(action) {
         if (action.id === 'vhs-action-1') return veltarumTrailerSource;
         const project = document.getElementById(trailerProjects[action.id]);
-        return project?.querySelector('source')?.getAttribute('src') || project?.getAttribute('src') || '';
+        const source = project?.querySelector('source');
+        return source?.getAttribute('data-src') || source?.getAttribute('src') || project?.getAttribute('src') || '';
       }
 
       function cueTrailer(action) {
         ++trailerRequest;
+        trailerController?.abort();
+        if (!tvScreen.classList.contains('is-playing')) tvTrailer.pause();
         cancelChannelChange();
         selectedTape = action;
         redButtonPressed = false;
@@ -1431,15 +1444,18 @@
       async function playTapeTrailer(action) {
         if (selectedTape !== action || !redButtonPressed || !trailerSourceFor(action)) return;
         const request = trailerRequest;
+        trailerController?.abort();
+        const controller = new AbortController();
+        trailerController = controller;
         try {
           tvTrailer.currentTime = 0;
-          await playUntilFrame(tvTrailer);
+          await playUntilFrame(tvTrailer, controller.signal);
           if (request !== trailerRequest || activeVideo !== idleVideo || switching) return;
           // Hold the first decoded frame so the tuning effect does not skip the intro.
           tvTrailer.pause();
           await channelChange();
           if (request !== trailerRequest || activeVideo !== idleVideo || switching) return;
-          await tvTrailer.play();
+          await playUntilFrame(tvTrailer, controller.signal);
           if (request !== trailerRequest || activeVideo !== idleVideo || switching) return;
           startupScreen.hidden = true;
           tvScreen.classList.add('is-playing');
@@ -1472,7 +1488,7 @@
         }
       }
 
-      function playUntilFrame(video) {
+      function playUntilFrame(video, signal) {
         return new Promise((resolve, reject) => {
           let frameId;
           let rafId;
@@ -1486,10 +1502,12 @@
             if (frameId !== undefined) video.cancelVideoFrameCallback(frameId);
             if (rafId !== undefined) cancelAnimationFrame(rafId);
             video.removeEventListener('error', onError);
+            signal?.removeEventListener('abort', onAbort);
             error ? reject(error) : resolve();
           }
 
           function onError() { finish(new Error('Video could not be loaded')); }
+          function onAbort() { finish(new DOMException('Playback request replaced', 'AbortError')); }
 
           function framePresented() {
             if (!video.seeking && video.readyState >= 2) finish();
@@ -1503,9 +1521,14 @@
             } else rafId = requestAnimationFrame(checkFallback);
           }
 
+          if (signal?.aborted) { onAbort(); return; }
+          if (video.error) { onError(); return; }
+          signal?.addEventListener('abort', onAbort, { once: true });
           video.addEventListener('error', onError);
           if (typeof video.requestVideoFrameCallback === 'function') frameId = video.requestVideoFrameCallback(framePresented);
-          else rafId = requestAnimationFrame(checkFallback);
+          // Some browsers suppress video-frame callbacks for fully transparent video.
+          // Also watch decoded playback, so an invisible incoming clip cannot deadlock.
+          rafId = requestAnimationFrame(checkFallback);
 
           try {
             const playback = video.play();
@@ -1515,45 +1538,61 @@
       }
 
       async function showVideo(next) {
-        if (switching || next === activeVideo) return;
-        switching = true;
-        setBusy(true);
+        if (pendingVideo === next) return false;
+        if (next === activeVideo && !next.ended && !next.error && !actionStalled) return false;
         const request = ++switchId;
+        switchController?.abort();
+        if (pendingVideo && pendingVideo !== activeVideo) pendingVideo.pause();
+        const controller = new AbortController();
+        switchController = controller;
+        pendingVideo = next;
+        switching = true;
+        // Downloads can be replaced by another selection; a playing hand cannot.
+        setBusy(actionIsBusy());
         const previous = activeVideo;
 
         try {
           prepare(next);
           next.currentTime = 0;
-          await playUntilFrame(next);
-          if (request !== switchId) return;
+          await playUntilFrame(next, controller.signal);
+          if (request !== switchId) return false;
 
           // Swap both classes in one task, after the next decoded frame is ready.
           next.classList.add('is-active');
           next.setAttribute('aria-hidden', 'false');
-          previous.classList.remove('is-active');
-          previous.setAttribute('aria-hidden', 'true');
+          if (previous !== next) {
+            previous.classList.remove('is-active');
+            previous.setAttribute('aria-hidden', 'true');
+            previous.pause();
+          }
           activeVideo = next;
+          actionStalled = false;
+          actionProgressTime = next.currentTime;
+          actionProgressAt = performance.now();
           watchRedButtonPress(next);
-          previous.pause();
           resumeIdle = false;
+          return true;
         } catch (error) {
+          if (request !== switchId) return false;
           // Preserve the outgoing image, release the controls and allow a retry.
           next.pause();
           resumeIdle = next === idleVideo;
           console.warn('VHS video unavailable; keeping the previous frame.', error);
+          return false;
         } finally {
           if (request === switchId) {
             switching = false;
-            setBusy(activeVideo !== idleVideo && !activeVideo.ended && !activeVideo.error);
+            pendingVideo = null;
+            setBusy(actionIsBusy());
           }
         }
       }
 
       hotspots.forEach(button => {
         button.addEventListener('click', () => {
-          if (switching || channelChanging || (activeVideo !== idleVideo && !activeVideo.ended && !activeVideo.error)) return;
+          if (channelChanging || actionIsBusy()) return;
           const next = videosBySource.get(button.dataset.video);
-          if (next) {
+          if (next && pendingVideo !== next) {
             cueTrailer(next);
             showVideo(next);
           }
@@ -1567,8 +1606,8 @@
         video.addEventListener('ended', () => {
           if (activeVideo === video) {
             updateRedButtonPress(video);
-            showVideo(idleVideo).then(() => {
-              if (activeVideo === idleVideo) playTapeTrailer(video);
+            showVideo(idleVideo).then(shown => {
+              if (shown && activeVideo === idleVideo) playTapeTrailer(video);
             });
           }
         });
@@ -1583,37 +1622,32 @@
         if (resumeIdle && !switching) showVideo(idleVideo);
         else if (!switching && !activeVideo.ended) activeVideo.play().catch(() => {});
       }
-      document.addEventListener('visibilitychange', resumePlayback);
+      document.addEventListener('visibilitychange', () => {
+        actionProgressAt = performance.now();
+        resumePlayback();
+      });
       window.addEventListener('pageshow', resumePlayback);
       window.addEventListener('online', resumePlayback);
       // A user gesture also retries playback if a browser blocked autoplay.
       document.getElementById('hero').addEventListener('pointerdown', resumePlayback);
 
-      function bufferedForPlayback(video) {
-        return new Promise(resolve => {
-          let timer;
-          function done() {
-            clearTimeout(timer);
-            video.removeEventListener('canplaythrough', done);
-            video.removeEventListener('error', done);
-            resolve();
-          }
-          if (video.readyState >= 4 || video.error) return resolve();
-          video.addEventListener('canplaythrough', done);
-          video.addEventListener('error', done);
-          timer = setTimeout(done, 15000);
-        });
-      }
-
-      // Load idle first, then warm paused action clips one at a time.
-      // This avoids competing downloads at startup and keeps decoding work low.
-      (async () => {
-        await bufferedForPlayback(idleVideo);
-        for (const video of actionVideos) {
-          prepare(video);
-          await bufferedForPlayback(video);
+      // Fetch action clips on demand, instead of four competing startup downloads.
+      // Recover a hand animation that stops advancing after it has already started.
+      setInterval(() => {
+        const now = performance.now();
+        if (document.hidden || switching || activeVideo === idleVideo || activeVideo.ended || actionStalled) {
+          actionProgressAt = now;
+          return;
         }
-      })();
+        if (Math.abs(activeVideo.currentTime - actionProgressTime) > .01) {
+          actionProgressTime = activeVideo.currentTime;
+          actionProgressAt = now;
+        } else if (now - actionProgressAt >= 8000) {
+          actionStalled = true;
+          setBusy(false);
+          showVideo(idleVideo);
+        }
+      }, 1000);
       idleVideo.play().catch(() => {});
 
       const projectVideos = [
@@ -1647,12 +1681,22 @@
 
       muteAllVideos(null);
 
+      function ensureProjectVideo(video) {
+        const source = video.querySelector('source[data-src]');
+        if (source && !source.getAttribute('src')) {
+          source.setAttribute('src', source.getAttribute('data-src'));
+          video.preload = 'auto';
+          video.load();
+        }
+      }
+
       videoBtns.forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-video');
           const vid = videoById.get(id);
 
           if (!vid) return;
+          ensureProjectVideo(vid);
 
           const isOn = btn.getAttribute('aria-pressed') === 'true';
 
@@ -1671,17 +1715,33 @@
         });
       });
 
-      const tryPlayAllProjectVideos = () => {
+      const tryPlayVisibleProjectVideos = () => {
         projectVideos.forEach(v => {
-          const pr = v.play();
-          if (pr && typeof pr.catch === 'function') pr.catch(() => {});
+          const bounds = v.getBoundingClientRect();
+          if (bounds.height > 0 && bounds.top < innerHeight + 100 && bounds.bottom > 0) {
+            ensureProjectVideo(v);
+            v.play().catch(() => {});
+          } else v.pause();
         });
       };
 
-      tryPlayAllProjectVideos();
+      if ('IntersectionObserver' in window) {
+        const projectObserver = new IntersectionObserver(entries => {
+          entries.forEach(({ target, isIntersecting }) => {
+            if (isIntersecting) {
+              ensureProjectVideo(target);
+              target.play().catch(() => {});
+            } else target.pause();
+          });
+        }, { rootMargin: '0px 0px 100px 0px' });
+        projectVideos.forEach(v => projectObserver.observe(v));
+      } else {
+        window.addEventListener('scroll', tryPlayVisibleProjectVideos, { passive: true });
+      }
+      tryPlayVisibleProjectVideos();
 
       ['click','touchstart','keydown'].forEach(evt => {
-        window.addEventListener(evt, tryPlayAllProjectVideos, { once: true, passive: true });
+        window.addEventListener(evt, tryPlayVisibleProjectVideos, { passive: true });
       });
 
       window.addEventListener('scroll', () => {

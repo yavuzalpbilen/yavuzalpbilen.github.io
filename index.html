@@ -679,25 +679,58 @@
       background: linear-gradient(90deg, #5b5146, transparent);
     }
 
+    #projects .projects-grid{ counter-reset: tape; }
+
     #projects .project-card{
+      counter-increment: tape;
       background: #1d1b18;
       border: 1px solid #494137;
       border-radius: 4px;
       box-shadow: 0 16px 35px rgba(0,0,0,.3), inset 0 1px rgba(244,227,202,.04);
+      /* Keep text/video on a stationary surface, including the reveal state. */
+      transform: none;
+      transition: opacity .45s ease, border-color .16s ease;
     }
 
-    #projects .project-card:hover{
-      transform: translateY(-3px);
+    #projects .project-card:hover,
+    #projects .project-card:focus-within{
+      transform: none;
       border-color: #887565;
-      box-shadow: 0 20px 40px rgba(0,0,0,.38);
+      box-shadow: 0 16px 35px rgba(0,0,0,.3), inset 0 1px rgba(244,227,202,.04);
     }
 
     #projects .project-image{ border-bottom: 1px solid #51453b; }
 
     #projects .project-info{
+      position: relative;
       padding: 1.8rem;
       background: linear-gradient(135deg, #24211d, #1b1917);
       border-left: 3px solid #8d5146;
+    }
+
+    /* Static cassette catalog details: no flicker, scaling or video overlays. */
+    #projects .project-info::before{
+      content: "TAPE " counter(tape, decimal-leading-zero) " / SIDE A";
+      display: block;
+      padding-bottom: .85rem;
+      padding-right: 3.5rem;
+      margin-bottom: 1.2rem;
+      border-bottom: 1px solid #494137;
+      color: #b7a58f;
+      font: .7rem/1.4 "Courier New", Courier, monospace;
+      letter-spacing: .16em;
+      pointer-events: none;
+    }
+
+    #projects .project-info::after{
+      content: "";
+      position: absolute;
+      top: 1.95rem;
+      right: 1.8rem;
+      width: 2.5rem;
+      height: .5rem;
+      background: repeating-linear-gradient(90deg, #8d5146 0 3px, transparent 3px 6px);
+      pointer-events: none;
     }
 
     #projects .project-info h3{
@@ -828,8 +861,13 @@
 
     @media (max-width: 640px){
       #projects .project-info{ padding: 1.2rem; }
+      #projects .project-info::after{ top: 1.35rem; right: 1.2rem; }
       #projects > h2, #skills > h2{ gap: .75rem; letter-spacing: .08em; }
       #contact .contact{ padding: 2.5rem 1.2rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      #projects .project-card{ transition: none; }
     }
   </style>
 </head>

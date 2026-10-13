@@ -571,7 +571,7 @@
 
     .floating-contact-links{
       position: fixed;
-      left: var(--side-pad);
+      left: max(10px, calc(var(--side-pad) - 24px));
       bottom: 24px;
       z-index: 1400;
       display: flex;
@@ -608,7 +608,7 @@
       nav{ display: none; }
       .project-image{ height: 420px; }
       .project-header{ align-items: flex-start; }
-      .floating-contact-links{ left: 14px; bottom: 18px; gap: 8px; max-width: calc(100vw - 28px); }
+      .floating-contact-links{ left: 10px; bottom: 18px; gap: 8px; max-width: calc(100vw - 28px); }
       .contact-link{ padding: 0.9rem 1.15rem; font-size: 0.95rem; }
       .video-sound-btn{ top: 12px; right: 12px; width: 42px; height: 42px; font-size: 17px; }
     }

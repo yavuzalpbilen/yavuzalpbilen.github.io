@@ -595,33 +595,45 @@
     }
 
     .portfolio-links{
-      position: relative;
-      z-index: 10;
+      position: fixed;
+      right: max(14px, env(safe-area-inset-right));
+      bottom: max(14px, env(safe-area-inset-bottom));
+      z-index: 1400;
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      width: 100%;
+      flex-wrap: nowrap;
+      gap: 8px;
+      width: max-content;
+      max-width: calc(100vw - 28px);
       margin: 0;
-      padding: 22px var(--side-pad);
-      background: #1d1915;
-      border-top: 1px solid #4b4035;
+      padding: 7px;
+      background: rgba(24,21,18,.84);
+      border: 1px solid rgba(183,165,143,.32);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 6px 20px rgba(0,0,0,.28);
     }
 
     .portfolio-links .contact-link{
       margin-left: 0;
       justify-content: center;
-      min-height: 46px;
-      padding: 0.75rem 1.25rem;
+      flex: 0 0 auto;
+      min-height: 40px;
+      gap: 7px;
+      padding: .5rem .7rem;
       border: 1px solid #75614b;
       border-radius: 4px;
       color: #e4dccd;
       background: #28211a;
-      box-shadow: 0 3px 10px rgba(0,0,0,.18);
-      font-size: .95rem;
+      box-shadow: none;
+      font-size: .82rem;
       font-weight: 600;
+      white-space: nowrap;
     }
+    .portfolio-links .contact-link .icon,
+    .portfolio-links .contact-link .itch-icon{ width: 20px; height: 20px; }
     .portfolio-links .contact-link::before{ display: none; }
     .portfolio-links .contact-link:hover{
       color: #211c15;
@@ -629,7 +641,7 @@
     }
     .portfolio-links .contact-link:focus-visible{
       outline: 2px solid #e1c99d;
-      outline-offset: 4px;
+      outline-offset: 3px;
     }
 
     .contact-link.is-hidden{ display: none; }
@@ -651,8 +663,10 @@
       #site-header nav{ display: none; }
       .project-image{ height: 420px; }
       .project-header{ align-items: flex-start; }
-      .portfolio-links{ gap: 10px; padding: 18px 14px; }
-      .portfolio-links .contact-link{ margin-left: 0; flex: 1 1 130px; max-width: 200px; }
+      .portfolio-links{ right: max(10px, env(safe-area-inset-right)); bottom: max(10px, env(safe-area-inset-bottom)); max-width: calc(100vw - 20px); gap: 5px; padding: 6px; }
+      .portfolio-links .contact-link{ min-height: 38px; padding: 7px 6px; gap: 5px; font-size: .7rem; }
+      .portfolio-links .contact-link .icon,
+      .portfolio-links .contact-link .itch-icon{ width: 18px; height: 18px; }
       .contact-link{ padding: 0.9rem 1.15rem; font-size: 0.95rem; }
       .video-sound-btn{ top: 12px; right: 12px; width: 42px; height: 42px; font-size: 17px; }
     }

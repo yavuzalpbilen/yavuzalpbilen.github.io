@@ -99,9 +99,15 @@
       pointer-events: none;
       opacity: 0;
       z-index: 0;
+      transition: opacity 100ms linear;
     }
 
     .vhs-video.is-active{ opacity: 1; z-index: 1; }
+    /* The incoming picture fades over an opaque outgoing frame. */
+    .vhs-video.is-incoming{ z-index: 2; }
+    @media (prefers-reduced-motion: reduce){
+      .vhs-video{ transition: none; }
+    }
 
     /* TV glass bounds in the original 1920x1080 recordings.
        These percentages scale with the SAME stage as the room video. */
@@ -258,10 +264,29 @@
 
     /* Matched to the recordings, with room for the tapes to bob during idle.
        Percentages refer to the original 16:9 frame, including cropped areas. */
-    .hotspot-fav1{ left: 77.7%; top: 5%; width: 13%; height: 31%; }
-    .hotspot-fav2{ left: 76.8%; top: 36%; width: 13%; height: 30%; }
-    .hotspot-fav3{ left: 9%; top: 5%; width: 13.5%; height: 31%; }
-    .hotspot-fav4{ left: 10.3%; top: 36%; width: 13%; height: 30%; }
+    .hotspot-fav1{ left: 76.95796%; top: 5.254352%; width: 13.95923%; height: 26.615566%; }
+    .hotspot-fav2{ left: 76.20693%; top: 36.315357%; width: 13.675675%; height: 24.081875%; }
+    .hotspot-fav3{ left: 8.729043%; top: 5.485141%; width: 13.976936%; height: 26.54472%; }
+    .hotspot-fav4{ left: 9.890656%; top: 35.02543%; width: 13.645302%; height: 24.066532%; }
+    .hotspot-fav5{ left: 10.695863%; top: 61.903976%; width: 13.325397%; height: 24.835539%; }
+
+    /* Independent physical store signs; these stay usable during a tape action. */
+    .vhs-store-link{
+      position: absolute;
+      z-index: 3;
+      display: block;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      cursor: pointer;
+    }
+    .vhs-store-link:focus-visible{ outline: 2px solid var(--color-primary); outline-offset: -2px; }
+    .vhs-store-link[aria-disabled="true"]{ cursor: default; }
+    .store-blacksmithkin{ left: 0%; top: 12.602419%; width: 8.629043%; height: 13.63594%; }
+    .store-veltarum{ left: 1.088503%; top: 40.842827%; width: 8.702153%; height: 12.405616%; }
+    .store-sixcoins{ left: 1.892588%; top: 67.20626%; width: 8.652533%; height: 13.400984%; }
+    .store-projecttrash{ left: 91.01719%; top: 12.308985%; width: 8.98281%; height: 13.911528%; }
+    .store-ecdysis{ left: 89.982605%; top: 42.01681%; width: 9.100496%; height: 12.576026%; }
 
     /* DEBUG: uncomment to show the clickable cassette areas.
     .vhs-hotspot{ outline: 1px solid rgba(255,0,0,.35); background: rgba(255,0,0,.08); }
@@ -900,6 +925,8 @@
              muted playsinline preload="none" aria-hidden="true"></video>
       <video class="vhs-video" id="vhs-action-4" src="./assets/icons/fav4.mp4"
              muted playsinline preload="none" aria-hidden="true"></video>
+      <video class="vhs-video" id="vhs-action-5" src="./assets/icons/fav5.mp4"
+             muted playsinline preload="none" aria-hidden="true"></video>
       <div class="vhs-tv-screen" id="vhs-tv-screen" aria-hidden="true">
         <video class="vhs-tv-trailer" id="vhs-tv-trailer" muted loop playsinline preload="none"
                aria-label="Selected game trailer"></video>
@@ -912,10 +939,22 @@
         </div>
       </div>
       <canvas class="vhs-channel-change" id="vhs-channel-change" width="320" height="180" hidden aria-hidden="true"></canvas>
-      <button class="vhs-hotspot hotspot-fav1" type="button" data-video="./assets/icons/fav1.mp4" aria-label="Play right top cassette"></button>
-      <button class="vhs-hotspot hotspot-fav2" type="button" data-video="./assets/icons/fav2.mp4" aria-label="Play right middle cassette"></button>
-      <button class="vhs-hotspot hotspot-fav3" type="button" data-video="./assets/icons/fav3.mp4" aria-label="Play left top cassette"></button>
-      <button class="vhs-hotspot hotspot-fav4" type="button" data-video="./assets/icons/fav4.mp4" aria-label="Play left middle cassette"></button>
+      <button class="vhs-hotspot hotspot-fav1" type="button" data-video="./assets/icons/fav1.mp4" aria-label="Insert Project Trash VHS"></button>
+      <button class="vhs-hotspot hotspot-fav2" type="button" data-video="./assets/icons/fav2.mp4" aria-label="Insert Ecdysis VHS"></button>
+      <button class="vhs-hotspot hotspot-fav3" type="button" data-video="./assets/icons/fav3.mp4" aria-label="Insert Blacksmithkin VHS"></button>
+      <button class="vhs-hotspot hotspot-fav4" type="button" data-video="./assets/icons/fav4.mp4" aria-label="Insert Veltarum VHS"></button>
+      <button class="vhs-hotspot hotspot-fav5" type="button" data-video="./assets/icons/fav5.mp4" aria-label="Insert Six Coins VHS"></button>
+
+      <a class="vhs-store-link store-blacksmithkin" role="link" tabindex="0" aria-disabled="true"
+         aria-label="Blacksmithkin on Steam — coming soon" title="Blacksmithkin Steam page coming soon"></a>
+      <a class="vhs-store-link store-veltarum" href="https://store.steampowered.com/app/5463460/Veltarum/"
+         target="_blank" rel="noopener noreferrer" aria-label="Play Veltarum on Steam" title="Veltarum on Steam"></a>
+      <a class="vhs-store-link store-sixcoins" href="https://store.steampowered.com/app/5441670/Six_Coins/"
+         target="_blank" rel="noopener noreferrer" aria-label="Play Six Coins on Steam" title="Six Coins on Steam"></a>
+      <a class="vhs-store-link store-projecttrash" href="https://futuregames.itch.io/projecttrash"
+         target="_blank" rel="noopener noreferrer" aria-label="Play Project Trash on itch.io" title="Project Trash on itch.io"></a>
+      <a class="vhs-store-link store-ecdysis" href="https://futuregames.itch.io/ecdysis"
+         target="_blank" rel="noopener noreferrer" aria-label="Play Ecdysis on itch.io" title="Ecdysis on itch.io"></a>
     </div>
   </section>
 
@@ -1286,11 +1325,12 @@
   <script>
     (function () {
       const idleVideo = document.getElementById('vhs-hero-video');
-      const actionVideos = [1, 2, 3, 4].map(i => document.getElementById('vhs-action-' + i));
+      const actionVideos = [1, 2, 3, 4, 5].map(i => document.getElementById('vhs-action-' + i));
       const hotspots = Array.from(document.querySelectorAll('.vhs-hotspot'));
       const videosBySource = new Map(actionVideos.map(v => [v.getAttribute('src'), v]));
       let activeVideo = idleVideo;
       let switching = false;
+      let crossfading = false;
       let switchId = 0;
       let resumeIdle = false;
       let switchController = null;
@@ -1300,7 +1340,7 @@
       let actionProgressAt = performance.now();
 
       function actionIsBusy() {
-        return activeVideo !== idleVideo && !activeVideo.ended && !activeVideo.error && !actionStalled;
+        return crossfading || (activeVideo !== idleVideo && !activeVideo.ended && !activeVideo.error && !actionStalled);
       }
 
       const tvScreen = document.getElementById('vhs-tv-screen');
@@ -1308,12 +1348,15 @@
       const startupScreen = document.getElementById('vhs-startup-screen');
       // Seconds into each recording when the finger reaches the red button.
       // Adjust these if the source videos are edited or replaced.
+      // RECORDING_TIMINGS_BEGIN — seconds, including the 100 ms recording head hold.
       const redButtonPressTimes = {
-        'vhs-action-1': 0.90,
-        'vhs-action-2': 0.85,
-        'vhs-action-3': 1.10,
-        'vhs-action-4': 0.50
+        'vhs-action-1': 1.01666665,
+        'vhs-action-2': 0.8666667,
+        'vhs-action-3': 0.700000048,
+        'vhs-action-4': 0.7166667,
+        'vhs-action-5': 0.7166667
       };
+      // RECORDING_TIMINGS_END
 
       function updateRedButtonPress(video, mediaTime = video.currentTime) {
         if (activeVideo === video && selectedTape === video && !redButtonPressed &&
@@ -1392,13 +1435,14 @@
           paint(started);
         });
       }
-      // Add your Veltarum trailer path here when it is ready, for example:
-      // const veltarumTrailerSource = './assets/icons/VeltarumVideo.mp4';
+      // Keep trailers separate from the recorded room. Add Veltarum when available.
       const veltarumTrailerSource = '';
-      const trailerProjects = {
-        'vhs-action-2': 'project-video-6', // Six Coins
-        'vhs-action-3': 'project-video-3', // Project Trash
-        'vhs-action-4': 'project-video-2'  // Ecdysis
+      const trailerSources = {
+        'vhs-action-1': './assets/icons/video3.mp4',
+        'vhs-action-2': './assets/icons/video2.mp4',
+        'vhs-action-3': './assets/icons/Blacksmithkin_Gameplay_Trailer_v11_Under25MB.mp4',
+        'vhs-action-4': veltarumTrailerSource,
+        'vhs-action-5': './assets/icons/sixcoinstrailer.mp4'
       };
       let selectedTape = null;
       let trailerRequest = 0;
@@ -1406,10 +1450,7 @@
       let trailerController = null;
 
       function trailerSourceFor(action) {
-        if (action.id === 'vhs-action-1') return veltarumTrailerSource;
-        const project = document.getElementById(trailerProjects[action.id]);
-        const source = project?.querySelector('source');
-        return source?.getAttribute('data-src') || source?.getAttribute('src') || project?.getAttribute('src') || '';
+        return trailerSources[action.id] || '';
       }
 
       function cueTrailer(action) {
@@ -1537,6 +1578,32 @@
         });
       }
 
+      function waitForVideoFade(video, signal) {
+        if (signal.aborted) return Promise.reject(new DOMException('Playback request replaced', 'AbortError'));
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return Promise.resolve();
+        return new Promise((resolve, reject) => {
+          let done = false;
+          const timer = setTimeout(() => finish(), 150);
+          function finish(error) {
+            if (done) return;
+            done = true;
+            clearTimeout(timer);
+            video.removeEventListener('transitionend', onTransition);
+            video.removeEventListener('error', onError);
+            signal.removeEventListener('abort', onAbort);
+            error ? reject(error) : resolve();
+          }
+          function onTransition(event) {
+            if (event.target === video && event.propertyName === 'opacity') finish();
+          }
+          function onAbort() { finish(new DOMException('Playback request replaced', 'AbortError')); }
+          function onError() { finish(new Error('Video failed during the transition')); }
+          video.addEventListener('transitionend', onTransition);
+          video.addEventListener('error', onError);
+          signal.addEventListener('abort', onAbort, { once: true });
+        });
+      }
+
       async function showVideo(next) {
         if (pendingVideo === next) return false;
         if (next === activeVideo && !next.ended && !next.error && !actionStalled) return false;
@@ -1547,7 +1614,7 @@
         switchController = controller;
         pendingVideo = next;
         switching = true;
-        // Downloads can be replaced by another selection; a playing hand cannot.
+        // A download may be replaced; a visible hand movement or fade may not.
         setBusy(actionIsBusy());
         const previous = activeVideo;
 
@@ -1557,30 +1624,49 @@
           await playUntilFrame(next, controller.signal);
           if (request !== switchId) return false;
 
-          // Swap both classes in one task, after the next decoded frame is ready.
+          if (previous !== next) {
+            // Freeze the outgoing picture, then fade the decoded incoming frame over it.
+            // Keeping the outgoing frame opaque prevents a dip to the poster or black.
+            previous.pause();
+            crossfading = true;
+            next.classList.add('is-incoming');
+            void next.offsetWidth;
+          }
           next.classList.add('is-active');
           next.setAttribute('aria-hidden', 'false');
-          if (previous !== next) {
-            previous.classList.remove('is-active');
-            previous.setAttribute('aria-hidden', 'true');
-            previous.pause();
-          }
           activeVideo = next;
           actionStalled = false;
           actionProgressTime = next.currentTime;
           actionProgressAt = performance.now();
+          setBusy(actionIsBusy());
           watchRedButtonPress(next);
           resumeIdle = false;
+
+          if (previous !== next) {
+            await waitForVideoFade(next, controller.signal);
+            if (request !== switchId) return false;
+            previous.classList.remove('is-active', 'is-incoming');
+            previous.setAttribute('aria-hidden', 'true');
+            next.classList.remove('is-incoming');
+          }
           return true;
         } catch (error) {
           if (request !== switchId) return false;
-          // Preserve the outgoing image, release the controls and allow a retry.
           next.pause();
+          if (previous !== next) {
+            next.classList.remove('is-active', 'is-incoming');
+            next.setAttribute('aria-hidden', 'true');
+            previous.classList.add('is-active');
+            previous.setAttribute('aria-hidden', 'false');
+            activeVideo = previous;
+            if (!previous.ended && !previous.error) previous.play().catch(() => {});
+          }
           resumeIdle = next === idleVideo;
           console.warn('VHS video unavailable; keeping the previous frame.', error);
           return false;
         } finally {
           if (request === switchId) {
+            crossfading = false;
             switching = false;
             pendingVideo = null;
             setBusy(actionIsBusy());
@@ -1631,7 +1717,7 @@
       // A user gesture also retries playback if a browser blocked autoplay.
       document.getElementById('hero').addEventListener('pointerdown', resumePlayback);
 
-      // Fetch action clips on demand, instead of four competing startup downloads.
+      // Fetch action clips on demand, instead of five competing startup downloads.
       // Recover a hand animation that stops advancing after it has already started.
       setInterval(() => {
         const now = performance.now();

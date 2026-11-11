@@ -594,24 +594,42 @@
       mask: url("assets/icons/itch-io-icon.png") center / contain no-repeat;
     }
 
-    .floating-contact-links{
-      position: fixed;
-      left: max(10px, calc(var(--side-pad) - 24px));
-      bottom: 24px;
-      z-index: 1400;
+    .portfolio-links{
+      position: relative;
+      z-index: 10;
       display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 10px;
-      flex-wrap: nowrap;
-      pointer-events: auto;
-      width: max-content;
-      max-width: calc(100vw - 28px);
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+      margin: 0;
+      padding: 22px var(--side-pad);
+      background: #1d1915;
+      border-top: 1px solid #4b4035;
     }
 
-    .floating-contact-links .contact-link{
+    .portfolio-links .contact-link{
+      margin-left: 0;
       justify-content: center;
-      padding: 0.75rem 1rem;
+      min-height: 46px;
+      padding: 0.75rem 1.25rem;
+      border: 1px solid #75614b;
+      border-radius: 4px;
+      color: #e4dccd;
+      background: #28211a;
+      box-shadow: 0 3px 10px rgba(0,0,0,.18);
+      font-size: .95rem;
+      font-weight: 600;
+    }
+    .portfolio-links .contact-link::before{ display: none; }
+    .portfolio-links .contact-link:hover{
+      color: #211c15;
+      background: #e1c99d;
+    }
+    .portfolio-links .contact-link:focus-visible{
+      outline: 2px solid #e1c99d;
+      outline-offset: 4px;
     }
 
     .contact-link.is-hidden{ display: none; }
@@ -630,10 +648,11 @@
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
 
     @media (max-width: 768px){
-      nav{ display: none; }
+      #site-header nav{ display: none; }
       .project-image{ height: 420px; }
       .project-header{ align-items: flex-start; }
-      .floating-contact-links{ left: 10px; bottom: 18px; gap: 8px; max-width: calc(100vw - 28px); }
+      .portfolio-links{ gap: 10px; padding: 18px 14px; }
+      .portfolio-links .contact-link{ margin-left: 0; flex: 1 1 130px; max-width: 200px; }
       .contact-link{ padding: 0.9rem 1.15rem; font-size: 0.95rem; }
       .video-sound-btn{ top: 12px; right: 12px; width: 42px; height: 42px; font-size: 17px; }
     }
@@ -957,6 +976,35 @@
          target="_blank" rel="noopener noreferrer" aria-label="Play Ecdysis on itch.io" title="Ecdysis on itch.io"></a>
     </div>
   </section>
+
+  <nav class="portfolio-links" aria-label="Portfolio links">
+    <a href="assets/icons/YavuzAlpBilenCV.pdf" class="contact-link" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm1 7V3.5L19.5 9H15z"/>
+        <path d="M8 12h8v2H8zm0 4h8v2H8z"/>
+      </svg>
+      CV
+    </a>
+
+    <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
+      <span class="icon itch-icon" aria-hidden="true"></span>
+      itch.io
+    </a>
+
+    <a href="https://www.linkedin.com/in/yavuz-a-9243211a4/" class="contact-link" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.05-1.86-3.05-1.86 0-2.14 1.45-2.14 2.95v5.67H9.33V9h3.42v1.56h.05c.48-.9 1.64-1.86 3.36-1.86 3.59 0 4.25 2.37 4.25 5.45v6.3zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .78 0 1.74v20.52C0 23.22.79 24 1.77 24h20.46c.98 0 1.77-.78 1.77-1.74V1.74C24 .78 23.21 0 22.23 0z"/>
+      </svg>
+      LinkedIn
+    </a>
+
+    <a href="https://github.com/yavuzalpbilen" class="contact-link" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 .5C5.73.5.75 5.67.75 12.08c0 5.12 3.29 9.46 7.86 11 .58.11.79-.26.79-.57v-2.02c-3.2.71-3.87-1.58-3.87-1.58-.52-1.36-1.27-1.72-1.27-1.72-1.04-.74.08-.73.08-.73 1.15.08 1.76 1.22 1.76 1.22 1.02 1.8 2.67 1.28 3.32.98.1-.76.4-1.28.72-1.58-2.55-.3-5.24-1.31-5.24-5.84 0-1.29.45-2.35 1.18-3.18-.12-.3-.51-1.53.11-3.18 0 0 .97-.32 3.18 1.21a10.7 10.7 0 0 1 2.9-.4c.98 0 1.97.14 2.9.4 2.2-1.53 3.18-1.21 3.18-1.21.62 1.65.23 2.88.11 3.18.74.83 1.18 1.89 1.18 3.18 0 4.54-2.7 5.54-5.27 5.83.41.36.78 1.08.78 2.18v3.23c0 .32.2.69.8.57 4.56-1.54 7.85-5.88 7.85-11C23.25 5.67 18.27.5 12 .5z"/>
+      </svg>
+      GitHub
+    </a>
+  </nav>
 
   <section id="projects">
     <h2>Projects</h2>
@@ -1293,34 +1341,6 @@
     <p>&copy; 2026 Portfolio.</p>
   </footer>
 
-  <div class="floating-contact-links">
-    <a href="assets/icons/YavuzAlpBilenCV.pdf" class="contact-link" target="_blank" rel="noopener">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm1 7V3.5L19.5 9H15z"/>
-        <path d="M8 12h8v2H8zm0 4h8v2H8z"/>
-      </svg>
-      CV
-    </a>
-
-    <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
-      <span class="icon itch-icon" aria-hidden="true"></span>
-      itch.io
-    </a>
-
-    <a href="https://www.linkedin.com/in/yavuz-a-9243211a4/" class="contact-link" target="_blank" rel="noopener">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.05-1.86-3.05-1.86 0-2.14 1.45-2.14 2.95v5.67H9.33V9h3.42v1.56h.05c.48-.9 1.64-1.86 3.36-1.86 3.59 0 4.25 2.37 4.25 5.45v6.3zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .78 0 1.74v20.52C0 23.22.79 24 1.77 24h20.46c.98 0 1.77-.78 1.77-1.74V1.74C24 .78 23.21 0 22.23 0z"/>
-      </svg>
-      LinkedIn
-    </a>
-
-    <a href="https://github.com/yavuzalpbilen" class="contact-link" target="_blank" rel="noopener">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 .5C5.73.5.75 5.67.75 12.08c0 5.12 3.29 9.46 7.86 11 .58.11.79-.26.79-.57v-2.02c-3.2.71-3.87-1.58-3.87-1.58-.52-1.36-1.27-1.72-1.27-1.72-1.04-.74.08-.73.08-.73 1.15.08 1.76 1.22 1.76 1.22 1.02 1.8 2.67 1.28 3.32.98.1-.76.4-1.28.72-1.58-2.55-.3-5.24-1.31-5.24-5.84 0-1.29.45-2.35 1.18-3.18-.12-.3-.51-1.53.11-3.18 0 0 .97-.32 3.18 1.21a10.7 10.7 0 0 1 2.9-.4c.98 0 1.97.14 2.9.4 2.2-1.53 3.18-1.21 3.18-1.21.62 1.65.23 2.88.11 3.18.74.83 1.18 1.89 1.18 3.18 0 4.54-2.7 5.54-5.27 5.83.41.36.78 1.08.78 2.18v3.23c0 .32.2.69.8.57 4.56-1.54 7.85-5.88 7.85-11C23.25 5.67 18.27.5 12 .5z"/>
-      </svg>
-      GitHub
-    </a>
-  </div>
 
   <script>
     (function () {

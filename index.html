@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- STORE_HIGHLIGHTS_V3_SHARED_SVG -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -295,20 +296,15 @@
       cursor: pointer;
     }
 
-    /* Static store plates share the cassettes' white/orange interaction cue. */
-    .vhs-store-link.has-store-outline{color:#fff;transition:color 130ms ease}
-    .vhs-store-link.has-store-outline:hover,
-    .vhs-store-link.has-store-outline:focus-visible{color:#ff8a26}
-    .vhs-store-link.has-store-outline:focus-visible{outline:none}
-    .store-highlight{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;transition:opacity 120ms ease}
-    .store-highlights-muted .store-highlight{opacity:0}
-    .store-highlights-muted .vhs-store-link:focus-visible{outline:2px solid var(--color-primary);outline-offset:-2px}
-    .store-highlight path{fill:none;stroke:currentColor;stroke-linejoin:round;stroke-linecap:round}
-    .store-highlight-glow{stroke-width:7;opacity:.18;transition:opacity 130ms ease}
-    .store-highlight-edge{stroke-width:2.4}
-    .vhs-store-link:hover .store-highlight-glow,
-    .vhs-store-link:focus-visible .store-highlight-glow{opacity:.5}
-    @media (prefers-reduced-motion:reduce){.vhs-store-link.has-store-outline,.store-highlight,.store-highlight-glow{transition:none}}
+    /* STORE_HIGHLIGHTS_V3: one shared 1920x1080 outline layer. */
+    .store-outline{color:#fff;transition:color 130ms ease}
+    .store-outline.is-selected{color:#ff8a26}
+    .store-outline path{fill:none;stroke:currentColor;stroke-linejoin:round;stroke-linecap:round}
+    .store-outline-glow{stroke-width:7;opacity:.18;filter:url(#cassette-outline-soften);transition:opacity 130ms ease}
+    .store-outline-edge{stroke-width:2.4}
+    .store-outline.is-selected .store-outline-glow{opacity:.5}
+    .vhs-store-link.store-focus-outlined:focus-visible{outline:none}
+    @media (prefers-reduced-motion:reduce){.store-outline,.store-outline-glow{transition:none}}
 
     .vhs-store-link:focus-visible{ outline: 2px solid var(--color-primary); outline-offset: -2px; }
     .vhs-store-link[aria-disabled="true"]{ cursor: default; }
@@ -1017,6 +1013,11 @@
         <g class="cassette-outline" data-cassette="4"><path class="cassette-highlight-glow"/><path class="cassette-highlight-edge"/></g>
         <g class="cassette-outline" data-cassette="5"><path class="cassette-highlight-glow"/><path class="cassette-highlight-edge"/></g>
         </g>
+        <g class="store-outline" data-store="projecttrash"><path class="store-outline-glow" d="M1752.4,284.1L1761.1,151.8L1770.1,145.4L1772.6,143.6L1916.7,132.4L1916.5,135.8L1905.5,274.1L1902.3,275.2L1890.7,278.9Z"/><path class="store-outline-edge" d="M1752.4,284.1L1761.1,151.8L1770.1,145.4L1772.6,143.6L1916.7,132.4L1916.5,135.8L1905.5,274.1L1902.3,275.2L1890.7,278.9Z"/></g>
+        <g class="store-outline" data-store="ecdysis"><path class="store-outline-glow" d="M1732.8,583.3L1742.7,452.3L1751.4,451.3L1753.8,451.1L1896.4,453.7L1884.7,591.2L1743.6,586.0L1741.2,585.4Z"/><path class="store-outline-edge" d="M1732.8,583.3L1742.7,452.3L1751.4,451.3L1753.8,451.1L1896.4,453.7L1884.7,591.2L1743.6,586.0L1741.2,585.4Z"/></g>
+        <g class="store-outline" data-store="blacksmithkin"><path class="store-outline-glow" d="M1.0,133.7L141.9,144.6L144.8,146.3L155.0,152.4L162.9,285.6L28.0,280.1L15.2,276.7L11.7,275.7L1.2,137.2Z"/><path class="store-outline-edge" d="M1.0,133.7L141.9,144.6L144.8,146.3L155.0,152.4L162.9,285.6L28.0,280.1L15.2,276.7L11.7,275.7L1.2,137.2Z"/></g>
+        <g class="store-outline" data-store="veltarum"><path class="store-outline-glow" d="M24.5,439.3L163.9,439.3L166.7,439.5L176.6,440.3L184.7,571.7L175.1,574.1L172.5,574.6L34.7,576.6Z"/><path class="store-outline-edge" d="M24.5,439.3L163.9,439.3L166.7,439.5L176.6,440.3L184.7,571.7L175.1,574.1L172.5,574.6L34.7,576.6Z"/></g>
+        <g class="store-outline" data-store="sixcoins"><path class="store-outline-glow" d="M40.1,738.0L43.6,736.5L55.9,731.4L192.0,724.0L199.9,850.9L190.7,858.4L188.1,860.4L50.6,872.8L40.3,741.3Z"/><path class="store-outline-edge" d="M40.1,738.0L43.6,736.5L55.9,731.4L192.0,724.0L199.9,850.9L190.7,858.4L188.1,860.4L50.6,872.8L40.3,741.3Z"/></g>
       </svg>
 
       <button class="vhs-hotspot hotspot-fav1" type="button" data-video="./assets/icons/fav1.mp4" aria-label="Insert Project Trash VHS"></button>
@@ -1025,16 +1026,16 @@
       <button class="vhs-hotspot hotspot-fav4" type="button" data-video="./assets/icons/fav4.mp4" aria-label="Insert Veltarum VHS"></button>
       <button class="vhs-hotspot hotspot-fav5" type="button" data-video="./assets/icons/fav5.mp4" aria-label="Insert Six Coins VHS"></button>
 
-      <a class="vhs-store-link has-store-outline store-blacksmithkin" href="https://store.steampowered.com/app/5569760/Blacksmithkin/?beta=1"
-         target="_blank" rel="noopener noreferrer" aria-label="Wishlist Blacksmithkin on Steam" title="Wishlist Blacksmithkin on Steam"><svg class="store-highlight" viewBox="0 0 165.6776 147.2682" preserveAspectRatio="none" aria-hidden="true" focusable="false"><defs><filter id="store-outline-soften-3" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs><path class="store-highlight-glow" filter="url(#store-outline-soften-3)" d="M1.0,-2.4L141.9,8.5L144.8,10.2L155.0,16.3L162.9,149.5L28.0,143.9L15.2,140.6L11.7,139.6L1.2,1.1Z"/><path class="store-highlight-edge" d="M1.0,-2.4L141.9,8.5L144.8,10.2L155.0,16.3L162.9,149.5L28.0,143.9L15.2,140.6L11.7,139.6L1.2,1.1Z"/></svg></a>
-      <a class="vhs-store-link has-store-outline store-veltarum" href="https://store.steampowered.com/app/5463460/Veltarum/"
-         target="_blank" rel="noopener noreferrer" aria-label="Play Veltarum on Steam" title="Veltarum on Steam"><svg class="store-highlight" viewBox="0 0 167.0813 133.9807" preserveAspectRatio="none" aria-hidden="true" focusable="false"><defs><filter id="store-outline-soften-4" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs><path class="store-highlight-glow" filter="url(#store-outline-soften-4)" d="M3.6,-1.8L143.0,-1.8L145.8,-1.7L155.7,-0.8L163.8,130.6L154.2,132.9L151.6,133.5L13.8,135.5Z"/><path class="store-highlight-edge" d="M3.6,-1.8L143.0,-1.8L145.8,-1.7L155.7,-0.8L163.8,130.6L154.2,132.9L151.6,133.5L13.8,135.5Z"/></svg></a>
-      <a class="vhs-store-link has-store-outline store-sixcoins" href="https://store.steampowered.com/app/5441670/Six_Coins/"
-         target="_blank" rel="noopener noreferrer" aria-label="Play Six Coins on Steam" title="Six Coins on Steam"><svg class="store-highlight" viewBox="0 0 166.1286 144.7306" preserveAspectRatio="none" aria-hidden="true" focusable="false"><defs><filter id="store-outline-soften-5" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs><path class="store-highlight-glow" filter="url(#store-outline-soften-5)" d="M3.8,12.2L7.2,10.7L19.6,5.6L155.7,-1.9L163.6,125.1L154.3,132.5L151.7,134.5L14.3,147.0L4.0,15.4Z"/><path class="store-highlight-edge" d="M3.8,12.2L7.2,10.7L19.6,5.6L155.7,-1.9L163.6,125.1L154.3,132.5L151.7,134.5L14.3,147.0L4.0,15.4Z"/></svg></a>
-      <a class="vhs-store-link has-store-outline store-projecttrash" href="https://futuregames.itch.io/projecttrash"
-         target="_blank" rel="noopener noreferrer" aria-label="Play Project Trash on itch.io" title="Project Trash on itch.io"><svg class="store-highlight" viewBox="0 0 172.4700 150.2445" preserveAspectRatio="none" aria-hidden="true" focusable="false"><defs><filter id="store-outline-soften-1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs><path class="store-highlight-glow" filter="url(#store-outline-soften-1)" d="M4.9,151.1L13.6,18.9L22.5,12.4L25.1,10.7L169.2,-0.5L169.0,2.9L158.0,141.2L154.7,142.3L143.1,146.0Z"/><path class="store-highlight-edge" d="M4.9,151.1L13.6,18.9L22.5,12.4L25.1,10.7L169.2,-0.5L169.0,2.9L158.0,141.2L154.7,142.3L143.1,146.0Z"/></svg></a>
-      <a class="vhs-store-link has-store-outline store-ecdysis" href="https://futuregames.itch.io/ecdysis"
-         target="_blank" rel="noopener noreferrer" aria-label="Play Ecdysis on itch.io" title="Ecdysis on itch.io"><svg class="store-highlight" viewBox="0 0 174.7295 135.8211" preserveAspectRatio="none" aria-hidden="true" focusable="false"><defs><filter id="store-outline-soften-2" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs><path class="store-highlight-glow" filter="url(#store-outline-soften-2)" d="M5.2,129.5L15.0,-1.5L23.7,-2.5L26.2,-2.6L168.8,-0.1L157.1,137.4L15.9,132.2L13.6,131.7Z"/><path class="store-highlight-edge" d="M5.2,129.5L15.0,-1.5L23.7,-2.5L26.2,-2.6L168.8,-0.1L157.1,137.4L15.9,132.2L13.6,131.7Z"/></svg></a>
+      <a class="vhs-store-link store-blacksmithkin" href="https://store.steampowered.com/app/5569760/Blacksmithkin/?beta=1"
+         target="_blank" rel="noopener noreferrer" aria-label="Wishlist Blacksmithkin on Steam" title="Wishlist Blacksmithkin on Steam"></a>
+      <a class="vhs-store-link store-veltarum" href="https://store.steampowered.com/app/5463460/Veltarum/"
+         target="_blank" rel="noopener noreferrer" aria-label="Play Veltarum on Steam" title="Veltarum on Steam"></a>
+      <a class="vhs-store-link store-sixcoins" href="https://store.steampowered.com/app/5441670/Six_Coins/"
+         target="_blank" rel="noopener noreferrer" aria-label="Play Six Coins on Steam" title="Six Coins on Steam"></a>
+      <a class="vhs-store-link store-projecttrash" href="https://futuregames.itch.io/projecttrash"
+         target="_blank" rel="noopener noreferrer" aria-label="Play Project Trash on itch.io" title="Project Trash on itch.io"></a>
+      <a class="vhs-store-link store-ecdysis" href="https://futuregames.itch.io/ecdysis"
+         target="_blank" rel="noopener noreferrer" aria-label="Play Ecdysis on itch.io" title="Ecdysis on itch.io"></a>
     </div>
   </section>
 
@@ -1430,6 +1431,26 @@
       const cassetteOccluderShape = document.getElementById('cassette-occluder-shape');
       let occlusionFrame = -1;
       const cassetteHighlight = document.getElementById('cassette-highlight');
+
+      // Store signs use the same screen-space SVG as the cassettes.
+      const storeOutlineLinks = Array.from(document.querySelectorAll('.vhs-store-link'));
+      const storeOutlineGroups = new Map(Array.from(cassetteHighlight.querySelectorAll('.store-outline')).map(group => [group.dataset.store, group]));
+      const storeOutlineEntries = storeOutlineLinks.map(link => {
+        const key = Array.from(link.classList).find(name => name.startsWith('store-')).slice(6);
+        return {link, group:storeOutlineGroups.get(key)};
+      });
+      function updateStoreOutlines(visible = cassetteHighlight.classList.contains('is-visible')) {
+        storeOutlineEntries.forEach(({link, group}) => {
+          const keyboardFocus = link.matches(':focus-visible');
+          group.classList.toggle('is-selected', link.matches(':hover') || keyboardFocus);
+          link.classList.toggle('store-focus-outlined', visible && keyboardFocus);
+        });
+      }
+      storeOutlineLinks.forEach(link => {
+        ['pointerenter','pointerleave','focus','blur'].forEach(event => link.addEventListener(event, () => updateStoreOutlines()));
+      });
+      document.addEventListener('keydown', () => updateStoreOutlines());
+
       const cassetteHighlightGroups = Array.from(cassetteHighlight.querySelectorAll('.cassette-outline'));
       const cassetteHighlightPaths = cassetteHighlightGroups.map(group => Array.from(group.querySelectorAll('path')));
       let hoveredCassette = null;
@@ -1461,7 +1482,7 @@
         const button = selectedOutlineButton();
         const visible = !document.hidden && !switching && activeVideo === idleVideo && !hotspots.some(hotspot => hotspot.getAttribute('aria-disabled') === 'true');
         cassetteHighlight.classList.toggle('is-visible', visible);
-        idleVideo.closest('.vhs-stage').classList.toggle('store-highlights-muted', !visible);
+        updateStoreOutlines(visible);
         idleVideo.closest('.vhs-stage').classList.toggle('has-cassette-focus-highlight', visible && !!button && button === focusedCassette && button.matches(':focus-visible'));
         if (!visible) return false;
         const maskFrame = Math.max(0, Math.min(cassetteOcclusionTrack.paths.length - 1, Math.round(mediaTime * cassetteOcclusionTrack.fps)));

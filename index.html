@@ -294,6 +294,22 @@
       border-radius: 0;
       cursor: pointer;
     }
+
+    /* Static store plates share the cassettes' white/orange interaction cue. */
+    .vhs-store-link.has-store-outline{color:#fff;transition:color 130ms ease}
+    .vhs-store-link.has-store-outline:hover,
+    .vhs-store-link.has-store-outline:focus-visible{color:#ff8a26}
+    .vhs-store-link.has-store-outline:focus-visible{outline:none}
+    .store-highlight{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;transition:opacity 120ms ease}
+    .store-highlights-muted .store-highlight{opacity:0}
+    .store-highlights-muted .vhs-store-link:focus-visible{outline:2px solid var(--color-primary);outline-offset:-2px}
+    .store-highlight path{fill:none;stroke:currentColor;stroke-linejoin:round;stroke-linecap:round}
+    .store-highlight-glow{stroke-width:7;opacity:.18;transition:opacity 130ms ease}
+    .store-highlight-edge{stroke-width:2.4}
+    .vhs-store-link:hover .store-highlight-glow,
+    .vhs-store-link:focus-visible .store-highlight-glow{opacity:.5}
+    @media (prefers-reduced-motion:reduce){.vhs-store-link.has-store-outline,.store-highlight,.store-highlight-glow{transition:none}}
+
     .vhs-store-link:focus-visible{ outline: 2px solid var(--color-primary); outline-offset: -2px; }
     .vhs-store-link[aria-disabled="true"]{ cursor: default; }
     .store-blacksmithkin{ left: 0%; top: 12.602419%; width: 8.629043%; height: 13.63594%; }
@@ -1009,16 +1025,16 @@
       <button class="vhs-hotspot hotspot-fav4" type="button" data-video="./assets/icons/fav4.mp4" aria-label="Insert Veltarum VHS"></button>
       <button class="vhs-hotspot hotspot-fav5" type="button" data-video="./assets/icons/fav5.mp4" aria-label="Insert Six Coins VHS"></button>
 
-      <a class="vhs-store-link store-blacksmithkin" href="https://store.steampowered.com/app/5569760/Blacksmithkin/?beta=1"
-         target="_blank" rel="noopener noreferrer" aria-label="Wishlist Blacksmithkin on Steam" title="Wishlist Blacksmithkin on Steam"></a>
-      <a class="vhs-store-link store-veltarum" href="https://store.steampowered.com/app/5463460/Veltarum/"
-         target="_blank" rel="noopener noreferrer" aria-label="Play Veltarum on Steam" title="Veltarum on Steam"></a>
-      <a class="vhs-store-link store-sixcoins" href="https://store.steampowered.com/app/5441670/Six_Coins/"
-         target="_blank" rel="noopener noreferrer" aria-label="Play Six Coins on Steam" title="Six Coins on Steam"></a>
-      <a class="vhs-store-link store-projecttrash" href="https://futuregames.itch.io/projecttrash"
-         target="_blank" rel="noopener noreferrer" aria-label="Play Project Trash on itch.io" title="Project Trash on itch.io"></a>
-      <a class="vhs-store-link store-ecdysis" href="https://futuregames.itch.io/ecdysis"
-         target="_blank" rel="noopener noreferrer" aria-label="Play Ecdysis on itch.io" title="Ecdysis on itch.io"></a>
+      <a class="vhs-store-link has-store-outline store-blacksmithkin" href="https://store.steampowered.com/app/5569760/Blacksmithkin/?beta=1"
+         target="_blank" rel="noopener noreferrer" aria-label="Wishlist Blacksmithkin on Steam" title="Wishlist Blacksmithkin on Steam"><svg class="store-highlight" viewBox="0 0 165.6776 147.2682" preserveAspectRatio="none" aria-hidden="true" focusable="false"><defs><filter id="store-outline-soften-3" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs><path class="store-highlight-glow" filter="url(#store-outline-soften-3)" d="M1.0,-2.4L141.9,8.5L144.8,10.2L155.0,16.3L162.9,149.5L28.0,143.9L15.2,140.6L11.7,139.6L1.2,1.1Z"/><path class="store-highlight-edge" d="M1.0,-2.4L141.9,8.5L144.8,10.2L155.0,16.3L162.9,149.5L28.0,143.9L15.2,140.6L11.7,139.6L1.2,1.1Z"/></svg></a>
+      <a class="vhs-store-link has-store-outline store-veltarum" href="https://store.steampowered.com/app/5463460/Veltarum/"
+         target="_blank" rel="noopener noreferrer" aria-label="Play Veltarum on Steam" title="Veltarum on Steam"><svg class="store-highlight" viewBox="0 0 167.0813 133.9807" preserveAspectRatio="none" aria-hidden="true" focusable="false"><defs><filter id="store-outline-soften-4" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs><path class="store-highlight-glow" filter="url(#store-outline-soften-4)" d="M3.6,-1.8L143.0,-1.8L145.8,-1.7L155.7,-0.8L163.8,130.6L154.2,132.9L151.6,133.5L13.8,135.5Z"/><path class="store-highlight-edge" d="M3.6,-1.8L143.0,-1.8L145.8,-1.7L155.7,-0.8L163.8,130.6L154.2,132.9L151.6,133.5L13.8,135.5Z"/></svg></a>
+      <a class="vhs-store-link has-store-outline store-sixcoins" href="https://store.steampowered.com/app/5441670/Six_Coins/"
+         target="_blank" rel="noopener noreferrer" aria-label="Play Six Coins on Steam" title="Six Coins on Steam"><svg class="store-highlight" viewBox="0 0 166.1286 144.7306" preserveAspectRatio="none" aria-hidden="true" focusable="false"><defs><filter id="store-outline-soften-5" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs><path class="store-highlight-glow" filter="url(#store-outline-soften-5)" d="M3.8,12.2L7.2,10.7L19.6,5.6L155.7,-1.9L163.6,125.1L154.3,132.5L151.7,134.5L14.3,147.0L4.0,15.4Z"/><path class="store-highlight-edge" d="M3.8,12.2L7.2,10.7L19.6,5.6L155.7,-1.9L163.6,125.1L154.3,132.5L151.7,134.5L14.3,147.0L4.0,15.4Z"/></svg></a>
+      <a class="vhs-store-link has-store-outline store-projecttrash" href="https://futuregames.itch.io/projecttrash"
+         target="_blank" rel="noopener noreferrer" aria-label="Play Project Trash on itch.io" title="Project Trash on itch.io"><svg class="store-highlight" viewBox="0 0 172.4700 150.2445" preserveAspectRatio="none" aria-hidden="true" focusable="false"><defs><filter id="store-outline-soften-1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs><path class="store-highlight-glow" filter="url(#store-outline-soften-1)" d="M4.9,151.1L13.6,18.9L22.5,12.4L25.1,10.7L169.2,-0.5L169.0,2.9L158.0,141.2L154.7,142.3L143.1,146.0Z"/><path class="store-highlight-edge" d="M4.9,151.1L13.6,18.9L22.5,12.4L25.1,10.7L169.2,-0.5L169.0,2.9L158.0,141.2L154.7,142.3L143.1,146.0Z"/></svg></a>
+      <a class="vhs-store-link has-store-outline store-ecdysis" href="https://futuregames.itch.io/ecdysis"
+         target="_blank" rel="noopener noreferrer" aria-label="Play Ecdysis on itch.io" title="Ecdysis on itch.io"><svg class="store-highlight" viewBox="0 0 174.7295 135.8211" preserveAspectRatio="none" aria-hidden="true" focusable="false"><defs><filter id="store-outline-soften-2" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs><path class="store-highlight-glow" filter="url(#store-outline-soften-2)" d="M5.2,129.5L15.0,-1.5L23.7,-2.5L26.2,-2.6L168.8,-0.1L157.1,137.4L15.9,132.2L13.6,131.7Z"/><path class="store-highlight-edge" d="M5.2,129.5L15.0,-1.5L23.7,-2.5L26.2,-2.6L168.8,-0.1L157.1,137.4L15.9,132.2L13.6,131.7Z"/></svg></a>
     </div>
   </section>
 
@@ -1445,6 +1461,7 @@
         const button = selectedOutlineButton();
         const visible = !document.hidden && !switching && activeVideo === idleVideo && !hotspots.some(hotspot => hotspot.getAttribute('aria-disabled') === 'true');
         cassetteHighlight.classList.toggle('is-visible', visible);
+        idleVideo.closest('.vhs-stage').classList.toggle('store-highlights-muted', !visible);
         idleVideo.closest('.vhs-stage').classList.toggle('has-cassette-focus-highlight', visible && !!button && button === focusedCassette && button.matches(':focus-visible'));
         if (!visible) return false;
         const maskFrame = Math.max(0, Math.min(cassetteOcclusionTrack.paths.length - 1, Math.round(mediaTime * cassetteOcclusionTrack.fps)));

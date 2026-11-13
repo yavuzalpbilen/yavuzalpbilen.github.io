@@ -716,6 +716,39 @@
     #skills .timeline-item-text-only{grid-template-columns:minmax(0,1fr)}
     /* Five contact links remain reachable on narrow screens. */
     @media(max-width:768px){.portfolio-links{flex-wrap:wrap;max-width:calc(100% - 20px)}}
+
+    /* TV_SOUND_OSD_STYLES_BEGIN */
+    .vhs-tv-osd{
+      position:absolute;left:29.06%;top:12.4%;width:40.47%;height:51.3%;
+      z-index:5;pointer-events:none;container-type:inline-size;
+      color:#e7e9e4;font-family:"Courier New",Courier,monospace;
+    }
+    .vhs-tv-sound-btn{
+      position:absolute;top:5%;right:max(5%,calc(48.258% - 50vw + 16px));
+      min-width:44px;min-height:44px;padding:6px 0;display:flex;align-items:center;gap:.55em;
+      border:0;border-radius:0;background:transparent;color:inherit;cursor:pointer;
+      pointer-events:auto;touch-action:manipulation;
+      font:700 clamp(13px,2.65cqw,22px)/1 "Courier New",Courier,monospace;letter-spacing:.12em;
+      text-shadow:0 0 3px rgba(235,245,235,.5),0 0 12px rgba(215,235,215,.18),1px 1px 1px #000;
+      filter:drop-shadow(0 0 1px rgba(230,240,230,.35));
+    }
+    .vhs-tv-sound-btn:hover{color:#fff}
+    .vhs-tv-sound-btn:focus-visible{outline:1px dashed #e7e9e4;outline-offset:5px}
+    .vhs-tv-sound-icon{width:1.55em;height:1.25em;flex:none;fill:currentColor;shape-rendering:crispEdges}
+    .vhs-tv-sound-btn[data-sound="off"] .tv-speaker-waves,
+    .vhs-tv-sound-btn[data-sound="on"] .tv-speaker-cross{display:none}
+    .vhs-tv-sound-feedback{
+      position:absolute;right:max(5%,calc(48.258% - 50vw + 16px));top:calc(5% + 48px);
+      display:flex;align-items:center;gap:.6em;font-size:clamp(10px,1.7cqw,14px);
+      font-weight:700;letter-spacing:.12em;opacity:0;transition:opacity 180ms linear;
+      text-shadow:0 0 3px rgba(235,245,235,.5),1px 1px 1px #000;
+    }
+    .vhs-tv-osd.is-feedback .vhs-tv-sound-feedback{opacity:1}
+    .vhs-tv-sound-bars{display:flex;gap:3px}
+    .vhs-tv-sound-bars i{display:block;width:4px;height:10px;background:currentColor;box-shadow:0 0 3px rgba(235,245,235,.3)}
+    .vhs-tv-osd[data-sound="off"] .vhs-tv-sound-bars i{opacity:.2}
+    @media(prefers-reduced-motion:reduce){.vhs-tv-sound-feedback{transition:none}}
+    /* TV_SOUND_OSD_STYLES_END */
   </style>
 
   <!-- VHS LOWER-PAGE THEME TRIAL: remove this style block to restore the previous styling. -->
@@ -1004,6 +1037,22 @@
           <span class="vhs-startup-title" data-text="SELECT A VHS">SELECT A VHS</span>
         </div>
       </div>
+      <!-- TV_SOUND_OSD_BEGIN -->
+      <div class="vhs-tv-osd" id="vhs-tv-osd" data-sound="off">
+        <button class="vhs-tv-sound-btn" id="vhs-tv-sound-btn" type="button" data-sound="off"
+                aria-label="Unmute TV sound" aria-pressed="false" aria-controls="vhs-tv-trailer" title="Unmute TV sound">
+          <svg class="vhs-tv-sound-icon" viewBox="0 0 32 24" aria-hidden="true" focusable="false">
+            <path d="M2 8H7V6H9V4H11V2H14V22H11V20H9V18H7V16H2Z"/>
+            <path class="tv-speaker-cross" d="M19 6H22V9H25V6H28V9H25V12H28V15H25V12H22V15H19V12H22V9H19Z"/>
+            <path class="tv-speaker-waves" d="M18 7H21V10H23V14H21V17H18V14H20V10H18ZM24 3H27V6H29V9H31V15H29V18H27V21H24V18H26V15H28V9H26V6H24Z"/>
+          </svg>
+          <span id="vhs-tv-sound-label" aria-hidden="true">MUTE</span>
+        </button>
+        <div class="vhs-tv-sound-feedback" aria-hidden="true">
+          <span>VOLUME</span><span class="vhs-tv-sound-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        </div>
+      </div>
+      <!-- TV_SOUND_OSD_END -->
       <canvas class="vhs-channel-change" id="vhs-channel-change" width="320" height="180" hidden aria-hidden="true"></canvas>
       <svg class="cassette-highlight" id="cassette-highlight" viewBox="0 0 1920 1080" aria-hidden="true" focusable="false">
         <defs><filter id="cassette-outline-soften" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
@@ -1658,6 +1707,45 @@
 
       const tvScreen = document.getElementById('vhs-tv-screen');
       const tvTrailer = document.getElementById('vhs-tv-trailer');
+      // TV_SOUND_CONTROL_BEGIN
+      const tvSoundButton = document.getElementById('vhs-tv-sound-btn');
+      const tvSoundOSD = document.getElementById('vhs-tv-osd');
+      const tvSoundLabel = document.getElementById('vhs-tv-sound-label');
+      let tvSoundEnabled = false;
+      let tvSoundFeedbackTimer;
+
+      function syncTVSoundControl() {
+        const state = tvSoundEnabled ? 'on' : 'off';
+        const label = tvSoundEnabled ? 'Mute TV sound' : 'Unmute TV sound';
+        tvSoundButton.dataset.sound = state;
+        tvSoundOSD.dataset.sound = state;
+        tvSoundButton.setAttribute('aria-pressed', String(tvSoundEnabled));
+        tvSoundButton.setAttribute('aria-label', label);
+        tvSoundButton.title = label;
+        tvSoundLabel.textContent = tvSoundEnabled ? 'VOL' : 'MUTE';
+      }
+
+      tvTrailer.defaultMuted = true;
+      tvTrailer.muted = true;
+      syncTVSoundControl();
+      tvSoundButton.addEventListener('click', event => {
+        event.stopPropagation();
+        tvSoundEnabled = !tvSoundEnabled;
+        // Hidden first-frame decoding stays silent during cassette changes.
+        tvTrailer.muted = !(tvSoundEnabled && tvScreen.classList.contains('is-playing'));
+        syncTVSoundControl();
+        tvSoundOSD.classList.add('is-feedback');
+        clearTimeout(tvSoundFeedbackTimer);
+        tvSoundFeedbackTimer = setTimeout(() => tvSoundOSD.classList.remove('is-feedback'), 1800);
+      });
+      window.addEventListener('pageshow', event => {
+        if (!event.persisted) return;
+        tvSoundEnabled = false;
+        tvTrailer.muted = true;
+        syncTVSoundControl();
+      });
+      // TV_SOUND_CONTROL_END
+
       const startupScreen = document.getElementById('vhs-startup-screen');
       // Seconds into each recording when the finger reaches the red button.
       // Adjust these if the source videos are edited or replaced.
@@ -1809,11 +1897,24 @@
           tvTrailer.pause();
           await channelChange();
           if (request !== trailerRequest || activeVideo !== idleVideo || switching) return;
-          await playUntilFrame(tvTrailer, controller.signal);
+          // TV_SOUND_PLAYBACK_BEGIN
+          tvTrailer.muted = !tvSoundEnabled;
+          try {
+            await playUntilFrame(tvTrailer, controller.signal);
+          } catch (soundError) {
+            if (soundError.name !== 'NotAllowedError' || !tvSoundEnabled || controller.signal.aborted) throw soundError;
+            // Keep the trailer available if the browser requires a fresh sound click.
+            tvSoundEnabled = false;
+            tvTrailer.muted = true;
+            syncTVSoundControl();
+            await playUntilFrame(tvTrailer, controller.signal);
+          }
+          // TV_SOUND_PLAYBACK_END
           if (request !== trailerRequest || activeVideo !== idleVideo || switching) return;
           startupScreen.hidden = true;
           tvScreen.classList.add('is-playing');
           tvScreen.setAttribute('aria-hidden', 'false');
+          tvTrailer.muted = !tvSoundEnabled; // TV_SOUND_REVEAL: include clicks made while awaiting the first visible frame.
         } catch (error) {
           if (request !== trailerRequest) return;
           tvTrailer.pause();

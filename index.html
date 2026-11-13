@@ -710,6 +710,12 @@
       .timeline-logo img[alt="Decentraland Foundation"]{ width: 92%; height: 92%; padding: 8px; }
     }
 
+    .play-link-steam{gap:.55rem}
+    .play-link-steam .steam-icon{width:22px;height:22px;flex:0 0 22px;fill:currentColor}
+    /* A text-only studio entry until its updated logo is supplied. */
+    #skills .timeline-item-text-only{grid-template-columns:minmax(0,1fr)}
+    /* Five contact links remain reachable on narrow screens. */
+    @media(max-width:768px){.portfolio-links{flex-wrap:wrap;max-width:calc(100% - 20px)}}
   </style>
 
   <!-- VHS LOWER-PAGE THEME TRIAL: remove this style block to restore the previous styling. -->
@@ -1058,6 +1064,15 @@
       CV
     </a>
 
+    <a href="https://www.instagram.com/veltarum" class="contact-link" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="17.5" cy="6.5" r="1.2"/>
+      </svg>
+      Instagram
+    </a>
+
     <a href="https://yavuzalpbilen.itch.io/" class="contact-link" target="_blank" rel="noopener">
       <span class="icon itch-icon" aria-hidden="true"></span>
       itch.io
@@ -1085,29 +1100,81 @@
 
       <div class="project-card reveal">
         <div class="project-image">
-          <button class="video-sound-btn" type="button" data-video="project-video-2" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
-          <video id="project-video-2" muted loop playsinline webkit-playsinline preload="none">
-            <source data-src="./assets/icons/video2.mp4" type="video/mp4">
+          <button class="video-sound-btn" type="button" data-video="project-video-blacksmithkin" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
+          <video id="project-video-blacksmithkin" muted loop playsinline webkit-playsinline preload="none">
+            <source data-src="./assets/icons/Blacksmithkin_Gameplay_Trailer_v11_Under25MB.mp4" type="video/mp4">
           </video>
         </div>
 
         <div class="project-info">
           <div class="project-header">
-            <h3>Ecdysis</h3>
-            <a href="https://futuregames.itch.io/ecdysis" class="play-link" target="_blank" rel="noopener">PLAY</a>
+            <h3>Blacksmithkin</h3>
+            <a href="https://store.steampowered.com/app/5569760/Blacksmithkin/?beta=1" class="play-link play-link-steam" target="_blank" rel="noopener" aria-label="Wishlist Blacksmithkin on Steam"><svg class="steam-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/></svg><span>WISHLIST</span></a>
           </div>
-
-          <div class="project-role">Gameplay Developer &amp; Level Designer &amp; Environment</div>
-
-          <p>In this 2.5D action platformer, you defeat enemies, consume their skills, and evolve to progress through new biomes. I led the core game loop and combat design, but primarily focused on level and environment design, placing enemies, balancing encounters, and shaping biomes so players naturally navigate and evolve through each stage.</p>
-
+          <div class="project-role">Game Designer &amp; Developer</div>
+          <p>A first-person medieval blacksmithing game that connects hands-on crafting with combat. Heat, hammer, quench, and grind your blades, craft shields and armor, and test the gear you make. Complete customer orders, watch customers duel with your equipment, and invest your earnings in recipes and workshop upgrades. Take your own creations into the arena to face shielded opponents and bosses.</p>
           <div class="project-tags">
+            <span class="tag">Solo Development</span>
             <span class="tag">Unity</span>
-            <span class="tag">Side-Scroller</span>
-            <span class="tag">Unity Development</span>
-            <span class="tag">Level Design</span>
-            <span class="tag">Environment</span>
+            <span class="tag">Crafting Simulation</span>
+            <span class="tag">Game Design</span>
+            <span class="tag">Gameplay Development</span>
+            <span class="tag">Combat Systems</span>
+            <span class="tag">Progression &amp; Economy</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-image">
+          <button class="video-sound-btn" type="button" data-video="project-video-veltarum" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
+          <video id="project-video-veltarum" muted loop playsinline webkit-playsinline preload="none">
+            <source data-src="./assets/icons/VELTARUM-Website-Trailer-v2-35s-720p60.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="project-info">
+          <div class="project-header">
+            <h3>Veltarum</h3>
+            <a href="https://store.steampowered.com/app/5463460/Veltarum/" class="play-link play-link-steam" target="_blank" rel="noopener" aria-label="Play Veltarum on Steam"><svg class="steam-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/></svg><span>PLAY</span></a>
+          </div>
+          <div class="project-role">Game Designer &amp; Developer</div>
+          <p>A fast-paced retro FPS built around fluid movement and aggressive combat. Sprint, slide, and wall-run through encounters, combining firearms with a sword dash to close the distance. Use a time-slowing watch to turn dangerous fights in your favor, defeat bosses, and spend collected crystals between lives on health, damage, dash distance, and watch upgrades.</p>
+          <div class="project-tags">
+            <span class="tag">Solo Development</span>
+            <span class="tag">Unity</span>
+            <span class="tag">Retro FPS</span>
+            <span class="tag">Game Design</span>
+            <span class="tag">Movement Systems</span>
             <span class="tag">Combat Design</span>
+            <span class="tag">Level Design</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-image">
+          <button class="video-sound-btn" type="button" data-video="project-video-6" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
+          <video id="project-video-6" muted loop playsinline webkit-playsinline preload="none">
+            <source data-src="./assets/icons/sixcoinstrailer.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="project-info">
+          <div class="project-header">
+            <h3>Six Coins</h3>
+            <a href="https://store.steampowered.com/app/5441670/Six_Coins/" class="play-link play-link-steam" target="_blank" rel="noopener" aria-label="Play Six Coins on Steam"><svg class="steam-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/></svg><span>PLAY</span></a>
+          </div>
+          <div class="project-role">Game Designer &amp; Developer</div>
+          <p>A turn-based card game where coins are both your lifeline and the cost of drawing another card. Compete against three AI opponents, choose between white, red, and discard piles, and decide when to stand. Build matching pairs or narrow the gap between your cards, then buy and equip trinkets that change the rules in your favor. I designed and developed the core loop, hand rankings, AI, shop and trinket systems, progression, and UI.</p>
+          <div class="project-tags">
+            <span class="tag">Solo Development</span>
+            <span class="tag">Unity</span>
+            <span class="tag">Card Game</span>
+            <span class="tag">Game Design</span>
+            <span class="tag">Gameplay Programming</span>
+            <span class="tag">AI Behavior</span>
+            <span class="tag">UI &amp; Progression</span>
           </div>
         </div>
       </div>
@@ -1143,6 +1210,35 @@
 
       <div class="project-card reveal">
         <div class="project-image">
+          <button class="video-sound-btn" type="button" data-video="project-video-2" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
+          <video id="project-video-2" muted loop playsinline webkit-playsinline preload="none">
+            <source data-src="./assets/icons/video2.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="project-info">
+          <div class="project-header">
+            <h3>Ecdysis</h3>
+            <a href="https://futuregames.itch.io/ecdysis" class="play-link" target="_blank" rel="noopener">PLAY</a>
+          </div>
+
+          <div class="project-role">Gameplay Developer &amp; Level Designer &amp; Environment</div>
+
+          <p>In this 2.5D action platformer, you defeat enemies, consume their skills, and evolve to progress through new biomes. I led the core game loop and combat design, but primarily focused on level and environment design, placing enemies, balancing encounters, and shaping biomes so players naturally navigate and evolve through each stage.</p>
+
+          <div class="project-tags">
+            <span class="tag">Unity</span>
+            <span class="tag">Side-Scroller</span>
+            <span class="tag">Unity Development</span>
+            <span class="tag">Level Design</span>
+            <span class="tag">Environment</span>
+            <span class="tag">Combat Design</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-image">
           <button class="video-sound-btn" type="button" data-video="project-video-7" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
           <video id="project-video-7" muted loop playsinline webkit-playsinline preload="none">
             <source data-src="./assets/icons/0622 (1)(4).mp4" type="video/mp4">
@@ -1160,6 +1256,7 @@
           <p>A tactical duel combat prototype built around three directional stances: up, left, and right. Players attack and block by reading the opponent’s stance, creating a timing-focused fighting system where positioning and reaction matter. I designed and implemented the combat mechanics, stance-based attacks, directional blocking, enemy duel behavior, and encounter flow in Unreal Engine, while also shaping the level layout to support clear one-on-one combat readability.</p>
 
           <div class="project-tags">
+            <span class="tag">Solo Development</span>
             <span class="tag">Unreal Engine</span>
             <span class="tag">Fighting Game</span>
             <span class="tag">Game Programming</span>
@@ -1167,34 +1264,6 @@
             <span class="tag">Combat Design</span>
             <span class="tag">Unreal</span>
             <span class="tag">Engine Development</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card reveal">
-        <div class="project-image">
-          <button class="video-sound-btn" type="button" data-video="project-video-6" aria-pressed="false" aria-label="Toggle video sound">🔇</button>
-          <video id="project-video-6" muted loop playsinline webkit-playsinline preload="none">
-            <source data-src="./assets/icons/sixcoinstrailer.mp4" type="video/mp4">
-          </video>
-        </div>
-
-        <div class="project-info">
-          <div class="project-header">
-            <h3>Six Coins</h3>
-            <a href="#" class="play-link is-hidden">PLAY</a>
-          </div>
-
-          <div class="project-role">Gameplay Developer &amp; Level Designer</div>
-
-          <p>In this turn-based card game, you compete against three AI opponents, manage limited coins, and decide when to draw or stand to build the best hand each round. I designed and built the entire project, including the core gameplay loop, turn flow, hand-ranking system, coin-based risk structure, AI behavior, UI, and overall visual presentation, creating a clear and polished digital card game experience.</p>
-
-          <div class="project-tags">
-            <span class="tag">Unity</span>
-            <span class="tag">Card Game</span>
-            <span class="tag">Game Programming</span>
-            <span class="tag">Unity Development</span>
-            <span class="tag">Game Design</span>
           </div>
         </div>
       </div>
@@ -1218,6 +1287,7 @@
           <p>A wave-based tower defense strategy game where enemies push toward the kingdom level by level and you defend by purchasing and placing towers. I implemented the core systems in Unity (wave progression, enemy behaviors, tower targeting/attacks, and the economy/resource loop), designed the tower roster and progression/balance, and built the full UI/UX for buying, placing, and upgrading. I also handled the visuals to deliver a playable tower defense game.</p>
 
           <div class="project-tags">
+            <span class="tag">Solo Development</span>
             <span class="tag">Unity</span>
             <span class="tag">Strategy</span>
             <span class="tag">Tower Defense</span>
@@ -1247,6 +1317,7 @@
           <p>In this mobile game for ZUS Insurance, you guide a character’s life from childhood to old age, balancing six stats through swiped decisions. I designed the narrative events and their stat effects, along with the core swiping mechanic linking choices to stats.</p>
 
           <div class="project-tags">
+            <span class="tag">Solo Development</span>
             <span class="tag">Unity</span>
             <span class="tag">Decision-Making</span>
             <span class="tag">Unity Development</span>
@@ -1338,6 +1409,15 @@
         <div class="timeline-title">Experience</div>
 
         <div class="timeline-list">
+          <div class="timeline-item timeline-item-text-only">
+            <!-- Add the SACRED PANIC GAMES logo here when the updated asset is ready. -->
+            <div class="timeline-main">
+              <div class="timeline-top"><div class="timeline-name">SACRED PANIC GAMES</div></div>
+              <div class="timeline-sub">Owner &amp; Game Developer</div>
+              <div class="timeline-location">Remote</div>
+            </div>
+          </div>
+
           <div class="timeline-item">
             <div class="timeline-logo"><img src="assets/icons/exp1.png" alt="Outlier"></div>
 
@@ -1970,15 +2050,7 @@
       }, 1000);
       idleVideo.play().catch(() => {});
 
-      const projectVideos = [
-        document.getElementById('project-video-1'),
-        document.getElementById('project-video-2'),
-        document.getElementById('project-video-3'),
-        document.getElementById('project-video-4'),
-        document.getElementById('project-video-5'),
-        document.getElementById('project-video-6'),
-        document.getElementById('project-video-7')
-      ].filter(Boolean);
+      const projectVideos = Array.from(document.querySelectorAll('#projects .project-image video'));
 
       const videoBtns = Array.from(document.querySelectorAll('.video-sound-btn'));
       const videoById = new Map(projectVideos.map(v => [v.id, v]));

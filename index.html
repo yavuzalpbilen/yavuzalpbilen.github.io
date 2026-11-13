@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- STORE_HIGHLIGHTS_V3_SHARED_SVG -->
+<!-- STORE_HIGHLIGHTS_V4_INDEPENDENT -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -296,11 +296,12 @@
       cursor: pointer;
     }
 
-    /* STORE_HIGHLIGHTS_V3: one shared 1920x1080 outline layer. */
+    /* Store signs remain visible independently of cassette/video transitions. */
+    .store-highlight{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;overflow:visible}
     .store-outline{color:#fff;transition:color 130ms ease}
     .store-outline.is-selected{color:#ff8a26}
     .store-outline path{fill:none;stroke:currentColor;stroke-linejoin:round;stroke-linecap:round}
-    .store-outline-glow{stroke-width:7;opacity:.18;filter:url(#cassette-outline-soften);transition:opacity 130ms ease}
+    .store-outline-glow{stroke-width:7;opacity:.18;filter:url(#store-outline-soften);transition:opacity 130ms ease}
     .store-outline-edge{stroke-width:2.4}
     .store-outline.is-selected .store-outline-glow{opacity:.5}
     .vhs-store-link.store-focus-outlined:focus-visible{outline:none}
@@ -1013,13 +1014,22 @@
         <g class="cassette-outline" data-cassette="4"><path class="cassette-highlight-glow"/><path class="cassette-highlight-edge"/></g>
         <g class="cassette-outline" data-cassette="5"><path class="cassette-highlight-glow"/><path class="cassette-highlight-edge"/></g>
         </g>
+
+
+
+
+
+      </svg>
+
+
+      <svg class="store-highlight" id="store-highlight" viewBox="0 0 1920 1080" aria-hidden="true" focusable="false">
+        <defs><filter id="store-outline-soften" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs>
         <g class="store-outline" data-store="projecttrash"><path class="store-outline-glow" d="M1752.4,284.1L1761.1,151.8L1770.1,145.4L1772.6,143.6L1916.7,132.4L1916.5,135.8L1905.5,274.1L1902.3,275.2L1890.7,278.9Z"/><path class="store-outline-edge" d="M1752.4,284.1L1761.1,151.8L1770.1,145.4L1772.6,143.6L1916.7,132.4L1916.5,135.8L1905.5,274.1L1902.3,275.2L1890.7,278.9Z"/></g>
         <g class="store-outline" data-store="ecdysis"><path class="store-outline-glow" d="M1732.8,583.3L1742.7,452.3L1751.4,451.3L1753.8,451.1L1896.4,453.7L1884.7,591.2L1743.6,586.0L1741.2,585.4Z"/><path class="store-outline-edge" d="M1732.8,583.3L1742.7,452.3L1751.4,451.3L1753.8,451.1L1896.4,453.7L1884.7,591.2L1743.6,586.0L1741.2,585.4Z"/></g>
         <g class="store-outline" data-store="blacksmithkin"><path class="store-outline-glow" d="M1.0,133.7L141.9,144.6L144.8,146.3L155.0,152.4L162.9,285.6L28.0,280.1L15.2,276.7L11.7,275.7L1.2,137.2Z"/><path class="store-outline-edge" d="M1.0,133.7L141.9,144.6L144.8,146.3L155.0,152.4L162.9,285.6L28.0,280.1L15.2,276.7L11.7,275.7L1.2,137.2Z"/></g>
         <g class="store-outline" data-store="veltarum"><path class="store-outline-glow" d="M24.5,439.3L163.9,439.3L166.7,439.5L176.6,440.3L184.7,571.7L175.1,574.1L172.5,574.6L34.7,576.6Z"/><path class="store-outline-edge" d="M24.5,439.3L163.9,439.3L166.7,439.5L176.6,440.3L184.7,571.7L175.1,574.1L172.5,574.6L34.7,576.6Z"/></g>
         <g class="store-outline" data-store="sixcoins"><path class="store-outline-glow" d="M40.1,738.0L43.6,736.5L55.9,731.4L192.0,724.0L199.9,850.9L190.7,858.4L188.1,860.4L50.6,872.8L40.3,741.3Z"/><path class="store-outline-edge" d="M40.1,738.0L43.6,736.5L55.9,731.4L192.0,724.0L199.9,850.9L190.7,858.4L188.1,860.4L50.6,872.8L40.3,741.3Z"/></g>
       </svg>
-
       <button class="vhs-hotspot hotspot-fav1" type="button" data-video="./assets/icons/fav1.mp4" aria-label="Insert Project Trash VHS"></button>
       <button class="vhs-hotspot hotspot-fav2" type="button" data-video="./assets/icons/fav2.mp4" aria-label="Insert Ecdysis VHS"></button>
       <button class="vhs-hotspot hotspot-fav3" type="button" data-video="./assets/icons/fav3.mp4" aria-label="Insert Blacksmithkin VHS"></button>
@@ -1432,14 +1442,16 @@
       let occlusionFrame = -1;
       const cassetteHighlight = document.getElementById('cassette-highlight');
 
-      // Store signs use the same screen-space SVG as the cassettes.
+      // Store signs have an independent layer; cassette visibility never hides them.
+      const storeHighlight = document.getElementById('store-highlight');
       const storeOutlineLinks = Array.from(document.querySelectorAll('.vhs-store-link'));
-      const storeOutlineGroups = new Map(Array.from(cassetteHighlight.querySelectorAll('.store-outline')).map(group => [group.dataset.store, group]));
+      const storeOutlineGroups = new Map(Array.from(storeHighlight.querySelectorAll('.store-outline')).map(group => [group.dataset.store, group]));
       const storeOutlineEntries = storeOutlineLinks.map(link => {
         const key = Array.from(link.classList).find(name => name.startsWith('store-')).slice(6);
         return {link, group:storeOutlineGroups.get(key)};
       });
-      function updateStoreOutlines(visible = cassetteHighlight.classList.contains('is-visible')) {
+      function updateStoreOutlines() {
+        const visible = !document.hidden;
         storeOutlineEntries.forEach(({link, group}) => {
           const keyboardFocus = link.matches(':focus-visible');
           group.classList.toggle('is-selected', link.matches(':hover') || keyboardFocus);

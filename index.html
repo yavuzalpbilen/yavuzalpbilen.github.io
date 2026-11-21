@@ -717,6 +717,7 @@
       width:100%;height:100%;padding:0;object-fit:contain;
       background:#000;image-rendering:auto;
     }
+    #skills .timeline-logo-black-drakkar img{width:100%;height:100%;padding:6px;object-fit:contain;image-rendering:auto;}
     /* Five contact links remain reachable on narrow screens. */
     @media(max-width:768px){.portfolio-links{flex-wrap:wrap;max-width:calc(100% - 20px)}}
 
@@ -743,7 +744,10 @@
     .vhs-tv-sound-btn[data-sound="off"] .tv-speaker-waves,
     .vhs-tv-sound-btn[data-sound="on"] .tv-speaker-cross{display:none}
     /* TV_SOUND_OSD_STYLES_END */
-  </style>
+  
+    #skills .background-logo-original img{width:100%;height:100%;padding:4px;object-fit:contain;transform:none;image-rendering:auto;}
+    #skills .timeline-date{color:var(--color-secondary);font-size:.95rem;margin-top:6px;line-height:1.5;}
+</style>
 
   <!-- VHS LOWER-PAGE THEME TRIAL: remove this style block to restore the previous styling. -->
   <style id="vhs-lower-theme">
@@ -1396,132 +1400,30 @@
     </div>
   </section>
 
-  <section id="skills">
-    <h2>Background</h2>
-
-    <div class="timeline-wrap">
-      <div class="timeline-block reveal">
-        <div class="timeline-title">Education</div>
-
-        <div class="timeline-list">
-          <div class="timeline-item">
-            <div class="timeline-logo">
-              <img src="assets/icons/cd5.jpg" alt="CD Projekt RED x Futuregames">
-            </div>
-
-            <div class="timeline-main">
-              <div class="timeline-top">
-                <div class="timeline-name">CD Projekt RED x Futuregames</div>
-              </div>
-
-              <div class="timeline-sub">Game Design</div>
-              <div class="timeline-location">Warsaw, Poland</div>
-
-              <div class="timeline-desc">
-                Game Development &amp; Game Design training with a specialization in Level Design, focused on player flow, encounter design, and building readable, engaging spaces.
-              </div>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-logo">
-              <img src="assets/icons/logo_11.jpg" alt="Atılım University">
-            </div>
-
-            <div class="timeline-main">
-              <div class="timeline-top">
-                <div class="timeline-name">Atılım University</div>
-              </div>
-
-              <div class="timeline-sub">Computer Engineering</div>
-              <div class="timeline-location">Ankara, Turkey</div>
-
-              <div class="timeline-desc">
-                Strong engineering foundation in software development, algorithms, and problem-solving, supporting robust design decisions and technical collaboration.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="timeline-block reveal">
-        <div class="timeline-title">Experience</div>
-
-        <div class="timeline-list">
-          <div class="timeline-item">
-            <div class="timeline-logo timeline-logo-sacred-panic">
-              <img src="assets/icons/Sacred_Panic_Games_Final_Hizali.png" alt="Sacred Panic Games" width="1254" height="1254" loading="lazy" decoding="async">
-            </div>
-            <div class="timeline-main">
-              <div class="timeline-top"><div class="timeline-name">SACRED PANIC GAMES</div></div>
-              <div class="timeline-sub">Owner &amp; Game Developer</div>
-              <div class="timeline-location">Remote</div>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-logo"><img src="assets/icons/exp1.png" alt="Outlier"></div>
-
-            <div class="timeline-main">
-              <div class="timeline-top"><div class="timeline-name">Outlier</div></div>
-              <div class="timeline-sub">Software Engineer</div>
-              <div class="timeline-location">Remote</div>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-logo"><img src="assets/icons/exp2.png" alt="Ertürkler A.Ş."></div>
-
-            <div class="timeline-main">
-              <div class="timeline-top"><div class="timeline-name">Ertürkler A.Ş.</div></div>
-              <div class="timeline-sub">Software Engineer</div>
-              <div class="timeline-location">Istanbul, Turkey</div>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-logo"><img src="assets/icons/exp6.png" alt="Decentraland Foundation"></div>
-
-            <div class="timeline-main">
-              <div class="timeline-top"><div class="timeline-name">Decentraland Foundation</div></div>
-              <div class="timeline-sub">Game Developer</div>
-              <div class="timeline-location">Remote</div>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-logo"><img src="assets/icons/exp3.jfif" alt="Dias Teknoloji"></div>
-
-            <div class="timeline-main">
-              <div class="timeline-top"><div class="timeline-name">Dias Teknoloji</div></div>
-              <div class="timeline-sub">Computer Engineer</div>
-              <div class="timeline-location">Istanbul, Turkey</div>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-logo"><img src="assets/icons/exp4.jfif" alt="DNS İnovasyon Sistemleri ve Teknoloji A.Ş."></div>
-
-            <div class="timeline-main">
-              <div class="timeline-top"><div class="timeline-name">DNS İnovasyon Sistemleri ve Teknoloji A.Ş.</div></div>
-              <div class="timeline-sub">Computer Engineer</div>
-              <div class="timeline-location">Istanbul, Turkey</div>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-logo"><img src="assets/icons/exp5.jfif" alt="Infopark Yazılım ve Danışmanlık"></div>
-
-            <div class="timeline-main">
-              <div class="timeline-top"><div class="timeline-name">Infopark Yazılım ve Danışmanlık</div></div>
-              <div class="timeline-sub">Software Engineer</div>
-              <div class="timeline-location">Ankara, Turkey</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section id="skills"><h2>Background</h2><div class="timeline-wrap">
+<div class="timeline-block reveal"><div class="timeline-title">Experience</div><div class="timeline-list">
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Sacred_Panic_Games_Final_Hizali.png" alt="Sacred Panic Games" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">Sacred Panic Games</div></div><div class="timeline-sub">Owner / Game Developer</div><div class="timeline-date">Present</div><div class="timeline-location">Remote</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Black_Drakkar_Games.png" alt="Black Drakkar Games" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">Black Drakkar Games</div></div><div class="timeline-sub">Game Designer</div><div class="timeline-date">January 2026 – March 2026 (2 months)</div><div class="timeline-location">Warsaw, Poland</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Outlier.png" alt="Outlier" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">Outlier</div></div><div class="timeline-sub">Software Engineer</div><div class="timeline-date">May 2024 – January 2025 (9 months)</div><div class="timeline-location">Remote</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Erturkler.png" alt="Ertürkler A.Ş." loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">Ertürkler A.Ş.</div></div><div class="timeline-sub">Computer Engineer</div><div class="timeline-date">April 2023 – December 2023 (9 months)</div><div class="timeline-location">Ankara, Turkey</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Dias.svg" alt="DİAS Teknoloji" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">DİAS Teknoloji</div></div><div class="timeline-sub">Computer Engineer</div><div class="timeline-date">July 2022 – September 2022 (3 months)</div><div class="timeline-location">Istanbul, Turkey</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/DNS_Inovasyon.jpg" alt="DNS İnovasyon Sistemleri ve Teknoloji A.Ş." loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">DNS İnovasyon Sistemleri ve Teknoloji A.Ş.</div></div><div class="timeline-sub">Computer Engineer</div><div class="timeline-date">May 2022 – July 2022 (3 months)</div><div class="timeline-location">Istanbul, Turkey</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Decentraland.svg" alt="Decentraland Foundation" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">Decentraland Foundation</div></div><div class="timeline-sub">Game Developer</div><div class="timeline-date">November 2021 – April 2022 (6 months)</div><div class="timeline-location">Remote</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Infopark.jpg" alt="Infopark Yazılım ve Danışmanlık" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">Infopark Yazılım ve Danışmanlık</div></div><div class="timeline-sub">Software Engineer</div><div class="timeline-date">July 2021 – September 2021 (3 months)</div><div class="timeline-location">Ankara, Turkey</div></div></div>
+</div></div>
+<div class="timeline-block reveal"><div class="timeline-title">Education</div><div class="timeline-list">
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/CD_Projekt_RED.png" alt="CD Projekt RED x Futuregames" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">CD Projekt RED x Futuregames</div></div><div class="timeline-sub">Game Designer Specialization</div><div class="timeline-date">September 2025 – Present</div><div class="timeline-location">Warsaw, Poland</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Atilim_Universitesi.jpg" alt="Atılım University" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">Atılım University</div></div><div class="timeline-sub">B.S. Computer Engineering</div><div class="timeline-date">September 2017 – July 2022</div><div class="timeline-location">Ankara, Turkey</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Buyuk_Kolej.png" alt="Büyük Kolej" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">Büyük Kolej</div></div></div></div>
+</div></div>
+<div class="timeline-block reveal"><div class="timeline-title">Events</div><div class="timeline-list">
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Digital_Dragons.svg" alt="Digital Dragons" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">Digital Dragons</div></div><div class="timeline-date">2026</div><div class="timeline-location">Krakow</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Game_Industry_Conference.png" alt="Game Industry Conference" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">Game Industry Conference</div></div><div class="timeline-date">2026</div><div class="timeline-location">Poznan</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/HackYeah.png" alt="HackYeah Hackathon" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">HackYeah Hackathon</div></div><div class="timeline-date">2025</div><div class="timeline-location">Krakow</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Student_Games_Festival.png" alt="Student Games Festival" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">Student Games Festival</div></div><div class="timeline-date">2025</div><div class="timeline-location">Warsaw</div></div></div>
+<div class="timeline-item"><div class="timeline-logo background-logo-original"><img src="assets/icons/Global_Game_Jam.jpg" alt="Global Game Jam" loading="lazy" decoding="async"></div><div class="timeline-main"><div class="timeline-top"><div class="timeline-name">Global Game Jam</div></div><div class="timeline-date">2023 &amp; 2022</div><div class="timeline-location">Ankara</div></div></div>
+</div></div>
+</div></section>
 
   <div id="contact">
     <section class="contact reveal">
